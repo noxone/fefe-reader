@@ -13,8 +13,13 @@ struct FefeReaderApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //ContentView()
+            //TestView()
+            TabbedBlogView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .task {
+                    await FefeBlog.shared.refresh()
+                }
         }
     }
 }

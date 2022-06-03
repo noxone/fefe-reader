@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
+		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
+		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
+		C5243EB22845CDDB001CBA3D /* FefeBlog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EB12845CDDB001CBA3D /* FefeBlog.swift */; };
+		C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */; };
+		C5243EBB28460D2F001CBA3D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = C5243EBA28460D2F001CBA3D /* SwiftSoup */; };
 		C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */; };
 		C524AD032843FD8900EF24F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD022843FD8900EF24F1 /* ContentView.swift */; };
 		C524AD052843FD8C00EF24F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C524AD042843FD8C00EF24F1 /* Assets.xcassets */; };
@@ -16,6 +22,18 @@
 		C524AD172843FD8C00EF24F1 /* FefeReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD162843FD8C00EF24F1 /* FefeReaderTests.swift */; };
 		C524AD212843FD8C00EF24F1 /* FefeReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD202843FD8C00EF24F1 /* FefeReaderUITests.swift */; };
 		C524AD232843FD8C00EF24F1 /* FefeReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD222843FD8C00EF24F1 /* FefeReaderUITestsLaunchTests.swift */; };
+		C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */; };
+		C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683A28491D5700082BA2 /* CommonIcons.swift */; };
+		C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683C2849DA6300082BA2 /* BookmarkListView.swift */; };
+		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
+		C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */ = {isa = PBXBuildFile; productRef = C5E310AB28471DA6005937FA /* SwiftUIWebView */; };
+		C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* ExternalLinkView.swift */; };
+		C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AF284738E3005937FA /* ShareSheet.swift */; };
+		C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B428473EC7005937FA /* ExitButtonView.swift */; };
+		C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlEnhancer.swift */; };
+		C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* TabbedBlogView.swift */; };
+		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
+		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +54,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
+		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
+		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
+		C5243EB12845CDDB001CBA3D /* FefeBlog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeBlog.swift; sourceTree = "<group>"; };
 		C524ACFD2843FD8900EF24F1 /* FefeReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FefeReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderApp.swift; sourceTree = "<group>"; };
 		C524AD022843FD8900EF24F1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,6 +70,18 @@
 		C524AD1C2843FD8C00EF24F1 /* FefeReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FefeReaderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD202843FD8C00EF24F1 /* FefeReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderUITests.swift; sourceTree = "<group>"; };
 		C524AD222843FD8C00EF24F1 /* FefeReaderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryRowView.swift; sourceTree = "<group>"; };
+		C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryListView.swift; sourceTree = "<group>"; };
+		C530683A28491D5700082BA2 /* CommonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIcons.swift; sourceTree = "<group>"; };
+		C530683C2849DA6300082BA2 /* BookmarkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListView.swift; sourceTree = "<group>"; };
+		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
+		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
+		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		C5E310B428473EC7005937FA /* ExitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButtonView.swift; sourceTree = "<group>"; };
+		C5E310B728474033005937FA /* HtmlEnhancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlEnhancer.swift; sourceTree = "<group>"; };
+		C5E310B928475840005937FA /* TabbedBlogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBlogView.swift; sourceTree = "<group>"; };
+		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */,
+				C5243EBB28460D2F001CBA3D /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +111,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C5243EAD2845CAA6001CBA3D /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				C5E310AF284738E3005937FA /* ShareSheet.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		C5243EB02845CDC8001CBA3D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C5243EB12845CDDB001CBA3D /* FefeBlog.swift */,
+				C5E310BB28475A9A005937FA /* Settings.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C5243EB32845CF5B001CBA3D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C5E310B928475840005937FA /* TabbedBlogView.swift */,
+				C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */,
+				C530683C2849DA6300082BA2 /* BookmarkListView.swift */,
+				C5E310A828464623005937FA /* BlogEntryDetailView.swift */,
+				C5E310AD28472EEA005937FA /* ExternalLinkView.swift */,
+				C5E310BD28476130005937FA /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		C524ACF42843FD8900EF24F1 = {
 			isa = PBXGroup;
 			children = (
@@ -100,8 +166,11 @@
 			children = (
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
 				C524AD022843FD8900EF24F1 /* ContentView.swift */,
+				C524AD2F2843FE8000EF24F1 /* UI */,
+				C5243EB02845CDC8001CBA3D /* Model */,
+				C524AD302843FE8C00EF24F1 /* Persistance */,
+				C5E310B62847401C005937FA /* HTML */,
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
-				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
 			);
@@ -133,6 +202,53 @@
 			path = FefeReaderUITests;
 			sourceTree = "<group>";
 		};
+		C524AD2F2843FE8000EF24F1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C5243EB32845CF5B001CBA3D /* Views */,
+				C524AD312843FEA500EF24F1 /* Widgets */,
+				C5243EAD2845CAA6001CBA3D /* UIKit */,
+				C530683928491D3D00082BA2 /* Shared */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		C524AD302843FE8C00EF24F1 /* Persistance */ = {
+			isa = PBXGroup;
+			children = (
+				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
+				C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */,
+				C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */,
+			);
+			path = Persistance;
+			sourceTree = "<group>";
+		};
+		C524AD312843FEA500EF24F1 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */,
+				C5E310B428473EC7005937FA /* ExitButtonView.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		C530683928491D3D00082BA2 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C5243EAE2845CABC001CBA3D /* TextExtension.swift */,
+				C530683A28491D5700082BA2 /* CommonIcons.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		C5E310B62847401C005937FA /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				C5E310B728474033005937FA /* HtmlEnhancer.swift */,
+			);
+			path = HTML;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +265,10 @@
 			dependencies = (
 			);
 			name = FefeReader;
+			packageProductDependencies = (
+				C5243EBA28460D2F001CBA3D /* SwiftSoup */,
+				C5E310AB28471DA6005937FA /* SwiftUIWebView */,
+			);
 			productName = FefeReader;
 			productReference = C524ACFD2843FD8900EF24F1 /* FefeReader.app */;
 			productType = "com.apple.product-type.application";
@@ -221,6 +341,11 @@
 				Base,
 			);
 			mainGroup = C524ACF42843FD8900EF24F1;
+			packageReferences = (
+				C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */,
+				C5E310B128473E36005937FA /* XCRemoteSwiftPackageReference "ExitButton" */,
+			);
 			productRefGroup = C524ACFE2843FD8900EF24F1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -264,9 +389,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				C524AD0D2843FD8C00EF24F1 /* FefeReader.xcdatamodeld in Sources */,
+				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */,
+				C5243EB22845CDDB001CBA3D /* FefeBlog.swift in Sources */,
+				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
+				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
+				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
+				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
+				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
+				C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */,
 				C524AD032843FD8900EF24F1 /* ContentView.swift in Sources */,
+				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
+				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
+				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
+				C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */,
+				C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,
+				C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */,
+				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
+				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +574,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -462,6 +604,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -591,6 +734,46 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/globulus/swiftui-webview";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		C5E310B128473E36005937FA /* XCRemoteSwiftPackageReference "ExitButton" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/joogps/ExitButton";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C5243EBA28460D2F001CBA3D /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		C5E310AB28471DA6005937FA /* SwiftUIWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */;
+			productName = SwiftUIWebView;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */ = {
