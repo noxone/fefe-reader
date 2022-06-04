@@ -18,6 +18,8 @@ class CommonIcons {
     
     private let searchImageName = "magnifyingglass"
     
+    private let trashImageName = "trash"
+    
     private init() {
     }
     
@@ -39,6 +41,12 @@ class CommonIcons {
     var searchImage: some View {
         get {
             Image(systemName: searchImageName)
+        }
+    }
+    
+    var trashImage: some View {
+        get {
+            Image(systemName: trashImageName)
         }
     }
 }

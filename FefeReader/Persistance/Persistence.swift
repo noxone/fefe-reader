@@ -78,6 +78,11 @@ struct PersistenceController {
         return blogEntry
     }
     
+    func delete(blogEntry: BlogEntry) {
+        container.viewContext.delete(blogEntry)
+        save()
+    }
+    
     // TODO: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-updates--cms-25120
     func resetBookmarks() {
         do {

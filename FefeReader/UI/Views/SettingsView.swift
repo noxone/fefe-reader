@@ -33,6 +33,9 @@ struct SettingsView: View {
                 }
             }
         }
+        .onReceive(settings.objectWillChange) {
+            settings.save()
+        }
     }
     
     private var sectionApplication: some View {
@@ -54,7 +57,7 @@ struct SettingsView: View {
     private var sectionOther: some View {
         Section("Feedback") {
             Button(action: {
-                UIApplication.shared.open(settings.issueUrl)
+                UIApplication.shared.open(Settings.issueUrl)
             }, label: {
                 Text("Issue tracker")
             })
@@ -93,11 +96,12 @@ struct SettingsView: View {
                 }
             }
 
-            Button(action: {
+            // TODO: Add reset button
+            /*Button(action: {
                 settings.fontSize = Settings.defaultFontSize
             }, label: {
                 Text("Reset")
-            })
+            })*/
         }
     }
     

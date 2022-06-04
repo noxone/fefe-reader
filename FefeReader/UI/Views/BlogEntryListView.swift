@@ -57,11 +57,18 @@ struct BlogEntryListView: View {
                         Button(action: {
                             fefeBlog.toggleFavourite(for: blogEntry)
                         }, label: {
-                            Image(systemName: "star")
-                            Text("Favourite")
+                            CommonIcons.shared.bookmarkImage()
                         })
                         .tint(CommonIcons.shared.bookmarkColor)
                     })
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(action: {
+                            PersistenceController.shared.delete(blogEntry: blogEntry)
+                        }, label: {
+                            CommonIcons.shared.trashImage
+                        })
+                        .tint(.red)
+                    }
                 }
             }
         }
