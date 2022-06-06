@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PopupView
 
 struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -21,6 +22,8 @@ struct BlogEntryListView: View {
         ],
         animation: .default)
     private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
+    
+    @State private var showNotificationPopup = false
 
     var body: some View {
         NavigationView {
@@ -40,15 +43,15 @@ struct BlogEntryListView: View {
             .refreshable {
                 _ = FefeBlog.shared.refresh(origin: "manual refresh")
             }
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        NotificationService.shared.requestAuthorizationExplicitly()
-                    } label: {
-                        Label("Remind Me", systemImage: "bell")
+            .onAppear {
+                if Settings.shared.askForNotificationApproval {
+                    NotificationService.shared.checkExplicitAuthorization {
+                        showNotificationPopup = true
                     }
-                    .tint(.orange)
                 }
+            }
+            .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
+                notificationPopup
             }
         }
     }
@@ -82,6 +85,36 @@ struct BlogEntryListView: View {
                 }
             }
         }
+    }
+    
+    private var notificationPopup: some View {
+        VStack(spacing: 10) {
+            Text("Do you want to receive notifications when Fefe publishes new blog entries?")
+                .font(.system(size: 16))
+                .foregroundColor(.black)
+            HStack {
+                Button(action: {
+                    Settings.shared.askForNotificationApproval = false
+                    showNotificationPopup = false
+                }, label: {
+                    Text("No")
+                })
+                .buttonStyle(.bordered)
+                Button(action: {
+                    Settings.shared.askForNotificationApproval = false
+                    NotificationService.shared.requestAuthorizationExplicitly()
+                    showNotificationPopup = false
+                }, label: {
+                    Text("Yes")
+                })
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(16)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.08), radius: 2, x: 0, y: 0)
+        .shadow(color: .black.opacity(0.16), radius: 24, x: 0, y: 0)
+        .padding(.horizontal, 16)
     }
 }
 

@@ -10,6 +10,7 @@
 		C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */; };
 		C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */; };
 		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
+		C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C51FA2C5284E2945007FAD56 /* PopupView */; };
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
 		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
@@ -94,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */,
 				C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */,
 				C5243EBB28460D2F001CBA3D /* SwiftSoup in Frameworks */,
 			);
@@ -284,6 +286,7 @@
 			packageProductDependencies = (
 				C5243EBA28460D2F001CBA3D /* SwiftSoup */,
 				C5E310AB28471DA6005937FA /* SwiftUIWebView */,
+				C51FA2C5284E2945007FAD56 /* PopupView */,
 			);
 			productName = FefeReader;
 			productReference = C524ACFD2843FD8900EF24F1 /* FefeReader.app */;
@@ -361,6 +364,7 @@
 				C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */,
 				C5E310B128473E36005937FA /* XCRemoteSwiftPackageReference "ExitButton" */,
+				C51FA2C4284E2945007FAD56 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = C524ACFE2843FD8900EF24F1 /* Products */;
 			projectDirPath = "";
@@ -756,6 +760,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C51FA2C4284E2945007FAD56 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scinfu/SwiftSoup";
@@ -783,6 +795,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C51FA2C5284E2945007FAD56 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C51FA2C4284E2945007FAD56 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
+		};
 		C5243EBA28460D2F001CBA3D /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */;

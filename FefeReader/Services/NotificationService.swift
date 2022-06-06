@@ -41,7 +41,7 @@ class NotificationService {
         })
     }
     
-    private func checkAuthorization(explicitly: Bool = false, andThenDo successCompletion: @escaping (UNUserNotificationCenter) -> () = {center in}, otherwise failCompletion: @escaping (UNUserNotificationCenter) -> () = {center in}) {
+    private func checkAuthorization(explicitly: Bool = false, andThenDo successCompletion: @escaping (UNUserNotificationCenter) -> () = {center in}) {
         center.getNotificationSettings { settings in
             if explicitly && settings.authorizationStatus != .authorized {
                 // We need to ask for permission --> fall through
@@ -70,7 +70,15 @@ class NotificationService {
     }
     
     func requestAuthorizationExplicitly() {
-        checkAuthorization(explicitly: true, otherwise: { center in })
+        checkAuthorization(explicitly: true)
+    }
+    
+    func checkExplicitAuthorization(otherwise handler: @escaping () -> ()) {
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus != .authorized {
+                handler()
+            }
+        }
     }
     
     private func addBadge(withNumber number: Int) {
