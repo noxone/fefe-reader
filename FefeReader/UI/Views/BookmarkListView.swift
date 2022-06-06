@@ -37,6 +37,14 @@ struct BookmarkListView: View {
             }
             .listStyle(.plain)
             .navigationTitle("Bookmarks")
+            // TODO: Show possibility to change sort direction
+            /*.toolbar {
+                ToolbarItem {
+                    Button(action: {}, label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                    })
+                }
+            }*/
         }
     }
 }

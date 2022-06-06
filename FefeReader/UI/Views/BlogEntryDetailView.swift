@@ -19,22 +19,22 @@ struct BlogEntryDetailView: View {
     
     @State private var showShareSheet = false
     
-    var dateString: String {
-        get {
-            if let date = blogEntry.date {
-                return DateFormatter.localizedString(from: date, dateStyle: .long, timeStyle: .none)
-            } else {
-                return "0-0-0"
-            }
-        }
-    }
+    @State private var urls: [URL] = []
     
     var body: some View {
         VStack(alignment: .leading) {
             let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: true, backgroundColor: .white)
             WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
+            /*VStack(alignment: .leading, spacing: 5) {
+                ForEach(urls, id: \.absoluteString) { url in
+                    Link(url.absoluteString, destination: url)
+                }
+            }
+            .frame(maxHeight: 150)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)*/
         }
-        .navigationTitle(dateString)
+        .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -55,9 +55,11 @@ struct BlogEntryDetailView: View {
         }
         .onAppear {
             if let content = blogEntry.content {
-                action = .loadHTML(HtmlEnhancer.shared.enhance(html: content))
+                action = .loadHTML(HtmlHelper.shared.enhance(html: content))
                 FefeBlog.shared.markAsRead(blogEntry)
                 PersistenceController.shared.save()
+                
+                urls = blogEntry.linkUrls
             } else {
                 action = .loadHTML("<i>No content to load.</i>")
             }
@@ -75,7 +77,7 @@ struct BlogEntryDetailView: View {
             externalUrl = url
             showExternalContent = true
         } else {
-            UIApplication.shared.open(url)
+            UrlService.openUrl(url)
         }
     }
 }

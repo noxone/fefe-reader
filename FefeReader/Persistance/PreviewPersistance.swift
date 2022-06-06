@@ -22,6 +22,7 @@ extension PersistenceController {
             entry.readTimestamp = Date()
         }
         entry.bookmarkDate = bookmark ? Date() : nil
+        entry.content = "<html>ja, <a href=\"google.de\">Google</a><html>"
         return entry
     }
     

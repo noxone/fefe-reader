@@ -11,6 +11,7 @@
 		C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */; };
 		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
 		C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C51FA2C5284E2945007FAD56 /* PopupView */; };
+		C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C7284E5802007FAD56 /* UrlService.swift */; };
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
 		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
@@ -33,7 +34,7 @@
 		C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* ExternalLinkView.swift */; };
 		C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AF284738E3005937FA /* ShareSheet.swift */; };
 		C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B428473EC7005937FA /* ExitButtonView.swift */; };
-		C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlEnhancer.swift */; };
+		C5E310B828474033005937FA /* HtmlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlHelper.swift */; };
 		C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* TabbedBlogView.swift */; };
 		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
 		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
@@ -60,6 +61,7 @@
 		C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTasks.swift; sourceTree = "<group>"; };
 		C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFetchList.swift; sourceTree = "<group>"; };
 		C51FA2C1284DF31F007FAD56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		C51FA2C7284E5802007FAD56 /* UrlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlService.swift; sourceTree = "<group>"; };
 		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
 		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
 		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
@@ -84,7 +86,7 @@
 		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C5E310B428473EC7005937FA /* ExitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButtonView.swift; sourceTree = "<group>"; };
-		C5E310B728474033005937FA /* HtmlEnhancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlEnhancer.swift; sourceTree = "<group>"; };
+		C5E310B728474033005937FA /* HtmlHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlHelper.swift; sourceTree = "<group>"; };
 		C5E310B928475840005937FA /* TabbedBlogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBlogView.swift; sourceTree = "<group>"; };
 		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				C5E310BB28475A9A005937FA /* Settings.swift */,
 				C5243EB12845CDDB001CBA3D /* FefeBlog.swift */,
 				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
+				C51FA2C7284E5802007FAD56 /* UrlService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -262,7 +265,7 @@
 		C5E310B62847401C005937FA /* HTML */ = {
 			isa = PBXGroup;
 			children = (
-				C5E310B728474033005937FA /* HtmlEnhancer.swift */,
+				C5E310B728474033005937FA /* HtmlHelper.swift */,
 			);
 			path = HTML;
 			sourceTree = "<group>";
@@ -417,8 +420,9 @@
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
 				C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
+				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
-				C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */,
+				C5E310B828474033005937FA /* HtmlHelper.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,

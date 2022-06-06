@@ -26,11 +26,11 @@ struct TabbedBlogView: View {
                     Text("Bookmarks")
                 }
             
-            CommonIcons.shared.searchImage
+            /*CommonIcons.shared.searchImage
                 .tabItem {
                     CommonIcons.shared.searchImage
                     Text("Search")
-                }
+                }*/
             
             /*UpdateFetchListView()
                 .environment(\.managedObjectContext, viewContext)

@@ -30,12 +30,18 @@ struct BlogEntryListView: View {
             List {
                 listContent
                 if fefeBlog.canLoadMore {
-                    Text("... end of list ...")
-                        .italic()
-                        .onAppear {
-                            print("Load older entries")
-                            fefeBlog.loadOlderEntries()
-                        }
+                    Button(action: {
+                        fefeBlog.loadOlderEntries()
+                    }, label: {
+                        Text("Load older entries")
+                            .frame(maxWidth: .infinity)
+                    })
+                    .buttonStyle(.bordered)
+                    .listRowSeparator(.hidden)
+                    .onAppear {
+                        print("Load older entries")
+                        fefeBlog.loadOlderEntries()
+                    }
                 }
             }
             .listStyle(.plain)

@@ -9,10 +9,20 @@ import Foundation
 import UserNotifications
 import UIKit
 
-class NotificationService {
+class NotificationService: NSObject, UNUserNotificationCenterDelegate, ObservableObject {
     static let shared = NotificationService()
     
-    private init() {}
+    private override init() {}
+    
+    @Published var idToOpen: Int64? = nil
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let id = response.notification.request.content.userInfo["id"] as? Int64 {
+            print("Open entry: ", id)
+            idToOpen = id
+        }
+        completionHandler()
+    }
     
     private var center: UNUserNotificationCenter {
         get {
@@ -21,6 +31,7 @@ class NotificationService {
     }
     
     func addNotifications(for blogEntries: [BlogEntry]) {
+        center.delegate = self
         addBadge(withNumber: blogEntries.count)
         for blogEntry in blogEntries {
             addNotification(for: blogEntry)
@@ -34,7 +45,7 @@ class NotificationService {
     }
     
     private func addNotification(withId id: UUID?, andContent content: UNNotificationContent) {
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         let request = UNNotificationRequest(identifier: (id ?? UUID()).uuidString, content: content, trigger: trigger)
         checkAuthorization(andThenDo:  { center in
             center.add(request)
@@ -59,7 +70,9 @@ class NotificationService {
             self.center.requestAuthorization(options: options) { success, error in
                 if success {
                     if explicitly {
-                        Settings.shared.askForNotificationApproval = false
+                        DispatchQueue.main.async {
+                            Settings.shared.askForNotificationApproval = false
+                        }
                     }
                     successCompletion(self.center)
                 } else if let error = error {

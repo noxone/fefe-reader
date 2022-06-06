@@ -44,4 +44,14 @@ extension BlogEntry {
             FefeBlog.shared.createUrl(forId: Int(id))
         }
     }
+    
+    var linkUrls: [URL] {
+        get {
+            if let content = content {
+                return HtmlHelper.shared.extractLinks(html: content)
+            } else {
+                return []
+            }
+        }
+    }
 }
