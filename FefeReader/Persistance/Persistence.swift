@@ -64,6 +64,13 @@ struct PersistenceController {
         return try? container.viewContext.fetch(request).first
     }
     
+    func createUpdateFetch(from: String) {
+        let fetch = UpdateFetch(context: container.viewContext)
+        fetch.date = Date()
+        fetch.from = from
+        save()
+    }
+    
     func createBlogEntry(from rawEntry: RawEntry) -> BlogEntry {
         let blogEntry = BlogEntry(context: container.viewContext)
         blogEntry.id = Int64(rawEntry.id)

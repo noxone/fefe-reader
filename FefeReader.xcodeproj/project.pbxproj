@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */; };
+		C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */; };
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
 		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
@@ -14,7 +16,6 @@
 		C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */; };
 		C5243EBB28460D2F001CBA3D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = C5243EBA28460D2F001CBA3D /* SwiftSoup */; };
 		C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */; };
-		C524AD032843FD8900EF24F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD022843FD8900EF24F1 /* ContentView.swift */; };
 		C524AD052843FD8C00EF24F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C524AD042843FD8C00EF24F1 /* Assets.xcassets */; };
 		C524AD082843FD8C00EF24F1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C524AD072843FD8C00EF24F1 /* Preview Assets.xcassets */; };
 		C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD092843FD8C00EF24F1 /* Persistence.swift */; };
@@ -54,13 +55,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTasks.swift; sourceTree = "<group>"; };
+		C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFetchList.swift; sourceTree = "<group>"; };
 		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
 		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
 		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
 		C5243EB12845CDDB001CBA3D /* FefeBlog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeBlog.swift; sourceTree = "<group>"; };
 		C524ACFD2843FD8900EF24F1 /* FefeReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FefeReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderApp.swift; sourceTree = "<group>"; };
-		C524AD022843FD8900EF24F1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C524AD042843FD8C00EF24F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C524AD072843FD8C00EF24F1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C524AD092843FD8C00EF24F1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryListView.swift; sourceTree = "<group>"; };
 		C530683A28491D5700082BA2 /* CommonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIcons.swift; sourceTree = "<group>"; };
 		C530683C2849DA6300082BA2 /* BookmarkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListView.swift; sourceTree = "<group>"; };
+		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
 		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
@@ -137,6 +140,7 @@
 				C5E310A828464623005937FA /* BlogEntryDetailView.swift */,
 				C5E310AD28472EEA005937FA /* ExternalLinkView.swift */,
 				C5E310BD28476130005937FA /* SettingsView.swift */,
+				C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -164,8 +168,9 @@
 		C524ACFF2843FD8900EF24F1 /* FefeReader */ = {
 			isa = PBXGroup;
 			children = (
+				C530683E2849E2A600082BA2 /* Info.plist */,
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
-				C524AD022843FD8900EF24F1 /* ContentView.swift */,
+				C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
 				C5243EB02845CDC8001CBA3D /* Model */,
 				C524AD302843FE8C00EF24F1 /* Persistance */,
@@ -395,13 +400,14 @@
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
+				C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
 				C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */,
-				C524AD032843FD8900EF24F1 /* ContentView.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
+				C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */,
 				C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */,
 				C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,
@@ -569,6 +575,7 @@
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FefeReader/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -599,6 +606,7 @@
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FefeReader/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

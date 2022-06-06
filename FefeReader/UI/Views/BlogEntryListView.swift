@@ -38,7 +38,7 @@ struct BlogEntryListView: View {
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                await FefeBlog.shared.refresh()
+                FefeBlog.shared.refresh()
             }
         }
     }

@@ -27,7 +27,7 @@ struct BookmarkListView: View {
                     NavigationLink(destination: {
                         BlogEntryDetailView(blogEntry: blogEntry)
                     }, label: {
-                        BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: false, showBookmarkIcon: false)
+                        BlogEntryRowView(blogEntry: blogEntry, showDate: true, tintReadEntries: false, showBookmarkIcon: false, lineLimit: 4)
                     })
                 }
                 if blogEntries.isEmpty {
@@ -44,5 +44,6 @@ struct BookmarkListView: View {
 struct BookmarkListView_Previews: PreviewProvider {
     static var previews: some View {
         BookmarkListView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

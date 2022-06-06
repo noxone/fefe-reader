@@ -32,6 +32,13 @@ struct TabbedBlogView: View {
                     Text("Search")
                 }
             
+            UpdateFetchListView()
+                .environment(\.managedObjectContext, viewContext)
+                .tabItem {
+                    Image(systemName: "circle")
+                    Text("Updates")
+                }
+            
             SettingsView()
             .tabItem {
                 Image(systemName: "ellipsis")

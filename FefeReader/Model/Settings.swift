@@ -12,10 +12,11 @@ class Settings : ObservableObject {
     static let shared = Settings()
     
     static let availableFonts = [
-        AppFont(displayName: "Helvetica Neue", font: .custom("Helvetica Neue", size: CGFloat(18)), html: "\"Helvetica Neue\""),
-        AppFont(displayName: "Times new Roman", font: .custom("Times New Roman", size: CGFloat(18)), html: "\"Times New Roman\""),
-        AppFont(displayName: "Courier New", font: .custom("Courier New", size: CGFloat(18)), html: "monospace"),
-        AppFont(displayName: "Optima", font: .custom("Optima", size: CGFloat(18)), html: "Optima")
+        AppFont(displayName: "System default", font: .body, html: "font:-apple-system-body"),
+        AppFont(displayName: "Helvetica Neue", font: .custom("Helvetica Neue", size: CGFloat(18)), html: "font-family:\"Helvetica Neue\""),
+        AppFont(displayName: "Times new Roman", font: .custom("Times New Roman", size: CGFloat(18)), html: "font-family:\"Times New Roman\""),
+        AppFont(displayName: "Courier New", font: .custom("Courier New", size: CGFloat(18)), html: "font-family:monospace"),
+        AppFont(displayName: "Optima", font: .custom("Optima", size: CGFloat(18)), html: "font-family:Optima")
         // TODO: Add more fonts
     ]
     static let availableRefreshFrequencies = [
@@ -30,10 +31,19 @@ class Settings : ObservableObject {
     static let issueUrl = URL(string: "https://github.com/noxone/fefe-reader/issues")!
     
     @Published var openUrlsInInternalBrowser: Bool = true
+    { didSet { save() } }
+    
     @Published var fontSize: Int = 12
+    { didSet { save() } }
+    
     @Published var overviewLineLimit: Int = 2
+    { didSet { save() } }
+    
     @Published var font: AppFont = Settings.availableFonts[0]
+    { didSet { save() } }
+    
     @Published var refreshFrequency: RefreshFrequency = Settings.availableRefreshFrequencies[2]
+    { didSet { save() } }
     
     private init() {
         let settings = UserDefaults.standard
@@ -43,7 +53,6 @@ class Settings : ObservableObject {
     }
     
     func save() {
-        print("save settings")
         let settings = UserDefaults.standard
         settings.set(openUrlsInInternalBrowser, forKey: "openUrlsInInternalBrowser")
         settings.set(fontSize, forKey: "fontSize")

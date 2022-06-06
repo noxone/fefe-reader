@@ -11,11 +11,12 @@
         <attribute name="teaser" optional="YES" attributeType="String"/>
         <attribute name="updatedSinceLastRead" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    <entity name="UpdateFetch" representedClassName="UpdateFetch" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="from" optional="YES" attributeType="String"/>
     </entity>
     <elements>
         <element name="BlogEntry" positionX="-63" positionY="-9" width="128" height="164"/>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="UpdateFetch" positionX="-63" positionY="63" width="128" height="59"/>
     </elements>
 </model>

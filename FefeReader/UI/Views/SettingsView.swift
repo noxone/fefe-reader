@@ -33,9 +33,6 @@ struct SettingsView: View {
                 }
             }
         }
-        .onReceive(settings.objectWillChange) {
-            settings.save()
-        }
     }
     
     private var sectionApplication: some View {

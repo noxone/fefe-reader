@@ -67,8 +67,9 @@ class FefeBlog : ObservableObject {
         persistance.save()
     }
     
-    func refresh() async {
-        print("Refresh...................")
+    func refresh() {
+        print("Refresh...................", Date())
+        PersistenceController.shared.createUpdateFetch(from: "blog")
         loadCurrentMonth()
     }
     
