@@ -57,7 +57,6 @@ struct BlogEntryDetailView: View {
             if let content = blogEntry.content {
                 action = .loadHTML(HtmlHelper.shared.enhance(html: content))
                 FefeBlog.shared.markAsRead(blogEntry)
-                PersistenceController.shared.save()
                 
                 urls = blogEntry.linkUrls
             } else {

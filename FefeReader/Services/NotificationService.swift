@@ -45,7 +45,7 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate, Observabl
     }
     
     private func addNotification(withId id: UUID?, andContent content: UNNotificationContent) {
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Settings.shared.notificationDelay, repeats: false)
         let request = UNNotificationRequest(identifier: (id ?? UUID()).uuidString, content: content, trigger: trigger)
         checkAuthorization(andThenDo:  { center in
             center.add(request)

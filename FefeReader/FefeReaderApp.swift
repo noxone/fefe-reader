@@ -13,7 +13,7 @@ import BackgroundTasks
 struct FefeReaderApp: App {
     private let persistenceController = PersistenceController.shared
     
-    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.scenePhase) private var scenePhase
     @State var set: Bool = true
     
     private let timer = Timer.publish(every: Settings.shared.refreshInternal, on: .main, in: .common).autoconnect()

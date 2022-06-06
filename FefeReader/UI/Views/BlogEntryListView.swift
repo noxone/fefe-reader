@@ -10,6 +10,7 @@ import PopupView
 
 struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject var fefeBlog = FefeBlog.shared
     
@@ -22,6 +23,8 @@ struct BlogEntryListView: View {
         ],
         animation: .default)
     private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
+    
+    @State private var selectedBlogEntry: BlogEntry? = nil
     
     @State private var showNotificationPopup = false
 
@@ -55,9 +58,20 @@ struct BlogEntryListView: View {
                         showNotificationPopup = true
                     }
                 }
+                print("opAppear")
+                if let id = NotificationService.shared.idToOpen {
+                    print("Open", id)
+                }
             }
             .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
                 notificationPopup
+            }
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+                    if let id = NotificationService.shared.idToOpen, let entry = PersistenceController.shared.getBlogEntry(withId: Int(id)) {
+                        selectedBlogEntry = entry
+                    }
+                }
             }
         }
     }
@@ -66,11 +80,10 @@ struct BlogEntryListView: View {
         ForEach(sectionedBlogEntries) { blogEntries in
             Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
                 ForEach(blogEntries) { blogEntry in
-                    NavigationLink {
+                    NavigationLink(tag: blogEntry, selection: $selectedBlogEntry) {
                         BlogEntryDetailView(blogEntry: blogEntry)
                     } label: {
                         BlogEntryRowView(blogEntry: blogEntry)
-                            .badge(blogEntry.updatedSinceLastRead ? Text("Updates") : nil)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
                         Button(action: {
@@ -87,6 +100,14 @@ struct BlogEntryListView: View {
                             CommonIcons.shared.trashImage
                         })
                         .tint(.red)
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        Button(action: {
+                            fefeBlog.toggleRead(blogEntry)
+                        }, label: {
+                            Image(systemName: "app.badge")
+                        })
+                        .tint(.blue)
                     }
                 }
             }

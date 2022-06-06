@@ -62,6 +62,20 @@ class FefeBlog : ObservableObject {
         persistance.save()
     }
     
+    func markAsUnread(_ blogEntry: BlogEntry) {
+        blogEntry.readTimestamp = nil
+        blogEntry.updatedSinceLastRead = false
+        persistance.save()
+    }
+    
+    func toggleRead(_ blogEntry: BlogEntry) {
+        if blogEntry.isRead {
+            markAsUnread(blogEntry)
+        } else {
+            markAsRead(blogEntry)
+        }
+    }
+    
     func toggleBookmark(for blogEntry: BlogEntry) {
         blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
         persistance.save()
@@ -120,7 +134,7 @@ class FefeBlog : ObservableObject {
                 // TODO
                 if blogEntry.content != rawEntry.content {
                     blogEntry.content = rawEntry.content
-                    if blogEntry.alreadyRead {
+                    if blogEntry.isRead {
                         blogEntry.updatedSinceLastRead = true
                     }
                 }
@@ -188,16 +202,26 @@ class FefeBlog : ObservableObject {
         }
     }
     
+    func isFefeBlogEntryUrl(_ url: URL) -> Bool {
+        return url.host == FefeBlog.baseUrl.host && (url.query?.contains("ts=") ?? false)
+    }
+    
+    func getIdFromFefeUrl(_ url: URL) -> Int? {
+        let href = url.absoluteString
+        if let firstIndex = href.firstIndex(of: "=") {
+            let index = href.index(firstIndex, offsetBy: 1)
+            let idString = String(href[index...])
+            return Int(idString, radix: 16)!
+        }
+        return nil
+    }
+    
     private func parseElementIntoRawEntry(_ element: Element, relativUrl: URL) -> RawEntry? {
         do {
             if let link = element.children().first(), link.tagName() == "a" {
                 let href = try link.attr("href")
-                if let hrefUrl = URL(string: href, relativeTo: relativUrl), hrefUrl.host == FefeBlog.baseUrl.host && (hrefUrl.query?.contains("ts=") ?? false) {
-                    if let firstIndex = href.firstIndex(of: "=") {
-                        let index = href.index(firstIndex, offsetBy: 1)
-                        let idString = String(href[index...])
-                        let id = Int(idString, radix: 16)!
-                        
+                if let hrefUrl = URL(string: href, relativeTo: relativUrl), isFefeBlogEntryUrl(hrefUrl) {
+                    if let id = getIdFromFefeUrl(hrefUrl) {
                         try link.remove()
                         let content = try element.html()
 

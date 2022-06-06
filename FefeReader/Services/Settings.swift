@@ -22,7 +22,13 @@ class Settings : ObservableObject {
 
     static let issueUrl = URL(string: "https://github.com/noxone/fefe-reader/issues")!
     
+#if targetEnvironment(simulator)
+    let refreshInternal = TimeInterval(10)
+    let notificationDelay = TimeInterval(5)
+#else
     let refreshInternal = TimeInterval(15 * 60)
+    let notificationDelay = TimeInterval(1)
+#endif
     
     @Published var askForNotificationApproval: Bool = true
     { didSet { save() } }

@@ -17,6 +17,23 @@ struct BlogEntryRowView: View {
     var showBookmarkIcon = true
     
     var lineLimit: Int? = nil
+    
+    var opacity: CGFloat {
+        get {
+            if !tintReadEntries {
+                return 1.0
+            }
+            if blogEntry.isRead {
+                if blogEntry.updatedSinceLastRead {
+                    return 0.8
+                } else {
+                    return 0.5
+                }
+            } else {
+                return 1.0
+            }
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,17 +49,17 @@ struct BlogEntryRowView: View {
 
             HStack(alignment: .center, spacing: 3) {
                 let teaser = blogEntry.teaser
-                let unread = !blogEntry.alreadyRead
                 
                 Text(teaser ?? "No teaser")
                     .active(teaser == nil, Text.italic)
-                    .opacity(tintReadEntries && unread ? 0.5 : 1.0)
+                    .opacity(opacity)
                     .lineLimit(lineLimit ?? settings.overviewLineLimit)
                 Spacer()
                 if showBookmarkIcon && blogEntry.isBookmarked {
                     blogEntry.bookmarkImage
                 }
             }
+            .badge(blogEntry.updatedSinceLastRead ? Text("Updates") : nil)
         }
     }
 }

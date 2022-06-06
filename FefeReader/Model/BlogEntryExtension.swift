@@ -8,9 +8,9 @@
 import SwiftUI
 
 extension BlogEntry {
-    var alreadyRead: Bool {
+    var isRead: Bool {
         get {
-            return readTimestamp == nil
+            return readTimestamp != nil
         }
     }
     
