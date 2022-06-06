@@ -116,12 +116,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C51FA2C0284DF30B007FAD56 /* Notifications */ = {
+		C51FA2C0284DF30B007FAD56 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C5E310BB28475A9A005937FA /* Settings.swift */,
+				C5243EB12845CDDB001CBA3D /* FefeBlog.swift */,
 				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
 			);
-			path = Notifications;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C51FA2C3284E2212007FAD56 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		C5243EAD2845CAA6001CBA3D /* UIKit */ = {
@@ -130,15 +140,6 @@
 				C5E310AF284738E3005937FA /* ShareSheet.swift */,
 			);
 			path = UIKit;
-			sourceTree = "<group>";
-		};
-		C5243EB02845CDC8001CBA3D /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				C5243EB12845CDDB001CBA3D /* FefeBlog.swift */,
-				C5E310BB28475A9A005937FA /* Settings.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		C5243EB32845CF5B001CBA3D /* Views */ = {
@@ -182,8 +183,8 @@
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
 				C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
-				C5243EB02845CDC8001CBA3D /* Model */,
-				C51FA2C0284DF30B007FAD56 /* Notifications */,
+				C51FA2C3284E2212007FAD56 /* Model */,
+				C51FA2C0284DF30B007FAD56 /* Services */,
 				C524AD302843FE8C00EF24F1 /* Persistance */,
 				C5E310B62847401C005937FA /* HTML */,
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
@@ -234,7 +235,6 @@
 			children = (
 				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
 				C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */,
-				C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";

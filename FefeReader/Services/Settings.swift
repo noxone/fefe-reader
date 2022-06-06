@@ -19,16 +19,13 @@ class Settings : ObservableObject {
         AppFont(displayName: "Optima", font: .custom("Optima", size: CGFloat(18)), html: "font-family:Optima")
         // TODO: Add more fonts
     ]
-    static let availableRefreshFrequencies = [
-        RefreshFrequency(display: "5 minutes", seconds: 5 * 60),
-        RefreshFrequency(display: "15 minutes", seconds: 15 * 60),
-        RefreshFrequency(display: "30 minutes", seconds: 30 * 60),
-        RefreshFrequency(display: "1 hour", seconds: 60 * 60),
-        RefreshFrequency(display: "2 hours", seconds: 2 * 60 * 60),
-        RefreshFrequency(display: "daily", seconds: 24 * 60 * 60)
-    ]
 
     static let issueUrl = URL(string: "https://github.com/noxone/fefe-reader/issues")!
+    
+    let refreshInternal = TimeInterval(15 * 60)
+    
+    @Published var askForNotificationApproval: Bool = true
+    { didSet { save() } }
     
     @Published var openUrlsInInternalBrowser: Bool = true
     { didSet { save() } }
@@ -42,14 +39,15 @@ class Settings : ObservableObject {
     @Published var font: AppFont = Settings.availableFonts[0]
     { didSet { save() } }
     
-    @Published var refreshFrequency: RefreshFrequency = Settings.availableRefreshFrequencies[2]
-    { didSet { save() } }
-    
     private init() {
         let settings = UserDefaults.standard
         self.openUrlsInInternalBrowser = settings.bool(forKey: "openUrlsInInternalBrowser", withDefault: true)
         self.fontSize = settings.integer(forKey: "fontSize", withDefault: 12)
+        self.font = settings.stringBasedObject(forKey: "fontName", withDefault: Settings.availableFonts[0], andConverter: { string in
+            Settings.availableFonts.first { $0.displayName == string }
+        })
         self.overviewLineLimit = settings.integer(forKey: "overviewLineLimit", withDefault: 2)
+        self.askForNotificationApproval = settings.bool(forKey: "askForNotoficationApproval", withDefault: true)
     }
     
     func save() {
@@ -58,7 +56,7 @@ class Settings : ObservableObject {
         settings.set(fontSize, forKey: "fontSize")
         settings.set(overviewLineLimit, forKey: "overviewLineLimit")
         settings.set(font.displayName, forKey: "fontName")
-        settings.set(refreshFrequency.seconds, forKey: "refreshFrequency")
+        settings.set(askForNotificationApproval, forKey: "askForNotoficationApproval")
     }
 }
 
@@ -73,6 +71,13 @@ extension UserDefaults {
     func integer(forKey key: String, withDefault defaultValue: Int) -> Int {
         if object(forKey: key) != nil {
             return integer(forKey: key)
+        }
+        return defaultValue
+    }
+    
+    func stringBasedObject<T>(forKey key: String, withDefault defaultValue: T, andConverter converter: (String) -> T?) -> T {
+        if let string = string(forKey: key) {
+            return converter(string) ?? defaultValue
         }
         return defaultValue
     }

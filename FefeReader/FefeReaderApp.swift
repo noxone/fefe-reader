@@ -16,7 +16,7 @@ struct FefeReaderApp: App {
     @Environment(\.scenePhase) var scenePhase
     @State var set: Bool = true
     
-    private let timer = Timer.publish(every: TimeInterval(5 * 60), on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: Settings.shared.refreshInternal, on: .main, in: .common).autoconnect()
         
     init() {
         BlogTasks.shared.registerBackgroundTaks()
@@ -27,7 +27,6 @@ struct FefeReaderApp: App {
             TabbedBlogView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .task {
-                    NotificationService.shared.requestAuthorization()
                     BlogTasks.shared.cancelAllPendingBGTask()
                     _ = FefeBlog.shared.refresh(origin: "init")
                 }
@@ -36,6 +35,9 @@ struct FefeReaderApp: App {
                 }
         }
         .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                UIApplication.shared.applicationIconBadgeNumber = 0
+            }
             if newPhase == .background {
                 BlogTasks.shared.cancelAllPendingBGTask()
                 BlogTasks.shared.scheduleAppRefresh()

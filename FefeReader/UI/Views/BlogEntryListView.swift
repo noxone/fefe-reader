@@ -40,6 +40,16 @@ struct BlogEntryListView: View {
             .refreshable {
                 _ = FefeBlog.shared.refresh(origin: "manual refresh")
             }
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        NotificationService.shared.requestAuthorizationExplicitly()
+                    } label: {
+                        Label("Remind Me", systemImage: "bell")
+                    }
+                    .tint(.orange)
+                }
+            }
         }
     }
     

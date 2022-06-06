@@ -82,6 +82,7 @@ struct PersistenceController {
         blogEntry.teaser = preview
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
+        blogEntry.uuid = UUID()
         return blogEntry
     }
     
