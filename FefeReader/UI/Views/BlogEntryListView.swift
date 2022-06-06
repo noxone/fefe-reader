@@ -38,7 +38,7 @@ struct BlogEntryListView: View {
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                FefeBlog.shared.refresh()
+                _ = FefeBlog.shared.refresh(origin: "manual refresh")
             }
         }
     }
@@ -55,7 +55,7 @@ struct BlogEntryListView: View {
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
                         Button(action: {
-                            fefeBlog.toggleFavourite(for: blogEntry)
+                            fefeBlog.toggleBookmark(for: blogEntry)
                         }, label: {
                             CommonIcons.shared.bookmarkImage()
                         })

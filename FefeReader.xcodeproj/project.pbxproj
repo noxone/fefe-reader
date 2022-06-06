@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */; };
 		C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */; };
+		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
 		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTasks.swift; sourceTree = "<group>"; };
 		C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFetchList.swift; sourceTree = "<group>"; };
+		C51FA2C1284DF31F007FAD56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
 		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
 		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
@@ -114,6 +116,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C51FA2C0284DF30B007FAD56 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		C5243EAD2845CAA6001CBA3D /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -173,6 +183,7 @@
 				C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
 				C5243EB02845CDC8001CBA3D /* Model */,
+				C51FA2C0284DF30B007FAD56 /* Notifications */,
 				C524AD302843FE8C00EF24F1 /* Persistance */,
 				C5E310B62847401C005937FA /* HTML */,
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
@@ -405,6 +416,7 @@
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
 				C5E310B828474033005937FA /* HtmlEnhancer.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
+				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
 				C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */,

@@ -11,7 +11,7 @@ import CoreData
 extension PersistenceController {
     private static var relNumber: Int = 0
     
-    private func preview_createBlogEntry(id: Int, teaser: String, read: Bool, favourite: Bool) -> BlogEntry {
+    private func preview_createBlogEntry(id: Int, teaser: String, read: Bool, bookmark: Bool) -> BlogEntry {
         let entry = BlogEntry(context: container.viewContext)
         entry.id = Int64(id)
         entry.date = Date()
@@ -21,7 +21,7 @@ extension PersistenceController {
         if read {
             entry.readTimestamp = Date()
         }
-        entry.favourite = favourite
+        entry.bookmarkDate = bookmark ? Date() : nil
         return entry
     }
     
@@ -43,10 +43,10 @@ extension PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 1, teaser: "This is an unread teaser.", read: false, favourite: false))
-        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 2, teaser: "This is another teaser, but read.", read: true, favourite: false))
-        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 3, teaser: "Unread: This is some more text that is really long and does not fit into one single line.", read: false, favourite: true))
-        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 4, teaser: "Read: And a fourth one... This one also has quite a long teaser text.", read: true, favourite: false))
+        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 1, teaser: "This is an unread teaser.", read: false, bookmark: false))
+        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 2, teaser: "This is another teaser, but read.", read: true, bookmark: false))
+        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 3, teaser: "Unread: This is some more text that is really long and does not fit into one single line.", read: false, bookmark: true))
+        preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 4, teaser: "Read: And a fourth one... This one also has quite a long teaser text.", read: true, bookmark: false))
         preview_internal_BlogEntries[3].updatedSinceLastRead = true
 
         _ = result.preview_createUpdate(from: "a")

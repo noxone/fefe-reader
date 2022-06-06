@@ -16,19 +16,23 @@ struct FefeReaderApp: App {
     @Environment(\.scenePhase) var scenePhase
     @State var set: Bool = true
     
+    private let timer = Timer.publish(every: TimeInterval(5 * 60), on: .main, in: .common).autoconnect()
+        
     init() {
         BlogTasks.shared.registerBackgroundTaks()
     }
 
     var body: some Scene {
         WindowGroup {
-            //ContentView()
-            //TestView()
             TabbedBlogView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .task {
-                    FefeBlog.shared.refresh()
-                    //Refresher.shared.scheduleAppRefresh(now: true)
+                    NotificationService.shared.requestAuthorization()
+                    BlogTasks.shared.cancelAllPendingBGTask()
+                    _ = FefeBlog.shared.refresh(origin: "init")
+                }
+                .onReceive(timer) { input in
+                    FefeBlog.shared.refreshWithNotifications(origin: "timer")
                 }
         }
         .onChange(of: scenePhase) { newPhase in

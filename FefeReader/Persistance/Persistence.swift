@@ -77,9 +77,9 @@ struct PersistenceController {
         blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
         blogEntry.date = rawEntry.date
         blogEntry.content = rawEntry.content
-        blogEntry.favourite = false
+        blogEntry.bookmarkDate = nil
         let preview = rawEntry.plainContent
-        blogEntry.teaser = String(preview[..<preview.index(preview.startIndex, offsetBy: min(400, preview.count))])
+        blogEntry.teaser = preview
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
         return blogEntry
@@ -94,12 +94,12 @@ struct PersistenceController {
     func resetBookmarks() {
         do {
             let request = BlogEntry.fetchRequest()
-            _ = (\BlogEntry.favourite) // Reminder, that "favourite" is used here
-            request.predicate = NSPredicate(format: "favourite == %@", NSNumber(value: true))
+            _ = (\BlogEntry.isBookmarked) // Reminder, that "isBookmarked" is used here
+            request.predicate = NSPredicate(format: "bookmarkDate != nil")
             
             let entries = try container.viewContext.fetch(request)
             for entry in entries {
-                entry.favourite = false
+                entry.bookmarkDate = nil
             }
 
             save()

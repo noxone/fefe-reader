@@ -62,24 +62,29 @@ class FefeBlog : ObservableObject {
         persistance.save()
     }
     
-    func toggleFavourite(for blogEntry: BlogEntry) {
-        blogEntry.favourite = !blogEntry.favourite
+    func toggleBookmark(for blogEntry: BlogEntry) {
+        blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
         persistance.save()
     }
     
-    func refresh() {
-        print("Refresh...................", Date())
-        PersistenceController.shared.createUpdateFetch(from: "blog")
-        loadCurrentMonth()
+    func refreshWithNotifications(origin: String) {
+        let blogEntries = FefeBlog.shared.refresh(origin: origin)
+        NotificationService.shared.addNotifications(for: blogEntries)
     }
     
-    private func loadCurrentMonth() {
-        _ = loadMonthIntoDatabase(forDate: Date())
+    func refresh(origin: String) -> [BlogEntry] {
+        print("Refresh...................", origin, Date())
+        PersistenceController.shared.createUpdateFetch(from: origin)
+        return loadCurrentMonth()
+    }
+        
+    private func loadCurrentMonth() -> [BlogEntry] {
+        return loadMonthIntoDatabase(forDate: Date()).createdBlogEntries
     }
     
     func loadOlderEntries() {
         guard let oldestEntry = persistance.getOldestBlogEntry() else {
-            loadCurrentMonth()
+            _ = loadCurrentMonth()
             return
         }
         
@@ -98,12 +103,14 @@ class FefeBlog : ObservableObject {
                 return
             }
         
-            count = loadMonthIntoDatabase(forDate: dateToLoad)
+            count = loadMonthIntoDatabase(forDate: dateToLoad).touchedEntries
         } while (count == 0)
     }
     
-    private func loadMonthIntoDatabase(forDate date: Date) -> Int {
+    private func loadMonthIntoDatabase(forDate date: Date) -> (touchedEntries: Int, createdBlogEntries: [BlogEntry]) {
         let rawEntries = downloadAndParseRawEntries(forDate: date)
+        
+        var createdBlogEntries: [BlogEntry] = []
         
         for rawEntry in rawEntries {
             let blogEntry = persistance.getBlogEntry(withId: rawEntry.id)
@@ -120,12 +127,13 @@ class FefeBlog : ObservableObject {
                 blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
             } else {
                 // Create entry
-                _ = persistance.createBlogEntry(from: rawEntry)
+                let newBlogEntry = persistance.createBlogEntry(from: rawEntry)
+                createdBlogEntries.append(newBlogEntry)
             }
         }
         persistance.save()
         
-        return rawEntries.count
+        return (touchedEntries: rawEntries.count, createdBlogEntries: createdBlogEntries)
     }
     
     private func downloadAndParseRawEntries(forDate date: Date) -> [RawEntry] {

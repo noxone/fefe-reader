@@ -42,19 +42,9 @@ class BlogTasks {
     func handleAppRefresh(task: BGAppRefreshTask) {
         print("--- Handle app refresh")
         
-        
         scheduleAppRefresh()
-        // let url = URL(string: "https://google.com")!
         
-        PersistenceController.shared.createUpdateFetch(from: "task")
-
-        /*let task2 = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else { return }
-            print(data)
-            task.setTaskCompleted(success: true)
-        }
-
-        task2.resume()*/
+        FefeBlog.shared.refreshWithNotifications(origin: "background")
         
         task.expirationHandler = {
             print("cancel operations")

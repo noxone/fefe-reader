@@ -39,7 +39,7 @@ struct BlogEntryDetailView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
-                    FefeBlog.shared.toggleFavourite(for: blogEntry)
+                    FefeBlog.shared.toggleBookmark(for: blogEntry)
                 }, label: {
                     blogEntry.bookmarkImage
                 })

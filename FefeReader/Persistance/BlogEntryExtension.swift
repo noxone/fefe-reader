@@ -14,10 +14,23 @@ extension BlogEntry {
         }
     }
     
+    var isBookmarked: Bool {
+        get {
+            return bookmarkDate != nil
+        }
+    }
+    
     var secureDate: Date {
         get {
             return date ?? Date()
         }
+    }
+    
+    func teaserPrefix(withMaximumLength length: Int) -> String? {
+        guard let teaser = teaser else { return nil }
+        
+        let addEllipsis = teaser.count > length
+        return String(teaser[..<teaser.index(teaser.startIndex, offsetBy: min(length, teaser.count))]) + (addEllipsis ? "..." : "")
     }
     
     var bookmarkImage: some View {

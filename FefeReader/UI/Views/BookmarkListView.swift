@@ -13,10 +13,10 @@ struct BookmarkListView: View {
     @FetchRequest(
         entity: BlogEntry.entity(),
         sortDescriptors: [
-            NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
+            NSSortDescriptor(keyPath: \BlogEntry.bookmarkDate, ascending: false),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
         ],
-        predicate: NSPredicate(format: "favourite == %@", NSNumber(value: true)),
+        predicate: NSPredicate(format: "bookmarkDate != nil"),
         animation: .default)
     private var blogEntries: FetchedResults<BlogEntry>
 
@@ -31,7 +31,7 @@ struct BookmarkListView: View {
                     })
                 }
                 if blogEntries.isEmpty {
-                    Text("To add a bookmark, go to the blog tab and mark blog posts with the \(Image(systemName: CommonIcons.shared.bookmarkImageActiveName)) icon. These posts will be displayed here.")
+                    Text("To add a bookmark, go to the \(CommonIcons.shared.blogImage) blog tab and mark blog posts with the \(CommonIcons.shared.bookmarkImage) icon. These posts will be displayed here.")
                         .listRowSeparator(.hidden)
                 }
             }

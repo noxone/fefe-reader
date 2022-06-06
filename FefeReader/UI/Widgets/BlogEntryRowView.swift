@@ -25,6 +25,7 @@ struct BlogEntryRowView: View {
                     if let date = blogEntry.date {
                         Text("\(date.formatted(date: .long, time: .omitted))")
                             .font(.caption2)
+                            .opacity(0.7)
                     }
                 }
             }
@@ -38,7 +39,7 @@ struct BlogEntryRowView: View {
                     .opacity(tintReadEntries && unread ? 0.5 : 1.0)
                     .lineLimit(lineLimit ?? settings.overviewLineLimit)
                 Spacer()
-                if showBookmarkIcon && blogEntry.favourite {
+                if showBookmarkIcon && blogEntry.isBookmarked {
                     blogEntry.bookmarkImage
                 }
             }
