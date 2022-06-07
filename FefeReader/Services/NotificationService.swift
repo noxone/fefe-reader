@@ -95,7 +95,9 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate, Observabl
     }
     
     private func addBadge(withNumber number: Int) {
-        UIApplication.shared.applicationIconBadgeNumber = number
+        DispatchQueue.main.async {
+            UIApplication.shared.applicationIconBadgeNumber = number
+        }
     }
 }
 

@@ -21,18 +21,24 @@ struct BlogEntryDetailView: View {
     
     @State private var urls: [URL] = []
     
+    @State private var selectedSubEntry: BlogEntry? = nil
+    
     var body: some View {
         VStack(alignment: .leading) {
             let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: true, backgroundColor: .white)
             WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
-            /*VStack(alignment: .leading, spacing: 5) {
-                ForEach(urls, id: \.absoluteString) { url in
-                    Link(url.absoluteString, destination: url)
+            
+            ForEach(blogEntry.linkUrls, id: \.absoluteURL) { url in
+                if FefeBlog.shared.isFefeBlogEntryUrl(url), let id = FefeBlog.shared.getIdFromFefeUrl(url), let entry = PersistenceController.shared.getBlogEntry(withId: id) {
+                    NavigationLink(tag: entry, selection: $selectedSubEntry, destination: {
+                        //BlogEntryDetailView(blogEntry: entry)
+                        //Text(entry.content!)
+                        BlogEntryDetailView(blogEntry: entry)
+                    }, label: {
+                        EmptyView()
+                    })
                 }
             }
-            .frame(maxHeight: 150)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)*/
         }
         .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
@@ -72,6 +78,13 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
+        if FefeBlog.shared.isFefeBlogEntryUrl(url) {
+            if let id = FefeBlog.shared.getIdFromFefeUrl(url), let entry = PersistenceController.shared.getBlogEntry(withId: id) {
+                selectedSubEntry = entry
+                return
+            }
+        }
+        
         if Settings.shared.openUrlsInInternalBrowser {
             externalUrl = url
             showExternalContent = true
@@ -80,7 +93,19 @@ struct BlogEntryDetailView: View {
         }
     }
 }
-
+struct RowLine<TargetView: View>: View {
+    var text: String
+    var imageName: String
+    var nextView: TargetView
+    var body: some View {
+        NavigationLink(destination: nextView) {
+            HStack {
+                Image(systemName: imageName)
+                Text(text)
+            }
+        }
+    }
+}
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

@@ -145,7 +145,13 @@ class FefeBlog : ObservableObject {
                 createdBlogEntries.append(newBlogEntry)
             }
         }
-        persistance.save()
+        if Thread.isMainThread {
+            persistance.save()
+        } else {
+            DispatchQueue.main.async {
+                self.persistance.save()
+            }
+        }
         
         return (touchedEntries: rawEntries.count, createdBlogEntries: createdBlogEntries)
     }
