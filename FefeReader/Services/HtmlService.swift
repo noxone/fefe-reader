@@ -25,6 +25,8 @@ class HtmlService {
             try preparedBody.parent()?.appendChild(body)
             try preparedBody.remove()
             
+            try makeLinksAbsolute(in: preparedHtml, relativeTo: URL(string: "https://blog.fefe.de")!)
+            
             let generatedHtml = try preparedHtml.html()
             return generatedHtml
         } catch {
@@ -32,6 +34,17 @@ class HtmlService {
             print("Unable to prepare HTML", error)
             return html
         }
+    }
+    
+    private func makeLinksAbsolute(in document: Document, relativeTo baseUrl: URL) throws {
+        let links = try document.select("a")
+        for link in links {
+            if let href = try? link.attr("href"), let url = URL(string: href, relativeTo: baseUrl) {
+                try link.attr("href", url.absoluteString)
+            }
+        }
+        let newHtml = try document.outerHtml()
+        print(newHtml)
     }
     
     func extractLinks(html: String) -> [URL] {
