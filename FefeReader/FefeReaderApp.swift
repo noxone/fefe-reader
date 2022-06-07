@@ -28,10 +28,10 @@ struct FefeReaderApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .task {
                     BlogTasks.shared.cancelAllPendingBGTask()
-                    _ = FefeBlog.shared.refresh(origin: "init")
+                    _ = FefeBlogService.shared.refresh(origin: "init")
                 }
                 .onReceive(timer) { input in
-                    FefeBlog.shared.refreshWithNotifications(origin: "timer")
+                    FefeBlogService.shared.refreshWithNotifications(origin: "timer")
                 }
         }
         .onChange(of: scenePhase) { newPhase in

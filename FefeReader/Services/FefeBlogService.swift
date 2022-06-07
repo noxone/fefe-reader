@@ -8,8 +8,8 @@
 import Foundation
 import SwiftSoup
 
-class FefeBlog : ObservableObject {
-    static let shared = FefeBlog()
+class FefeBlogService : ObservableObject {
+    static let shared = FefeBlogService()
     
     private static let baseUrl = URL(string: "https://blog.fefe.de")!
     
@@ -43,7 +43,7 @@ class FefeBlog : ObservableObject {
     @Published
     private(set) var canLoadMore: Bool = {
         if let oldestEntryDate = PersistenceController.shared.getOldestBlogEntry()?.date {
-            return oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlog.earliestPost)!
+            return oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
         } else {
             return true
         }
@@ -53,7 +53,7 @@ class FefeBlog : ObservableObject {
     }
     
     func createUrl(forId id: Int) -> URL {
-        return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlog.baseUrl)!
+        return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
     func markAsRead(_ blogEntry: BlogEntry) {
@@ -82,7 +82,7 @@ class FefeBlog : ObservableObject {
     }
     
     func refreshWithNotifications(origin: String) {
-        let blogEntries = FefeBlog.shared.refresh(origin: origin)
+        let blogEntries = FefeBlogService.shared.refresh(origin: origin)
         NotificationService.shared.addNotifications(for: blogEntries)
     }
     
@@ -112,7 +112,7 @@ class FefeBlog : ObservableObject {
         repeat {
             dateToLoad = Calendar.current.date(byAdding: .month, value: -1, to: dateToLoad)!
         
-            if dateToLoad < FefeBlog.earliestPost {
+            if dateToLoad < FefeBlogService.earliestPost {
                 canLoadMore = false
                 return
             }
@@ -145,13 +145,7 @@ class FefeBlog : ObservableObject {
                 createdBlogEntries.append(newBlogEntry)
             }
         }
-        if Thread.isMainThread {
-            persistance.save()
-        } else {
-            DispatchQueue.main.async {
-                self.persistance.save()
-            }
-        }
+        persistance.save()
         
         return (touchedEntries: rawEntries.count, createdBlogEntries: createdBlogEntries)
     }
@@ -200,7 +194,7 @@ class FefeBlog : ObservableObject {
     
     private func getDate(forElement element: Element) -> Date? {
         do {
-            return FefeBlog.blogDateFormatter.date(from: try element.text())
+            return FefeBlogService.blogDateFormatter.date(from: try element.text())
         } catch {
             // TODO better error handling
             print("Unable to parse date from element.", error)
@@ -209,7 +203,7 @@ class FefeBlog : ObservableObject {
     }
     
     func isFefeBlogEntryUrl(_ url: URL) -> Bool {
-        return url.host == FefeBlog.baseUrl.host && (url.query?.contains("ts=") ?? false)
+        return url.host == FefeBlogService.baseUrl.host && (url.query?.contains("ts=") ?? false)
     }
     
     func getIdFromFefeUrl(_ url: URL) -> Int? {
@@ -246,7 +240,7 @@ class FefeBlog : ObservableObject {
     }
     
     private func downloadHtmlForMonth(date: Date) -> (url: URL, html: String)? {
-        if let url = URL(string: "?mon=\(FefeBlog.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlog.baseUrl) {
+        if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
             do {
                 return try (url: url, html: String(contentsOf: url))
             } catch {

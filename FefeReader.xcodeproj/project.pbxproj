@@ -17,7 +17,7 @@
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
 		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
-		C5243EB22845CDDB001CBA3D /* FefeBlog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EB12845CDDB001CBA3D /* FefeBlog.swift */; };
+		C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */; };
 		C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */; };
 		C5243EBB28460D2F001CBA3D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = C5243EBA28460D2F001CBA3D /* SwiftSoup */; };
 		C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */; };
@@ -70,7 +70,7 @@
 		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
 		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
 		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
-		C5243EB12845CDDB001CBA3D /* FefeBlog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeBlog.swift; sourceTree = "<group>"; };
+		C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeBlogService.swift; sourceTree = "<group>"; };
 		C524ACFD2843FD8900EF24F1 /* FefeReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FefeReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderApp.swift; sourceTree = "<group>"; };
 		C524AD042843FD8C00EF24F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				C5E310BB28475A9A005937FA /* Settings.swift */,
-				C5243EB12845CDDB001CBA3D /* FefeBlog.swift */,
+				C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */,
 				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
 				C51FA2C7284E5802007FAD56 /* UrlService.swift */,
 			);
@@ -432,7 +432,7 @@
 				C524AD0D2843FD8C00EF24F1 /* FefeReader.xcdatamodeld in Sources */,
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */,
-				C5243EB22845CDDB001CBA3D /* FefeBlog.swift in Sources */,
+				C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,

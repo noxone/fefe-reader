@@ -12,7 +12,7 @@ struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
     
-    @ObservedObject var fefeBlog = FefeBlog.shared
+    @ObservedObject var fefeBlog = FefeBlogService.shared
     
     @SectionedFetchRequest(
         entity: BlogEntry.entity(),
@@ -55,7 +55,7 @@ struct BlogEntryListView: View {
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                _ = FefeBlog.shared.refresh(origin: "manual refresh")
+                _ = FefeBlogService.shared.refresh(origin: "manual refresh")
             }
             .onAppear {
                 if Settings.shared.askForNotificationApproval {

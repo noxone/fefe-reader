@@ -31,7 +31,7 @@ struct BlogEntryDetailView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
-                    FefeBlog.shared.toggleBookmark(for: blogEntry)
+                    FefeBlogService.shared.toggleBookmark(for: blogEntry)
                 }, label: {
                     blogEntry.bookmarkImage
                 })
@@ -48,7 +48,7 @@ struct BlogEntryDetailView: View {
         .onAppear {
             if let content = blogEntry.content {
                 action = .loadHTML(HtmlHelper.shared.enhance(html: content))
-                FefeBlog.shared.markAsRead(blogEntry)
+                FefeBlogService.shared.markAsRead(blogEntry)
                 
                 //urls = blogEntry.linkUrls
             } else {

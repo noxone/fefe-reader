@@ -44,7 +44,7 @@ class BlogTasks {
         
         scheduleAppRefresh()
         
-        FefeBlog.shared.refreshWithNotifications(origin: "background")
+        FefeBlogService.shared.refreshWithNotifications(origin: "background")
         
         task.expirationHandler = {
             print("cancel operations")

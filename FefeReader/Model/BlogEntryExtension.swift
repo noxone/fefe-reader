@@ -41,7 +41,7 @@ extension BlogEntry {
     
     var url: URL {
         get {
-            FefeBlog.shared.createUrl(forId: Int(id))
+            FefeBlogService.shared.createUrl(forId: Int(id))
         }
     }
     
