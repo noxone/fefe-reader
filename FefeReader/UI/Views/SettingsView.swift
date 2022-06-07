@@ -20,6 +20,7 @@ struct SettingsView: View {
                 sectionFont
                 sectionOther
                 sectionDevelopment
+                sectionLicenses
             }
             .navigationTitle("Settings")
             .confirmationDialog("Permanently erase all loaded blog entries and bookmarks?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
@@ -114,6 +115,14 @@ struct SettingsView: View {
             }, label: {
                 Text("Clear all loaded blog entries")
             })
+        }
+    }
+    
+    private var sectionLicenses: some View {
+        Section("Licenses") {
+            NavigationLink("View licenses") {
+                LicensesView()
+            }
         }
     }
 }

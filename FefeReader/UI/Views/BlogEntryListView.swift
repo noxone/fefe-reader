@@ -27,6 +27,12 @@ struct BlogEntryListView: View {
     @State private var selectedBlogEntry: BlogEntry? = nil
     
     @State private var showNotificationPopup = false
+    
+    init() {
+        // Use this if NavigationBarTitle is with large font
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 35)!]
+        UINavigationBar.appearance().titleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
+    }
 
     var body: some View {
         NavigationView {
