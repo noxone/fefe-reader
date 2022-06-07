@@ -87,7 +87,7 @@
 		C530683A28491D5700082BA2 /* CommonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIcons.swift; sourceTree = "<group>"; };
 		C530683C2849DA6300082BA2 /* BookmarkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListView.swift; sourceTree = "<group>"; };
 		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
+		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
 		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
@@ -196,7 +196,6 @@
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
 				C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
-				C533525E284F54EC0060A663 /* Allison-Regular.ttf */,
 				C51FA2C3284E2212007FAD56 /* Model */,
 				C51FA2C0284DF30B007FAD56 /* Services */,
 				C524AD302843FE8C00EF24F1 /* Persistance */,
@@ -240,6 +239,7 @@
 				C524AD312843FEA500EF24F1 /* Widgets */,
 				C5243EAD2845CAA6001CBA3D /* UIKit */,
 				C530683928491D3D00082BA2 /* Shared */,
+				C5335263284F75CF0060A663 /* Fonts */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -269,6 +269,14 @@
 				C530683A28491D5700082BA2 /* CommonIcons.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		C5335263284F75CF0060A663 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C533525E284F54EC0060A663 /* Allison-Regular.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		C5E310B62847401C005937FA /* HTML */ = {

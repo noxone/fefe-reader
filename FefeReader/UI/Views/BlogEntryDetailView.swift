@@ -19,26 +19,12 @@ struct BlogEntryDetailView: View {
     
     @State private var showShareSheet = false
     
-    @State private var urls: [URL] = []
-    
-    @State private var selectedSubEntry: BlogEntry? = nil
+    //@State private var urls: [URL] = []
     
     var body: some View {
         VStack(alignment: .leading) {
             let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: true, backgroundColor: .white)
             WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
-            
-            ForEach(blogEntry.linkUrls, id: \.absoluteURL) { url in
-                if FefeBlog.shared.isFefeBlogEntryUrl(url), let id = FefeBlog.shared.getIdFromFefeUrl(url), let entry = PersistenceController.shared.getBlogEntry(withId: id) {
-                    NavigationLink(tag: entry, selection: $selectedSubEntry, destination: {
-                        //BlogEntryDetailView(blogEntry: entry)
-                        //Text(entry.content!)
-                        BlogEntryDetailView(blogEntry: entry)
-                    }, label: {
-                        EmptyView()
-                    })
-                }
-            }
         }
         .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
@@ -64,7 +50,7 @@ struct BlogEntryDetailView: View {
                 action = .loadHTML(HtmlHelper.shared.enhance(html: content))
                 FefeBlog.shared.markAsRead(blogEntry)
                 
-                urls = blogEntry.linkUrls
+                //urls = blogEntry.linkUrls
             } else {
                 action = .loadHTML("<i>No content to load.</i>")
             }
@@ -78,13 +64,7 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
-        if FefeBlog.shared.isFefeBlogEntryUrl(url) {
-            if let id = FefeBlog.shared.getIdFromFefeUrl(url), let entry = PersistenceController.shared.getBlogEntry(withId: id) {
-                selectedSubEntry = entry
-                return
-            }
-        }
-        
+        print("Handle: ", url)
         if Settings.shared.openUrlsInInternalBrowser {
             externalUrl = url
             showExternalContent = true

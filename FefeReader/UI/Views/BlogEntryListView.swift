@@ -31,7 +31,6 @@ struct BlogEntryListView: View {
     init() {
         // Use this if NavigationBarTitle is with large font
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
-        UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Allison", size: 30)!]
     }
 
     var body: some View {
@@ -64,10 +63,6 @@ struct BlogEntryListView: View {
                         showNotificationPopup = true
                     }
                 }
-                print("opAppear")
-                if let id = NotificationService.shared.idToOpen {
-                    print("Open", id)
-                }
             }
             .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
                 notificationPopup
@@ -75,6 +70,7 @@ struct BlogEntryListView: View {
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
                     if let id = NotificationService.shared.idToOpen, let entry = PersistenceController.shared.getBlogEntry(withId: Int(id)) {
+                        NotificationService.shared.idToOpen = nil
                         selectedBlogEntry = entry
                     }
                 }

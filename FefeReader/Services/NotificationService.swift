@@ -9,12 +9,12 @@ import Foundation
 import UserNotifications
 import UIKit
 
-class NotificationService: NSObject, UNUserNotificationCenterDelegate, ObservableObject {
+class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationService()
     
     private override init() {}
     
-    @Published var idToOpen: Int64? = nil
+    var idToOpen: Int64? = nil
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         if let id = response.notification.request.content.userInfo["id"] as? Int64 {
