@@ -37,7 +37,7 @@
 		C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* ExternalLinkView.swift */; };
 		C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AF284738E3005937FA /* ShareSheet.swift */; };
 		C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B428473EC7005937FA /* ExitButtonView.swift */; };
-		C5E310B828474033005937FA /* HtmlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlHelper.swift */; };
+		C5E310B828474033005937FA /* HtmlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlService.swift */; };
 		C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* TabbedBlogView.swift */; };
 		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
 		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
@@ -92,7 +92,7 @@
 		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C5E310B428473EC7005937FA /* ExitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButtonView.swift; sourceTree = "<group>"; };
-		C5E310B728474033005937FA /* HtmlHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlHelper.swift; sourceTree = "<group>"; };
+		C5E310B728474033005937FA /* HtmlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlService.swift; sourceTree = "<group>"; };
 		C5E310B928475840005937FA /* TabbedBlogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBlogView.swift; sourceTree = "<group>"; };
 		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -129,9 +129,10 @@
 		C51FA2C0284DF30B007FAD56 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C5E310BB28475A9A005937FA /* Settings.swift */,
 				C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */,
+				C5E310B728474033005937FA /* HtmlService.swift */,
 				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
+				C5E310BB28475A9A005937FA /* Settings.swift */,
 				C51FA2C7284E5802007FAD56 /* UrlService.swift */,
 			);
 			path = Services;
@@ -199,7 +200,6 @@
 				C51FA2C3284E2212007FAD56 /* Model */,
 				C51FA2C0284DF30B007FAD56 /* Services */,
 				C524AD302843FE8C00EF24F1 /* Persistance */,
-				C5E310B62847401C005937FA /* HTML */,
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
@@ -277,14 +277,6 @@
 				C533525E284F54EC0060A663 /* Allison-Regular.ttf */,
 			);
 			path = Fonts;
-			sourceTree = "<group>";
-		};
-		C5E310B62847401C005937FA /* HTML */ = {
-			isa = PBXGroup;
-			children = (
-				C5E310B728474033005937FA /* HtmlHelper.swift */,
-			);
-			path = HTML;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -440,7 +432,7 @@
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
-				C5E310B828474033005937FA /* HtmlHelper.swift in Sources */,
+				C5E310B828474033005937FA /* HtmlService.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,

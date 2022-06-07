@@ -48,7 +48,7 @@ extension BlogEntry {
     var linkUrls: [URL] {
         get {
             if let content = content {
-                return HtmlHelper.shared.extractLinks(html: content)
+                return HtmlService.shared.extractLinks(html: content)
             } else {
                 return []
             }

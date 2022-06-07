@@ -47,7 +47,7 @@ struct BlogEntryDetailView: View {
         }
         .onAppear {
             if let content = blogEntry.content {
-                action = .loadHTML(HtmlHelper.shared.enhance(html: content))
+                action = .loadHTML(HtmlService.shared.enhance(html: content))
                 FefeBlogService.shared.markAsRead(blogEntry)
                 
                 //urls = blogEntry.linkUrls

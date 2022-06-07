@@ -8,8 +8,8 @@
 import Foundation
 import SwiftSoup
 
-class HtmlHelper {
-    static let shared = HtmlHelper()
+class HtmlService {
+    static let shared = HtmlService()
     
     private init() {}
     
