@@ -30,8 +30,8 @@ struct BlogEntryListView: View {
     
     init() {
         // Use this if NavigationBarTitle is with large font
-        UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 35)!]
-        UINavigationBar.appearance().titleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
+        UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Allison", size: 30)!]
     }
 
     var body: some View {
