@@ -18,36 +18,22 @@ struct SettingsView: View {
             List {
                 sectionApplication
                 sectionFont
+                sectionBlogEntries
                 sectionOther
-                sectionDevelopment
                 sectionLicenses
             }
             .navigationTitle("Settings")
-            .confirmationDialog("Permanently erase all loaded blog entries and bookmarks?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
-                Button("Delete all", role: .destructive) {
-                    PersistenceController.shared.clearBlogEntries()
-                }
-            }
-            .confirmationDialog("Reset all bookmarks?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
-                Button("Delete bookmarks", role: .destructive) {
-                    PersistenceController.shared.resetBookmarks()
-                }
-            }
         }
     }
     
     private var sectionApplication: some View {
-        Group {
-            Section {
-                Toggle("Open links in internal browser", isOn: $settings.openUrlsInInternalBrowser)
-                Picker("Number of lines in list", selection: $settings.overviewLineLimit) {
-                    ForEach(1 ..< 5) { lineLimit in
-                        Text("\(lineLimit)")
-                            .tag(lineLimit)
-                    }
+        Section("Application behaviour") {
+            Toggle("Open links in internal browser", isOn: $settings.openUrlsInInternalBrowser)
+            Picker("Number of lines in list", selection: $settings.overviewLineLimit) {
+                ForEach(1 ..< 5) { lineLimit in
+                    Text("\(lineLimit)")
+                        .tag(lineLimit)
                 }
-            } header: {
-                Text("Application")
             }
         }
     }
@@ -103,18 +89,42 @@ struct SettingsView: View {
         }
     }
     
-    private var sectionDevelopment: some View {
-        Section("Danger Zone") {
+    private var sectionBlogEntries: some View {
+        Section("Blog entries") {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle("Delete old blog entries", isOn: $settings.regularlyDeleteOldBlogEntries)
+                if settings.regularlyDeleteOldBlogEntries {
+                    Text("The app stores a copy of the loaded blog entries locally on your device. Blog entries older than half a year will be deleted to save some space. Older entries can always be re-downloaded by scrolling down.")
+                        .lineLimit(10)
+                        .font(.footnote)
+                } else {
+                    Text("The app stores a copy of the loaded blog entries locally on your device. Old blog entries will not be deleted.")
+                        .font(.footnote)
+                }
+            }
+            if settings.regularlyDeleteOldBlogEntries {
+                Toggle("Keep bookmarked blog entries", isOn: $settings.keepBookmarkedBlogEntries)
+            }
             Button(action: {
                 showClearBookmarksConfirmation = true
             }, label: {
                 Text("Reset bookmarks")
             })
+            .confirmationDialog("Reset all bookmarks?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
+                Button("Reset bookmarks", role: .destructive) {
+                    PersistenceController.shared.resetBookmarks()
+                }
+            }
             Button(role: .destructive, action: {
                 showClearBlogEntriesConfirmation = true
             }, label: {
                 Text("Clear all loaded blog entries")
             })
+            .confirmationDialog("Permanently erase all loaded blog entries and bookmarks?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
+                Button("Delete all", role: .destructive) {
+                    PersistenceController.shared.clearBlogEntries()
+                }
+            }
         }
     }
     

@@ -48,6 +48,9 @@ class Settings : ObservableObject {
     @Published var regularlyDeleteOldBlogEntries = true
     { didSet { save() } }
     
+    @Published var keepBookmarkedBlogEntries = true
+    { didSet { save() } }
+    
     private init() {
         let settings = UserDefaults.standard
         self.openUrlsInInternalBrowser = settings.bool(forKey: "openUrlsInInternalBrowser", withDefault: true)
@@ -58,6 +61,7 @@ class Settings : ObservableObject {
         self.overviewLineLimit = settings.integer(forKey: "overviewLineLimit", withDefault: 2)
         self.askForNotificationApproval = settings.bool(forKey: "askForNotoficationApproval", withDefault: true)
         self.regularlyDeleteOldBlogEntries = settings.bool(forKey: "regularlyDeleteOldBlogEntries", withDefault: true)
+        self.keepBookmarkedBlogEntries = settings.bool(forKey: "keepBookmarkedBlogEntries", withDefault: true)
     }
     
     func save() {
@@ -68,6 +72,7 @@ class Settings : ObservableObject {
         settings.set(font.displayName, forKey: "fontName")
         settings.set(askForNotificationApproval, forKey: "askForNotoficationApproval")
         settings.set(regularlyDeleteOldBlogEntries, forKey: "regularlyDeleteOldBlogEntries")
+        settings.set(keepBookmarkedBlogEntries, forKey: "keepBookmarkedBlogEntries")
     }
 }
 
