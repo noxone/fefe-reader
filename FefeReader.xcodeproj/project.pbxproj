@@ -32,6 +32,7 @@
 		C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683A28491D5700082BA2 /* CommonIcons.swift */; };
 		C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683C2849DA6300082BA2 /* BookmarkListView.swift */; };
 		C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C533525E284F54EC0060A663 /* Allison-Regular.ttf */; };
+		C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
 		C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */ = {isa = PBXBuildFile; productRef = C5E310AB28471DA6005937FA /* SwiftUIWebView */; };
 		C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* ExternalLinkView.swift */; };
@@ -88,6 +89,7 @@
 		C530683C2849DA6300082BA2 /* BookmarkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListView.swift; sourceTree = "<group>"; };
 		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
+		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
 		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 			children = (
 				C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */,
 				C5E310B428473EC7005937FA /* ExitButtonView.swift */,
+				C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
+				C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */,
 				C5E310B828474033005937FA /* HtmlService.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,

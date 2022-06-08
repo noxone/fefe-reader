@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftUIWebView
 
 struct BlogEntryDetailView: View {
+    private static let dummyBlogEntry = BlogEntry()
+    
     @ObservedObject var blogEntry: BlogEntry
     
     @State private var action = WebViewAction.idle
@@ -19,12 +21,20 @@ struct BlogEntryDetailView: View {
     
     @State private var showShareSheet = false
     
+    @State private var showSubEntry = false
+    @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
+    
     //@State private var urls: [URL] = []
     
     var body: some View {
         VStack(alignment: .leading) {
             let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: true, backgroundColor: .white)
             WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
+            NavigationLink(isActive: $showSubEntry, destination: {
+                BlogEntryDetailWrapper(blogEntry: $subEntry)
+            }, label: {
+                EmptyView()
+            })
         }
         .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
@@ -65,11 +75,22 @@ struct BlogEntryDetailView: View {
     
     private func handleHttpLinks(url: URL) {
         print("Handle: ", url)
-        if Settings.shared.openUrlsInInternalBrowser {
-            externalUrl = url
-            showExternalContent = true
+        if FefeBlogService.shared.isFefeBlogEntryUrl(url), let id = FefeBlogService.shared.getIdFromFefeUrl(url) {
+            if let entry = PersistenceController.shared.getBlogEntry(withId: id) {
+                subEntry = entry
+                showSubEntry = true
+            } else {
+                // TODO: Load older entry from blog, but do not persist it
+                externalUrl = url
+                showExternalContent = true
+            }
         } else {
-            UrlService.openUrl(url)
+            if Settings.shared.openUrlsInInternalBrowser {
+                externalUrl = url
+                showExternalContent = true
+            } else {
+                UrlService.openUrl(url)
+            }
         }
     }
 }
