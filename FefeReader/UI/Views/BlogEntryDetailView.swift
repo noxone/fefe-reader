@@ -28,7 +28,7 @@ struct BlogEntryDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: true, backgroundColor: .white)
+            let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
             WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
             NavigationLink(isActive: $showSubEntry, destination: {
                 BlogEntryDetailWrapper(blogEntry: $subEntry)
