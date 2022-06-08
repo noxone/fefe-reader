@@ -80,9 +80,13 @@ struct BlogEntryDetailView: View {
                 subEntry = entry
                 showSubEntry = true
             } else {
-                // TODO: Load older entry from blog, but do not persist it
-                externalUrl = url
-                showExternalContent = true
+                if let entry = FefeBlogService.shared.loadBlogEntryFor(id: id) {
+                    subEntry = entry
+                    showSubEntry = true
+                } else {
+                    externalUrl = url
+                    showExternalContent = true
+                }
             }
         } else {
             if Settings.shared.openUrlsInInternalBrowser {

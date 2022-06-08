@@ -21,6 +21,7 @@ struct BlogEntryListView: View {
             NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
         ],
+        predicate: NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL),
         animation: .default)
     private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
     

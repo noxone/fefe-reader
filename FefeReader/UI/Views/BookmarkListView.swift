@@ -16,7 +16,9 @@ struct BookmarkListView: View {
             NSSortDescriptor(keyPath: \BlogEntry.bookmarkDate, ascending: false),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
         ],
-        predicate: NSPredicate(format: "bookmarkDate != nil"),
+        predicate: NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL),
+            NSPredicate(format: "bookmarkDate != nil")]),
         animation: .default)
     private var blogEntries: FetchedResults<BlogEntry>
 

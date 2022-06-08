@@ -48,10 +48,13 @@ struct PersistenceController {
         }
     }
     
-    func getBlogEntry(withId id: Int) -> BlogEntry? {
+    func getBlogEntry(withId id: Int, onlyNormal: Bool = false) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.predicate = NSPredicate(format: "id == %ld", Int64(id))
         request.fetchLimit = 1
+        if onlyNormal {
+            request.predicate = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
+        }
         
         return try? container.viewContext.fetch(request).first
     }
@@ -60,6 +63,7 @@ struct PersistenceController {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
+        request.predicate = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
         
         return try? container.viewContext.fetch(request).first
     }
@@ -71,8 +75,9 @@ struct PersistenceController {
         save()
     }
     
-    func createBlogEntry(from rawEntry: RawEntry) -> BlogEntry {
+    func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
         let blogEntry = BlogEntry(context: container.viewContext)
+        blogEntry.validState = temporary ? BlogEntry.VALID_STATE_TEMPORARY : BlogEntry.VALID_STATE_NORMAL
         blogEntry.id = Int64(rawEntry.id)
         blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
         blogEntry.date = rawEntry.date
@@ -111,6 +116,7 @@ struct PersistenceController {
     }
     
     // TODO: https://www.advancedswift.com/batch-delete-everything-core-data-swift/
+    // TODO: Regularly clear temporary items
     func clearBlogEntries() {
         do {
             let request = BlogEntry.fetchRequest()

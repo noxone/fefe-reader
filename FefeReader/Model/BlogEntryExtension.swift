@@ -8,6 +8,9 @@
 import SwiftUI
 
 extension BlogEntry {
+    static let VALID_STATE_NORMAL = "N"
+    static let VALID_STATE_TEMPORARY = "T"
+    
     var isRead: Bool {
         get {
             return readTimestamp != nil

@@ -216,6 +216,21 @@ class FefeBlogService : ObservableObject {
         return nil
     }
     
+    private func getUrlFor(id: Int) -> URL {
+        return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
+    }
+    
+    func loadBlogEntryFor(id: Int) -> BlogEntry? {
+        if let html = downloadHtmlFor(url: getUrlFor(id: id)) {
+            if let rawEntry = parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
+                let entry = PersistenceController.shared.createBlogEntry(from: rawEntry, temporary: true)
+                PersistenceController.shared.save()
+                return entry
+            }
+        }
+        return nil
+    }
+    
     private func parseElementIntoRawEntry(_ element: Element, relativUrl: URL) -> RawEntry? {
         do {
             if let link = element.children().first(), link.tagName() == "a" {
@@ -241,15 +256,23 @@ class FefeBlogService : ObservableObject {
     
     private func downloadHtmlForMonth(date: Date) -> (url: URL, html: String)? {
         if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
-            do {
-                return try (url: url, html: String(contentsOf: url))
-            } catch {
-                print("Unable to load content")
-                // TODO
+            if let html = downloadHtmlFor(url: url) {
+                return (url: url, html: html)
+            } else {
                 return nil
             }
         } else {
             print("URL was not valid")
+            return nil
+        }
+    }
+    
+    private func downloadHtmlFor(url: URL) -> String? {
+        do {
+            return try String(contentsOf: url)
+        } catch {
+            print("Unable to load content for URL: ", url)
+            // TODO: better error handling
             return nil
         }
     }
