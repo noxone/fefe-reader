@@ -48,12 +48,14 @@ struct PersistenceController {
         }
     }
     
+    static let PREDICATE_VALID_STATE_NORMAL = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
+    
     func getBlogEntry(withId id: Int, onlyNormal: Bool = false) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.predicate = NSPredicate(format: "id == %ld", Int64(id))
         request.fetchLimit = 1
         if onlyNormal {
-            request.predicate = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
+            request.predicate = PersistenceController.PREDICATE_VALID_STATE_NORMAL
         }
         
         return try? container.viewContext.fetch(request).first
@@ -63,9 +65,20 @@ struct PersistenceController {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
-        request.predicate = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
+        request.predicate = PersistenceController.PREDICATE_VALID_STATE_NORMAL
         
         return try? container.viewContext.fetch(request).first
+    }
+    
+    func changeNonValidBlogEntries(callback: @escaping (BlogEntry) -> ()) {
+        let request = BlogEntry.fetchRequest()
+        request.predicate = NSPredicate(format: "validState == nil")
+        if let entries = try? container.viewContext.fetch(request) {
+            for entry in entries {
+                callback(entry)
+            }
+            save()
+        }
     }
     
     func createUpdateFetch(from: String) {
