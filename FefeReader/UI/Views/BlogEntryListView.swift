@@ -30,7 +30,6 @@ struct BlogEntryListView: View {
     @State private var showNotificationPopup = false
     
     init() {
-        // Use this if NavigationBarTitle is with large font
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
     }
 

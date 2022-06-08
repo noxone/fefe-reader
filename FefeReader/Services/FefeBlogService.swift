@@ -220,7 +220,11 @@ class FefeBlogService : ObservableObject {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
-    func loadBlogEntryFor(id: Int) -> BlogEntry? {
+    func loadTemporaryBlogEntryFor(id: Int) -> BlogEntry? {
+        if let entry = PersistenceController.shared.getBlogEntry(withId: id, onlyNormal: false) {
+            return entry
+        }
+        
         if let html = downloadHtmlFor(url: getUrlFor(id: id)) {
             if let rawEntry = parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
                 let entry = PersistenceController.shared.createBlogEntry(from: rawEntry, temporary: true)

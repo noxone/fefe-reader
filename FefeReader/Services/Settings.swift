@@ -45,6 +45,9 @@ class Settings : ObservableObject {
     @Published var font: AppFont = Settings.availableFonts[0]
     { didSet { save() } }
     
+    @Published var regularlyDeleteOldBlogEntries = true
+    { didSet { save() } }
+    
     private init() {
         let settings = UserDefaults.standard
         self.openUrlsInInternalBrowser = settings.bool(forKey: "openUrlsInInternalBrowser", withDefault: true)
@@ -54,6 +57,7 @@ class Settings : ObservableObject {
         })
         self.overviewLineLimit = settings.integer(forKey: "overviewLineLimit", withDefault: 2)
         self.askForNotificationApproval = settings.bool(forKey: "askForNotoficationApproval", withDefault: true)
+        self.regularlyDeleteOldBlogEntries = settings.bool(forKey: "regularlyDeleteOldBlogEntries", withDefault: true)
     }
     
     func save() {
@@ -63,6 +67,7 @@ class Settings : ObservableObject {
         settings.set(overviewLineLimit, forKey: "overviewLineLimit")
         settings.set(font.displayName, forKey: "fontName")
         settings.set(askForNotificationApproval, forKey: "askForNotoficationApproval")
+        settings.set(regularlyDeleteOldBlogEntries, forKey: "regularlyDeleteOldBlogEntries")
     }
 }
 

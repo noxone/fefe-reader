@@ -74,43 +74,21 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
-        print("Handle: ", url)
-        if FefeBlogService.shared.isFefeBlogEntryUrl(url), let id = FefeBlogService.shared.getIdFromFefeUrl(url) {
-            if let entry = PersistenceController.shared.getBlogEntry(withId: id) {
-                subEntry = entry
-                showSubEntry = true
-            } else {
-                if let entry = FefeBlogService.shared.loadBlogEntryFor(id: id) {
-                    subEntry = entry
-                    showSubEntry = true
-                } else {
-                    externalUrl = url
-                    showExternalContent = true
-                }
-            }
+        if FefeBlogService.shared.isFefeBlogEntryUrl(url), let id = FefeBlogService.shared.getIdFromFefeUrl(url), let entry = FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id) {
+            subEntry = entry
+            showSubEntry = true
+            return
+        }
+        
+        if Settings.shared.openUrlsInInternalBrowser {
+            externalUrl = url
+            showExternalContent = true
         } else {
-            if Settings.shared.openUrlsInInternalBrowser {
-                externalUrl = url
-                showExternalContent = true
-            } else {
-                UrlService.openUrl(url)
-            }
+            UrlService.openUrl(url)
         }
     }
 }
-struct RowLine<TargetView: View>: View {
-    var text: String
-    var imageName: String
-    var nextView: TargetView
-    var body: some View {
-        NavigationLink(destination: nextView) {
-            HStack {
-                Image(systemName: imageName)
-                Text(text)
-            }
-        }
-    }
-}
+
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
