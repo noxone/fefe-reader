@@ -81,24 +81,25 @@ class FefeBlogService : ObservableObject {
         persistance.save()
     }
     
-    func refreshWithNotifications(origin: String) {
-        let blogEntries = FefeBlogService.shared.refresh(origin: origin)
+    func refreshWithNotifications(origin: String) throws {
+        let blogEntries = try FefeBlogService.shared.refresh(origin: origin)
         NotificationService.shared.addNotifications(for: blogEntries)
     }
     
-    func refresh(origin: String) -> [BlogEntry] {
+    @discardableResult
+    func refresh(origin: String) throws -> [BlogEntry] {
         print("Refresh...................", origin, Date())
         PersistenceController.shared.createUpdateFetch(from: origin)
-        return loadCurrentMonth()
+        return try loadCurrentMonth()
     }
         
-    private func loadCurrentMonth() -> [BlogEntry] {
-        return loadMonthIntoDatabase(forDate: Date()).createdBlogEntries
+    private func loadCurrentMonth() throws -> [BlogEntry] {
+        return try loadMonthIntoDatabase(forDate: Date()).newlyCreateBlogEntries
     }
     
-    func loadOlderEntries() {
+    func loadOlderEntries() throws {
         guard let oldestEntry = persistance.getOldestBlogEntry() else {
-            _ = loadCurrentMonth()
+            _ = try loadCurrentMonth()
             return
         }
         
@@ -120,21 +121,25 @@ class FefeBlogService : ObservableObject {
                 return
             }
         
-            count = loadMonthIntoDatabase(forDate: dateToLoad).touchedEntries
+            count = try loadMonthIntoDatabase(forDate: dateToLoad).newlyCreateBlogEntries.count
         } while (count == 0)
     }
     
-    private func loadMonthIntoDatabase(forDate date: Date) -> (touchedEntries: Int, createdBlogEntries: [BlogEntry]) {
-        let rawEntries = downloadAndParseRawEntries(forDate: date)
+    private func loadMonthIntoDatabase(forDate date: Date) throws -> LoadBlogEntriesResult {
+        let rawEntries: [RawEntry]
+        do {
+            rawEntries = try downloadAndParseRawEntries(forDate: date)
+        } catch let error as FefeBlogError {
+            throw error
+        } catch {
+            throw FefeBlogError.unexpectedException(error: error)
+        }
         
         var createdBlogEntries: [BlogEntry] = []
         
         for rawEntry in rawEntries {
-            let blogEntry = persistance.getBlogEntry(withId: rawEntry.id)
-            
-            if let blogEntry = blogEntry {
+            if let blogEntry = persistance.getBlogEntry(withId: rawEntry.id) {
                 // Update content
-                // TODO
                 if blogEntry.content != rawEntry.content {
                     blogEntry.content = rawEntry.content
                     if blogEntry.isRead {
@@ -150,58 +155,20 @@ class FefeBlogService : ObservableObject {
         }
         persistance.save()
         
-        return (touchedEntries: rawEntries.count, createdBlogEntries: createdBlogEntries)
+        return LoadBlogEntriesResult(newlyCreateBlogEntries: createdBlogEntries, numberOfLoadedEntries: rawEntries.count)
     }
     
-    private func downloadAndParseRawEntries(forDate date: Date) -> [RawEntry] {
-        if let result = downloadHtmlForMonth(date: date) {
-            let entries = parseHtmlToRawEntries(html: result.html, relativeUrl: result.url)
-            return entries
-        }
-        
-        return []
+    private func downloadAndParseRawEntries(forDate date: Date) throws -> [RawEntry] {
+        let result = try downloadHtmlForMonth(date: date)
+        return try parseHtmlToRawEntries(html: result.html, relativeUrl: result.url)
     }
     
-    private func parseHtmlToRawEntries(html: String, relativeUrl: URL) -> [RawEntry] {
-        var result: [RawEntry] = []
-        
-        let elements: Elements
-        do {
-            let doc: Document = try SwiftSoup.parse(html)
-            // print(try doc.text())
-            elements = try doc.select("body > h3, body > ul > li")
-        } catch {
-            // TODO better error handling
-            print("Unable to parse HTML document.", error)
-            return []
-        }
-        var date: Date? = nil
-        var relativeNumber = 1
-        for element in elements {
-            // print(element)
-            if element.tagName() == "h3" {
-                date = getDate(forElement: element)
-                relativeNumber = 1
-            } else if element.tagName() == "li" {
-                if let date = date, var rawEntry = parseElementIntoRawEntry(element, relativUrl: relativeUrl) {
-                    rawEntry.date = date
-                    rawEntry.relativeNumber = relativeNumber
-                    result.append(rawEntry)
-                    relativeNumber += 1
-                }
-            }
-        }
-        
-        return result
-    }
-    
-    private func getDate(forElement element: Element) -> Date? {
+    private func getDate(forElement element: Element) throws -> Date? {
         do {
             return FefeBlogService.blogDateFormatter.date(from: try element.text())
-        } catch {
-            // TODO better error handling
+        } catch let error as Exception {
             print("Unable to parse date from element.", error)
-            return nil
+            throw FefeBlogError.parsingException(exception: error)
         }
     }
     
@@ -223,64 +190,90 @@ class FefeBlogService : ObservableObject {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
-    func loadTemporaryBlogEntryFor(id: Int) -> BlogEntry? {
+    func loadTemporaryBlogEntryFor(id: Int) throws -> BlogEntry? {
         if let entry = PersistenceController.shared.getBlogEntry(withId: id, onlyNormal: false) {
             return entry
         }
         
-        if let html = downloadHtmlFor(url: getUrlFor(id: id)) {
-            if let rawEntry = parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
-                let entry = PersistenceController.shared.createBlogEntry(from: rawEntry, temporary: true)
-                PersistenceController.shared.save()
-                return entry
-            }
+        let html = try downloadHtmlFor(url: getUrlFor(id: id))
+        if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
+            let entry = PersistenceController.shared.createBlogEntry(from: rawEntry, temporary: true)
+            PersistenceController.shared.save()
+            return entry
         }
         return nil
     }
     
-    private func parseElementIntoRawEntry(_ element: Element, relativUrl: URL) -> RawEntry? {
+    private func parseHtmlToRawEntries(html: String, relativeUrl: URL) throws -> [RawEntry] {
         do {
-            if let link = element.children().first(), link.tagName() == "a" {
-                let href = try link.attr("href")
-                if let hrefUrl = URL(string: href, relativeTo: relativUrl), isFefeBlogEntryUrl(hrefUrl) {
-                    if let id = getIdFromFefeUrl(hrefUrl) {
-                        try link.remove()
-                        let content = try element.html()
-
-                        //print(date, link, href, id, content)
-                        return RawEntry(id: id, link: URL(string: href)!, content: content, plainContent: try element.text())
+            let doc = try SwiftSoup.parse(html)
+            let elements = try doc.select("body > h3, body > ul > li")
+            
+            var result: [RawEntry] = []
+            
+            var date: Date? = nil
+            var relativeNumber = 1
+            
+            for element in elements {
+                // print(element)
+                if element.tagName() == "h3" {
+                    date = try getDate(forElement: element)
+                    relativeNumber = 1
+                } else if element.tagName() == "li" {
+                    if let date = date {
+                        var rawEntry = try parseElementIntoRawEntry(element, relativUrl: relativeUrl)
+                        rawEntry.date = date
+                        rawEntry.relativeNumber = relativeNumber
+                        result.append(rawEntry)
+                        relativeNumber += 1
+                    } else {
+                        print("Skipping element")
                     }
                 }
             }
             
-            return nil
-        } catch {
-            // TODO better error handling
-            print("Unable to parse blog entry from element.", error)
-            return nil
+            return result
+        } catch let error as Exception {
+            throw FefeBlogError.parsingException(exception: error)
         }
     }
     
-    private func downloadHtmlForMonth(date: Date) -> (url: URL, html: String)? {
-        if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
-            if let html = downloadHtmlFor(url: url) {
-                return (url: url, html: html)
+    private func parseElementIntoRawEntry(_ element: Element, relativUrl: URL) throws -> RawEntry {
+        do {
+            if let link = element.children().first(),
+                link.tagName() == "a",
+                let hrefUrl = URL(string: try link.attr("href"), relativeTo: relativUrl),
+                isFefeBlogEntryUrl(hrefUrl),
+                let id = getIdFromFefeUrl(hrefUrl)
+            {
+                try link.remove()
+                let htmlContent = try element.html()
+                let textContent = try element.text()
+
+                return RawEntry(id: id, link: hrefUrl, content: htmlContent, plainContent: textContent)
             } else {
-                return nil
+                throw FefeBlogError.invalidDocumentStructure
             }
+        } catch let error as Exception {
+            throw FefeBlogError.parsingException(exception: error)
+        }
+    }
+    
+    private func downloadHtmlForMonth(date: Date) throws -> (url: URL, html: String) {
+        if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
+            return (url: url, html: try downloadHtmlFor(url: url))
         } else {
             print("URL was not valid")
-            return nil
+            throw FefeBlogError.urlConstructionFailed
         }
     }
     
-    private func downloadHtmlFor(url: URL) -> String? {
+    private func downloadHtmlFor(url: URL) throws -> String {
         do {
             return try String(contentsOf: url)
         } catch {
             print("Unable to load content for URL: ", url)
-            // TODO: better error handling
-            return nil
+            throw FefeBlogError.downloadFailed(url: url, error: error)
         }
     }
 }
@@ -293,4 +286,39 @@ struct RawEntry {
     let plainContent: String
     var relativeNumber: Int = 0
     var date: Date = Date()
+}
+
+struct LoadBlogEntriesResult {
+    let newlyCreateBlogEntries: [BlogEntry]
+    let numberOfLoadedEntries: Int
+}
+
+enum FefeBlogError : Error {
+    case downloadFailed(url: URL, error: Error)
+    case urlConstructionFailed
+    case invalidUrl(url: URL)
+    case parsingException(exception: Exception)
+    case invalidDocumentStructure
+    case unexpectedException(error: Error)
+}
+
+/*extension FefeBlogError : CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .downloadError(let url):
+            return "Unable to load content for URL: \(url)"
+        }
+    }
+}*/
+
+// TODO: improve error messages
+extension FefeBlogError : LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .downloadFailed(let url, let error):
+            return "Unable to load content for URL: \(url)"
+        default:
+            return ""
+        }
+    }
 }
