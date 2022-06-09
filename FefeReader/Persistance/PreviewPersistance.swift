@@ -26,13 +26,6 @@ extension PersistenceController {
         return entry
     }
     
-    private func preview_createUpdate(from: String) -> UpdateFetch {
-        let update = UpdateFetch(context: container.viewContext)
-        update.date = Date()
-        update.from = from
-        return update
-    }
-    
     private static var preview_internal_BlogEntries: [BlogEntry] = []
     var preview_BlogEntries: [BlogEntry] {
         get {
@@ -49,10 +42,6 @@ extension PersistenceController {
         preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 3, teaser: "Unread: This is some more text that is really long and does not fit into one single line.", read: false, bookmark: true))
         preview_internal_BlogEntries.append(result.preview_createBlogEntry(id: 4, teaser: "Read: And a fourth one... This one also has quite a long teaser text.", read: true, bookmark: false))
         preview_internal_BlogEntries[3].updatedSinceLastRead = true
-
-        _ = result.preview_createUpdate(from: "a")
-        _ = result.preview_createUpdate(from: "b")
-        _ = result.preview_createUpdate(from: "c")
 
         do {
             try viewContext.save()

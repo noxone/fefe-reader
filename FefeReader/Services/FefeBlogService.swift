@@ -104,13 +104,16 @@ class FefeBlogService : ObservableObject {
         
         // Assumption is: We only load full months. So regardless whether this post is from
         // the first of the month or not: We need to load the previous month.
-        let dateOfPost = oldestEntry.date ?? Calendar.current.date(byAdding: .month, value: 1, to: Date())!
+        let dateOfOldestEntry = oldestEntry.date ?? Calendar.current.date(byAdding: .month, value: 1, to: Date())!
         
-        var dateToLoad = dateOfPost
+        var dateToLoad = dateOfOldestEntry
         
         var count = 0
         repeat {
-            dateToLoad = Calendar.current.date(byAdding: .month, value: -1, to: dateToLoad)!
+            var components = Calendar.current.dateComponents([.year, .month], from: dateToLoad)
+            components.timeZone = TimeZone(abbreviation: "UTC")
+            components.month = components.month! - 1
+            dateToLoad = Calendar.current.date(from: components)!
         
             if dateToLoad < FefeBlogService.earliestPost {
                 canLoadMore = false

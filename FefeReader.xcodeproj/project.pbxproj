@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */; };
-		C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */; };
 		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
 		C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C51FA2C5284E2945007FAD56 /* PopupView */; };
 		C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C7284E5802007FAD56 /* UrlService.swift */; };
@@ -32,6 +31,7 @@
 		C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683A28491D5700082BA2 /* CommonIcons.swift */; };
 		C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683C2849DA6300082BA2 /* BookmarkListView.swift */; };
 		C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C533525E284F54EC0060A663 /* Allison-Regular.ttf */; };
+		C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0928512B9F0026F67B /* DateExtension.swift */; };
 		C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
@@ -64,7 +64,6 @@
 
 /* Begin PBXFileReference section */
 		C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTasks.swift; sourceTree = "<group>"; };
-		C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFetchList.swift; sourceTree = "<group>"; };
 		C51FA2C1284DF31F007FAD56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C51FA2C7284E5802007FAD56 /* UrlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlService.swift; sourceTree = "<group>"; };
 		C51FA2C9284F30D3007FAD56 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
@@ -90,6 +89,7 @@
 		C530683C2849DA6300082BA2 /* BookmarkListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkListView.swift; sourceTree = "<group>"; };
 		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
+		C5583E0928512B9F0026F67B /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
@@ -147,6 +147,7 @@
 			children = (
 				C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */,
 				C55EC20A285111560049AFB3 /* ColorExtension.swift */,
+				C5583E0928512B9F0026F67B /* DateExtension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -168,7 +169,6 @@
 				C5E310A828464623005937FA /* BlogEntryDetailView.swift */,
 				C5E310AD28472EEA005937FA /* ExternalLinkView.swift */,
 				C5E310BD28476130005937FA /* SettingsView.swift */,
-				C51FA2BE284CA852007FAD56 /* UpdateFetchList.swift */,
 				C51FA2C9284F30D3007FAD56 /* LicensesView.swift */,
 				C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */,
 			);
@@ -428,13 +428,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C524AD0D2843FD8C00EF24F1 /* FefeReader.xcdatamodeld in Sources */,
+				C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */,
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */,
 				C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
-				C51FA2BF284CA852007FAD56 /* UpdateFetchList.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,

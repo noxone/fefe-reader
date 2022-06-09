@@ -17,6 +17,7 @@
 	</dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
+		<string>org.olafneumann.fefe-reader.FefeBlog.cleanUpDatabase</string>
 		<string>org.olafneumann.fefe-reader.FefeBlog.refresh</string>
 	</array>
 	<key>UIBackgroundModes</key>

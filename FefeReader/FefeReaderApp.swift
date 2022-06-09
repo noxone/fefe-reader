@@ -27,8 +27,11 @@ struct FefeReaderApp: App {
             TabbedBlogView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .task {
-                    BlogTasks.shared.cancelAllPendingBGTask()
+                    BlogTasks.shared.cancelAllPendingBackgroundTasks()
                     _ = FefeBlogService.shared.refresh(origin: "init")
+                }
+                .task {
+                    persistenceController.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
                 }
                 .onReceive(timer) { input in
                     FefeBlogService.shared.refreshWithNotifications(origin: "timer")
@@ -39,8 +42,8 @@ struct FefeReaderApp: App {
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
             if newPhase == .background {
-                BlogTasks.shared.cancelAllPendingBGTask()
-                BlogTasks.shared.scheduleAppRefresh()
+                BlogTasks.shared.cancelAllPendingBackgroundTasks()
+                BlogTasks.shared.scheduleBackgroundTasks()
             }
         }
     }

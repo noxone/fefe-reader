@@ -70,9 +70,32 @@ struct PersistenceController {
         return try? container.viewContext.fetch(request).first
     }
     
-    func changeNonValidBlogEntries(callback: @escaping (BlogEntry) -> ()) {
+    func deleteTemporaryBlogEntries() {
+        changeNonValidBlogEntries { container.viewContext.delete($0) }
+    }
+    
+    func deleteBlogEntries(olderThan date: Date, keepingBookmarks keepBookmarks: Bool) {
         let request = BlogEntry.fetchRequest()
-        request.predicate = NSPredicate(format: "validState == nil")
+        let startOfMonth = date.startOfMonth
+        request.predicate = NSPredicate(format: "date < %@", (startOfMonth) as NSDate)
+        if keepBookmarks {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                request.predicate!,
+                NSPredicate(format: "bookmarkDate == nil")
+            ])
+        }
+        if let entries = try? container.viewContext.fetch(request) {
+            print("Deleting entries: ", entries.count)
+            for entry in entries {
+                container.viewContext.delete(entry)
+            }
+        }
+        save()
+    }
+    
+    private func changeNonValidBlogEntries(callback: @escaping (BlogEntry) -> ()) {
+        let request = BlogEntry.fetchRequest()
+        request.predicate = NSPredicate(format: "validState == %@", BlogEntry.VALID_STATE_TEMPORARY)
         if let entries = try? container.viewContext.fetch(request) {
             for entry in entries {
                 callback(entry)
@@ -82,10 +105,10 @@ struct PersistenceController {
     }
     
     func createUpdateFetch(from: String) {
-        let fetch = UpdateFetch(context: container.viewContext)
+        /*let fetch = UpdateFetch(context: container.viewContext)
         fetch.date = Date()
         fetch.from = from
-        save()
+        save()*/
     }
     
     func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
@@ -142,6 +165,14 @@ struct PersistenceController {
             // TODO: Properly handle error
             // TODO: replace by log
             print("Error deleting data.", error)
+        }
+    }
+    
+    func cleanUpDatabase(deleteOldBlogEntries: Bool, keepBookmarks: Bool) {
+        PersistenceController.shared.deleteTemporaryBlogEntries()
+        if deleteOldBlogEntries {
+            let halfAYearAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date())!
+            deleteBlogEntries(olderThan: halfAYearAgo, keepingBookmarks: keepBookmarks)
         }
     }
 }
