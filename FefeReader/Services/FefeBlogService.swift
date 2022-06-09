@@ -318,7 +318,7 @@ extension FefeBlogError : LocalizedError {
         case .downloadFailed(let url, let error):
             return "Unable to load content for URL: \(url)"
         default:
-            return ""
+            return "ERROR, error"
         }
     }
 }

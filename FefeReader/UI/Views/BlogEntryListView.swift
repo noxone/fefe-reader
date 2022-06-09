@@ -32,6 +32,13 @@ struct BlogEntryListView: View {
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
     }
+    
+    private func loadOlderEntries() {
+        ErrorService.shared.executeShowingError {
+            print("Load older entries")
+            try fefeBlog.loadOlderEntries()
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -39,7 +46,7 @@ struct BlogEntryListView: View {
                 listContent
                 if fefeBlog.canLoadMore {
                     Button(action: {
-                        fefeBlog.loadOlderEntries()
+                        loadOlderEntries()
                     }, label: {
                         Text("Load older entries")
                             .frame(maxWidth: .infinity)
@@ -47,15 +54,16 @@ struct BlogEntryListView: View {
                     .buttonStyle(.bordered)
                     .listRowSeparator(.hidden)
                     .onAppear {
-                        print("Load older entries")
-                        fefeBlog.loadOlderEntries()
+                        loadOlderEntries()
                     }
                 }
             }
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                _ = FefeBlogService.shared.refresh(origin: "manual refresh")
+                ErrorService.shared.executeShowingError {
+                    try FefeBlogService.shared.refresh(origin: "manual refresh")
+                }
             }
             .onAppear {
                 if Settings.shared.askForNotificationApproval {

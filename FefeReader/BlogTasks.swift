@@ -71,9 +71,13 @@ class BlogTasks {
             print("Cancel refresh task")
         }
 
-        FefeBlogService.shared.refreshWithNotifications(origin: "background")
-        task.setTaskCompleted(success: true)
-        // TODO: Set success to false if failed
+        do {
+            try FefeBlogService.shared.refreshWithNotifications(origin: "background")
+            task.setTaskCompleted(success: true)
+        } catch {
+            // TODO: log error
+            task.setTaskCompleted(success: false)
+        }
     }
     
     

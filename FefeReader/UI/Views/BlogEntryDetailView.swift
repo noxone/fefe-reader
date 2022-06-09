@@ -74,9 +74,17 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
-        if FefeBlogService.shared.isFefeBlogEntryUrl(url), let id = FefeBlogService.shared.getIdFromFefeUrl(url), let entry = FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id) {
-            subEntry = entry
-            showSubEntry = true
+        ErrorService.shared.executeShowingError {
+            if FefeBlogService.shared.isFefeBlogEntryUrl(url),
+                let id = FefeBlogService.shared.getIdFromFefeUrl(url),
+                let entry = try FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
+            {
+                subEntry = entry
+                showSubEntry = true
+                return
+            }
+        }
+        if showSubEntry {
             return
         }
         

@@ -15,8 +15,19 @@ class ErrorService : ObservableObject {
     
     private init() {}
     
-    func showError(error: Error) {
+    func showError(message: String) {
         showError = true
-        errorMessage = error.localizedDescription
+        errorMessage = message
+    }
+    
+    func executeShowingError(_ action: @escaping () throws -> () ) {
+        do {
+            try action()
+        } catch let error as FefeBlogError {
+            let description = error.localizedDescription
+            showError(message: description)
+        } catch {
+            showError(message: "An error has occurred.")
+        }
     }
 }
