@@ -15,7 +15,7 @@ struct TabbedBlogView: View {
             BlogEntryListView()
             .environment(\.managedObjectContext, viewContext)
             .tabItem {
-                Image(systemName: "list.bullet")
+                CommonIcons.shared.blogImage
                 Text("Blog")
             }
             
@@ -41,8 +41,8 @@ struct TabbedBlogView: View {
             
             SettingsView()
             .tabItem {
-                Image(systemName: "ellipsis")
-                Text("More")
+                CommonIcons.shared.settingsImage
+                Text("Settings")
             }
         }
     }

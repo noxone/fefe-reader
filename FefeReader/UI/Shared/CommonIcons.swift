@@ -22,6 +22,8 @@ class CommonIcons {
     
     private let trashImageName = "trash"
     
+    private let settingsImageName = "gear"
+    
     private init() {
     }
     
@@ -61,6 +63,12 @@ class CommonIcons {
     var trashImage: Image {
         get {
             Image(systemName: trashImageName)
+        }
+    }
+    
+    var settingsImage: Image {
+        get {
+            Image(systemName: settingsImageName)
         }
     }
 }

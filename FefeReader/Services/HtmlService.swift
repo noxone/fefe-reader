@@ -43,8 +43,6 @@ class HtmlService {
                 try link.attr("href", url.absoluteString)
             }
         }
-        let newHtml = try document.outerHtml()
-        print(newHtml)
     }
     
     func extractLinks(html: String) -> [URL] {
