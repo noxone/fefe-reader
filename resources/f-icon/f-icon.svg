@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933334"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
+   sodipodi:docname="f-icon.svg"
+   inkscape:export-filename="/Users/olafneumann/git/github/noxone/FefeReader/resources/f-icon/f-icon_dark_24.png"
+   inkscape:export-xdpi="36.000004"
+   inkscape:export-ydpi="36.000004"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="6.0718114"
+     inkscape:cx="34.668402"
+     inkscape:cy="36.480053"
+     inkscape:window-width="1383"
+     inkscape:window-height="847"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:20.7159px;line-height:1.25;font-family:Allison;-inkscape-font-specification:Allison;stroke-width:0.107895;fill:#000000;fill-opacity:1"
+       x="-0.11422021"
+       y="13.643575"
+       id="text1023"><tspan
+         sodipodi:role="line"
+         id="tspan1021"
+         style="font-size:20.7159px;stroke-width:0.107895;fill:#000000;fill-opacity:1"
+         x="-0.11422021"
+         y="13.643575">F</tspan></text>
+  </g>
+</svg>

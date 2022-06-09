@@ -22,7 +22,7 @@ struct TabbedBlogView: View {
             BookmarkListView()
                 .environment(\.managedObjectContext, viewContext)
                 .tabItem {
-                    CommonIcons.shared.bookmarkImage()
+                    CommonIcons.shared.bookmarkImage
                     Text("Bookmarks")
                 }
             
