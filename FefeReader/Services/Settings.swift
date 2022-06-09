@@ -31,48 +31,37 @@ class Settings : ObservableObject {
 #endif
     
     @Published var askForNotificationApproval: Bool = true
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(askForNotificationApproval, forKey: "askForNotoficationApproval") } }
     
     @Published var openUrlsInInternalBrowser: Bool = true
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(openUrlsInInternalBrowser, forKey: "openUrlsInInternalBrowser") } }
     
     @Published var fontSize: Int = 12
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(fontSize, forKey: "fontSize") } }
     
     @Published var overviewLineLimit: Int = 2
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(overviewLineLimit, forKey: "overviewLineLimit") } }
     
     @Published var font: AppFont = Settings.availableFonts[0]
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(font.displayName, forKey: "fontName") } }
     
     @Published var regularlyDeleteOldBlogEntries = true
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(regularlyDeleteOldBlogEntries, forKey: "regularlyDeleteOldBlogEntries") } }
     
     @Published var keepBookmarkedBlogEntries = true
-    { didSet { save() } }
+    { didSet { UserDefaults.standard.set(keepBookmarkedBlogEntries, forKey: "keepBookmarkedBlogEntries") } }
     
     private init() {
-        let settings = UserDefaults.standard
-        self.openUrlsInInternalBrowser = settings.bool(forKey: "openUrlsInInternalBrowser", withDefault: true)
-        self.fontSize = settings.integer(forKey: "fontSize", withDefault: 12)
-        self.font = settings.stringBasedObject(forKey: "fontName", withDefault: Settings.availableFonts[0], andConverter: { string in
+        let userDefaults = UserDefaults.standard
+        self.openUrlsInInternalBrowser = userDefaults.bool(forKey: "openUrlsInInternalBrowser", withDefault: true)
+        self.fontSize = userDefaults.integer(forKey: "fontSize", withDefault: 12)
+        self.font = userDefaults.stringBasedObject(forKey: "fontName", withDefault: Settings.availableFonts[0], andConverter: { string in
             Settings.availableFonts.first { $0.displayName == string }
         })
-        self.overviewLineLimit = settings.integer(forKey: "overviewLineLimit", withDefault: 2)
-        self.askForNotificationApproval = settings.bool(forKey: "askForNotoficationApproval", withDefault: true)
-        self.regularlyDeleteOldBlogEntries = settings.bool(forKey: "regularlyDeleteOldBlogEntries", withDefault: true)
-        self.keepBookmarkedBlogEntries = settings.bool(forKey: "keepBookmarkedBlogEntries", withDefault: true)
-    }
-    
-    func save() {
-        let settings = UserDefaults.standard
-        settings.set(openUrlsInInternalBrowser, forKey: "openUrlsInInternalBrowser")
-        settings.set(fontSize, forKey: "fontSize")
-        settings.set(overviewLineLimit, forKey: "overviewLineLimit")
-        settings.set(font.displayName, forKey: "fontName")
-        settings.set(askForNotificationApproval, forKey: "askForNotoficationApproval")
-        settings.set(regularlyDeleteOldBlogEntries, forKey: "regularlyDeleteOldBlogEntries")
-        settings.set(keepBookmarkedBlogEntries, forKey: "keepBookmarkedBlogEntries")
+        self.overviewLineLimit = userDefaults.integer(forKey: "overviewLineLimit", withDefault: 2)
+        self.askForNotificationApproval = userDefaults.bool(forKey: "askForNotoficationApproval", withDefault: true)
+        self.regularlyDeleteOldBlogEntries = userDefaults.bool(forKey: "regularlyDeleteOldBlogEntries", withDefault: true)
+        self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: "keepBookmarkedBlogEntries", withDefault: true)
     }
 }
 
@@ -103,9 +92,4 @@ struct AppFont : Hashable {
     let displayName: String
     let font: Font
     let html: String
-}
-
-struct RefreshFrequency : Hashable {
-    let display: String
-    let seconds: Int
 }
