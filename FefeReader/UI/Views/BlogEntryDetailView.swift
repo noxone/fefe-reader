@@ -21,6 +21,7 @@ struct BlogEntryDetailView: View {
     
     @State private var showShareSheet = false
     
+    @State private var showPreparingSubEntry = false
     @State private var showSubEntry = false
     @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
     
@@ -54,6 +55,12 @@ struct BlogEntryDetailView: View {
                     CommonIcons.shared.shareImage
                 })
             }
+            
+            ToolbarItem(placement: .principal) {
+                if showPreparingSubEntry {
+                    ProgressView()
+                }
+            }
         }
         .onAppear {
             if let content = blogEntry.content {
@@ -74,24 +81,25 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
-        Task {
-            ErrorService.shared.executeShowingError {
-                if FefeBlogService.shared.isFefeBlogEntryUrl(url),
-                    let id = FefeBlogService.shared.getIdFromFefeUrl(url),
-                    let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
-                {
-                    subEntry = entry
-                    showSubEntry = true
-                    return
-                }
-
-                if Settings.shared.openUrlsInInternalBrowser {
-                    externalUrl = url
-                    showExternalContent = true
-                } else {
-                    UrlService.openUrl(url)
-                }
+        showPreparingSubEntry = true
+        ErrorService.shared.executeShowingError {
+            if FefeBlogService.shared.isFefeBlogEntryUrl(url),
+                let id = FefeBlogService.shared.getIdFromFefeUrl(url),
+                let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
+            {
+                subEntry = entry
+                showSubEntry = true
+                return
             }
+
+            if Settings.shared.openUrlsInInternalBrowser {
+                externalUrl = url
+                showExternalContent = true
+            } else {
+                UrlService.openUrl(url)
+            }
+        } andAlwaysDo: {
+            showPreparingSubEntry = false
         }
     }
 }

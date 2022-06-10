@@ -196,9 +196,10 @@ class FefeBlogService : ObservableObject {
     }
     
     func loadTemporaryBlogEntryFor(id: Int) async throws -> BlogEntry? {
-        if let entry = dataAccess.getBlogEntry(withId: id, onlyNormal: false) {
-            return entry
-        }
+        // TODO: Reactivate this... but don't know why it doesn't work...
+        /*if let entry = dataAccess.getBlogEntry(withId: id, onlyNormal: false) {
+            return dataAccess.createTemporaryBlogEntry(from: entry)
+        }*/
         
         let html = try await downloadString(url: getUrlFor(id: id))
         if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {

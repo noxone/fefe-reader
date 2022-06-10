@@ -28,6 +28,7 @@ struct BlogEntryListView: View {
     @State private var selectedBlogEntry: BlogEntry? = nil
     
     @State private var showNotificationPopup = false
+    @State private var showLoadingIndicator = false
     
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
@@ -36,7 +37,9 @@ struct BlogEntryListView: View {
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
             print("Load older entries")
+            showLoadingIndicator = true
             try await fefeBlog.loadOlderEntries()
+            showLoadingIndicator = false
         }
     }
 
@@ -45,13 +48,20 @@ struct BlogEntryListView: View {
             List {
                 listContent
                 if fefeBlog.canLoadMore {
-                    Button(action: {
-                        loadOlderEntries()
-                    }, label: {
-                        Text("Load older entries")
-                            .frame(maxWidth: .infinity)
-                    })
-                    .buttonStyle(.bordered)
+                    HStack(alignment: .center) {
+                        if !showLoadingIndicator {
+                            Button(action: {
+                                loadOlderEntries()
+                            }, label: {
+                                Text("Load older entries")
+                                    .frame(maxWidth: .infinity)
+                            })
+                            .buttonStyle(.bordered)
+                        } else {
+                            ProgressView()
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
                     .listRowSeparator(.hidden)
                     .onAppear {
                         loadOlderEntries()

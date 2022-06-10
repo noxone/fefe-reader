@@ -20,13 +20,16 @@ class ErrorService : ObservableObject {
         errorMessage = message
     }
     
-    func executeShowingError(_ action: @escaping () async throws -> () ) {
+    func executeShowingError(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) {
         Task {
-            await executeShowingErrorAsync(action)
+            await executeShowingErrorAsync(action, andAlwaysDo: deferredAction)
         }
     }
 
-    func executeShowingErrorAsync(_ action: @escaping () async throws -> ()) async {
+    func executeShowingErrorAsync(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: () -> () = {}) async {
+        defer {
+            deferredAction()
+        }
         do {
             try await action()
         } catch let error as FefeBlogError {

@@ -110,6 +110,23 @@ class DataAccess {
         return blogEntry
     }
     
+    func createTemporaryBlogEntry(from blogEntry: BlogEntry) -> BlogEntry {
+        return stack.withMainContext { context in
+            let blogEntry = BlogEntry(context: context)
+            blogEntry.validState = BlogEntry.VALID_STATE_TEMPORARY
+            blogEntry.id = blogEntry.id
+            blogEntry.relativeNumber = blogEntry.relativeNumber
+            blogEntry.date = blogEntry.date
+            blogEntry.content = blogEntry.content
+            blogEntry.bookmarkDate = blogEntry.bookmarkDate
+            blogEntry.teaser = blogEntry.teaser
+            blogEntry.loadedTimestamp = blogEntry.loadedTimestamp
+            blogEntry.readTimestamp = blogEntry.readTimestamp
+            blogEntry.uuid = UUID()
+            return blogEntry
+        }
+    }
+    
     // TODO: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-updates--cms-25120
     func resetBookmarks() {
         stack.withWorkingContext { context in
