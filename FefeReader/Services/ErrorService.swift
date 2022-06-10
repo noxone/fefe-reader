@@ -20,9 +20,15 @@ class ErrorService : ObservableObject {
         errorMessage = message
     }
     
-    func executeShowingError(_ action: @escaping () throws -> () ) {
+    func executeShowingError(_ action: @escaping () async throws -> () ) {
+        Task {
+            await executeShowingErrorAsync(action)
+        }
+    }
+
+    func executeShowingErrorAsync(_ action: @escaping () async throws -> ()) async {
         do {
-            try action()
+            try await action()
         } catch let error as FefeBlogError {
             let description = error.localizedDescription
             showError(message: description)

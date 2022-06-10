@@ -11,7 +11,8 @@ import BackgroundTasks
 
 @main
 struct FefeReaderApp: App {
-    private let persistenceController = PersistenceController.shared
+    //private let persistenceController = PersistenceController.shared
+    private let coreDataStack = CoreDataStack.shared
     
     @Environment(\.scenePhase) private var scenePhase
     @State var set: Bool = true
@@ -27,21 +28,23 @@ struct FefeReaderApp: App {
     var body: some Scene {
         WindowGroup {
             TabbedBlogView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.managedObjectContext, coreDataStack.managedObjectContext)
                 .task {
                     BlogTasks.shared.cancelAllPendingBackgroundTasks()
                     ErrorService.shared.executeShowingError {
-                        try FefeBlogService.shared.refresh(origin: "init")
+                        try await FefeBlogService.shared.refresh(origin: "init")
                     }
                 }
                 .task {
-                    persistenceController.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
+                    CoreDataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
                 }
                 .onReceive(timer) { input in
-                    do {
-                        try FefeBlogService.shared.refreshWithNotifications(origin: "timer")
-                    } catch {
-                        // TODO: log error
+                    Task {
+                        do {
+                            try await FefeBlogService.shared.refreshWithNotifications(origin: "timer")
+                        } catch {
+                            // TODO: log error
+                        }
                     }
                 }
                 .popup(isPresented: $errorService.showError, type: .toast, position: .top, autohideIn: 5, closeOnTap: true) {

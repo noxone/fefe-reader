@@ -36,7 +36,7 @@ struct BlogEntryListView: View {
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
             print("Load older entries")
-            try fefeBlog.loadOlderEntries()
+            try await fefeBlog.loadOlderEntries()
         }
     }
 
@@ -61,8 +61,8 @@ struct BlogEntryListView: View {
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                ErrorService.shared.executeShowingError {
-                    try FefeBlogService.shared.refresh(origin: "manual refresh")
+                await ErrorService.shared.executeShowingErrorAsync {
+                    try await FefeBlogService.shared.refresh(origin: "manual refresh")
                 }
             }
             .onAppear {
@@ -77,7 +77,7 @@ struct BlogEntryListView: View {
             }
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
-                    if let id = NotificationService.shared.idToOpen, let entry = PersistenceController.shared.getBlogEntry(withId: Int(id)) {
+                    if let id = NotificationService.shared.idToOpen, let entry = CoreDataAccess.shared.getBlogEntry(withId: Int(id)) {
                         NotificationService.shared.idToOpen = nil
                         selectedBlogEntry = entry
                     }
@@ -105,7 +105,7 @@ struct BlogEntryListView: View {
                     })
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(action: {
-                            PersistenceController.shared.delete(blogEntry: blogEntry)
+                            CoreDataAccess.shared.delete(blogEntry: blogEntry)
                         }, label: {
                             CommonIcons.shared.trashImage
                         })

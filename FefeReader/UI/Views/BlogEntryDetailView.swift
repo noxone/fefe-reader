@@ -74,25 +74,24 @@ struct BlogEntryDetailView: View {
     }
     
     private func handleHttpLinks(url: URL) {
-        ErrorService.shared.executeShowingError {
-            if FefeBlogService.shared.isFefeBlogEntryUrl(url),
-                let id = FefeBlogService.shared.getIdFromFefeUrl(url),
-                let entry = try FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
-            {
-                subEntry = entry
-                showSubEntry = true
-                return
+        Task {
+            ErrorService.shared.executeShowingError {
+                if FefeBlogService.shared.isFefeBlogEntryUrl(url),
+                    let id = FefeBlogService.shared.getIdFromFefeUrl(url),
+                    let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
+                {
+                    subEntry = entry
+                    showSubEntry = true
+                    return
+                }
+
+                if Settings.shared.openUrlsInInternalBrowser {
+                    externalUrl = url
+                    showExternalContent = true
+                } else {
+                    UrlService.openUrl(url)
+                }
             }
-        }
-        if showSubEntry {
-            return
-        }
-        
-        if Settings.shared.openUrlsInInternalBrowser {
-            externalUrl = url
-            showExternalContent = true
-        } else {
-            UrlService.openUrl(url)
         }
     }
 }

@@ -33,6 +33,9 @@
 		C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C533525E284F54EC0060A663 /* Allison-Regular.ttf */; };
 		C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0928512B9F0026F67B /* DateExtension.swift */; };
 		C5583E0C285230110026F67B /* ErrorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0B285230110026F67B /* ErrorService.swift */; };
+		C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0D285325530026F67B /* CoreDataStack.swift */; };
+		C5583E10285325B20026F67B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0F285325B20026F67B /* Logging.swift */; };
+		C5583E12285327240026F67B /* CoreDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E11285327240026F67B /* CoreDataAccess.swift */; };
 		C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
@@ -92,6 +95,9 @@
 		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
 		C5583E0928512B9F0026F67B /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		C5583E0B285230110026F67B /* ErrorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorService.swift; sourceTree = "<group>"; };
+		C5583E0D285325530026F67B /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C5583E0F285325B20026F67B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		C5583E11285327240026F67B /* CoreDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataAccess.swift; sourceTree = "<group>"; };
 		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
@@ -211,6 +217,7 @@
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
+				C5583E0F285325B20026F67B /* Logging.swift */,
 			);
 			path = FefeReader;
 			sourceTree = "<group>";
@@ -257,6 +264,8 @@
 			children = (
 				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
 				C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */,
+				C5583E0D285325530026F67B /* CoreDataStack.swift */,
+				C5583E11285327240026F67B /* CoreDataAccess.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -384,7 +393,6 @@
 			packageReferences = (
 				C5243EB928460D2F001CBA3D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */,
-				C5E310B128473E36005937FA /* XCRemoteSwiftPackageReference "ExitButton" */,
 				C51FA2C4284E2945007FAD56 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = C524ACFE2843FD8900EF24F1 /* Products */;
@@ -431,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C524AD0D2843FD8C00EF24F1 /* FefeReader.xcdatamodeld in Sources */,
+				C5583E10285325B20026F67B /* Logging.swift in Sources */,
 				C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */,
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */,
@@ -439,6 +448,7 @@
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
+				C5583E12285327240026F67B /* CoreDataAccess.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
 				C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */,
@@ -458,6 +468,7 @@
 				C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */,
 				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
 				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
+				C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,6 +624,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
@@ -633,9 +645,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.olafneumann.FefeReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -644,6 +657,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
@@ -664,9 +678,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.olafneumann.FefeReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -807,14 +822,6 @@
 		C5E310AA28471DA6005937FA /* XCRemoteSwiftPackageReference "swiftui-webview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/globulus/swiftui-webview";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		C5E310B128473E36005937FA /* XCRemoteSwiftPackageReference "ExitButton" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/joogps/ExitButton";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;

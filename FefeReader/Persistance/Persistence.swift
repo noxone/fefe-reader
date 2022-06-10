@@ -8,7 +8,7 @@
 import CoreData
 
 struct PersistenceController {
-    static let shared = PersistenceController()
+    static let shared2 = PersistenceController()
 
     let container: NSPersistentContainer
 
@@ -169,7 +169,7 @@ struct PersistenceController {
     }
     
     func cleanUpDatabase(deleteOldBlogEntries: Bool, keepBookmarks: Bool) {
-        PersistenceController.shared.deleteTemporaryBlogEntries()
+        CoreDataAccess.shared.deleteTemporaryBlogEntries()
         if deleteOldBlogEntries {
             let halfAYearAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date())!
             deleteBlogEntries(olderThan: halfAYearAgo, keepingBookmarks: keepBookmarks)

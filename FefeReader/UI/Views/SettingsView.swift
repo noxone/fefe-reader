@@ -112,7 +112,7 @@ struct SettingsView: View {
             })
             .confirmationDialog("Reset all bookmarks?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
                 Button("Reset bookmarks", role: .destructive) {
-                    PersistenceController.shared.resetBookmarks()
+                    CoreDataAccess.shared.resetBookmarks()
                 }
             }
             Button(role: .destructive, action: {
@@ -122,7 +122,7 @@ struct SettingsView: View {
             })
             .confirmationDialog("Permanently erase all loaded blog entries and bookmarks?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
                 Button("Delete all", role: .destructive) {
-                    PersistenceController.shared.clearBlogEntries()
+                    CoreDataAccess.shared.clearBlogEntries()
                 }
             }
         }

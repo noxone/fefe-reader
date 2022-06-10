@@ -71,12 +71,14 @@ class BlogTasks {
             print("Cancel refresh task")
         }
 
-        do {
-            try FefeBlogService.shared.refreshWithNotifications(origin: "background")
-            task.setTaskCompleted(success: true)
-        } catch {
-            // TODO: log error
-            task.setTaskCompleted(success: false)
+        Task {
+            do {
+                try await FefeBlogService.shared.refreshWithNotifications(origin: "background")
+                task.setTaskCompleted(success: true)
+            } catch {
+                // TODO: log error
+                task.setTaskCompleted(success: false)
+            }
         }
     }
     
@@ -90,7 +92,7 @@ class BlogTasks {
         }
         
         let settings = Settings.shared
-        PersistenceController.shared.cleanUpDatabase(deleteOldBlogEntries: settings.regularlyDeleteOldBlogEntries, keepBookmarks: settings.keepBookmarkedBlogEntries)
+        CoreDataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: settings.regularlyDeleteOldBlogEntries, keepBookmarks: settings.keepBookmarkedBlogEntries)
         task.setTaskCompleted(success: true)
     }
 }

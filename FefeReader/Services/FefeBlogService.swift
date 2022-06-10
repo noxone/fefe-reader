@@ -22,8 +22,6 @@ class FefeBlogService : ObservableObject {
         return Calendar.current.date(from: dateComponents)!
     }()
     
-    let persistance = PersistenceController.shared
-    
     private static let urlDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.init(identifier: "de")
@@ -42,15 +40,14 @@ class FefeBlogService : ObservableObject {
     
     @Published
     private(set) var canLoadMore: Bool = {
-        if let oldestEntryDate = PersistenceController.shared.getOldestBlogEntry()?.date {
+        if let oldestEntryDate = CoreDataAccess.shared.getOldestBlogEntry()?.date {
             return oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
         } else {
             return true
         }
     }()
     
-    private init() {
-    }
+    private init() {}
     
     func createUrl(forId id: Int) -> URL {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
@@ -59,13 +56,17 @@ class FefeBlogService : ObservableObject {
     func markAsRead(_ blogEntry: BlogEntry) {
         blogEntry.readTimestamp = Date()
         blogEntry.updatedSinceLastRead = false
-        persistance.save()
+        // TODO: FIX that!
+        try! blogEntry.managedObjectContext!.save()
+        //persistance.save()
     }
     
     func markAsUnread(_ blogEntry: BlogEntry) {
         blogEntry.readTimestamp = nil
         blogEntry.updatedSinceLastRead = false
-        persistance.save()
+        // TODO: FIX that!
+        try! blogEntry.managedObjectContext!.save()
+        //persistance.save()
     }
     
     func toggleRead(_ blogEntry: BlogEntry) {
@@ -78,28 +79,30 @@ class FefeBlogService : ObservableObject {
     
     func toggleBookmark(for blogEntry: BlogEntry) {
         blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
-        persistance.save()
+        // TODO: FIX that!
+        try! blogEntry.managedObjectContext!.save()
+        //persistance.save()
     }
     
-    func refreshWithNotifications(origin: String) throws {
-        let blogEntries = try FefeBlogService.shared.refresh(origin: origin)
+    func refreshWithNotifications(origin: String) async throws {
+        let blogEntries = try await FefeBlogService.shared.refresh(origin: origin)
         NotificationService.shared.addNotifications(for: blogEntries)
     }
     
     @discardableResult
-    func refresh(origin: String) throws -> [BlogEntry] {
+    func refresh(origin: String) async throws -> [BlogEntry] {
         print("Refresh...................", origin, Date())
-        PersistenceController.shared.createUpdateFetch(from: origin)
-        return try loadCurrentMonth()
+        CoreDataAccess.shared.createUpdateFetch(from: origin)
+        return try await loadCurrentMonth()
     }
         
-    private func loadCurrentMonth() throws -> [BlogEntry] {
-        return try loadMonthIntoDatabase(forDate: Date()).newlyCreateBlogEntries
+    private func loadCurrentMonth() async throws -> [BlogEntry] {
+        return try await loadMonthIntoDatabase(forDate: Date()).newlyCreateBlogEntries
     }
     
-    func loadOlderEntries() throws {
-        guard let oldestEntry = persistance.getOldestBlogEntry() else {
-            _ = try loadCurrentMonth()
+    func loadOlderEntries() async throws {
+        guard let oldestEntry = CoreDataAccess.shared.getOldestBlogEntry() else {
+            _ = try await loadCurrentMonth()
             return
         }
         
@@ -121,14 +124,14 @@ class FefeBlogService : ObservableObject {
                 return
             }
         
-            count = try loadMonthIntoDatabase(forDate: dateToLoad).newlyCreateBlogEntries.count
+            count = try await loadMonthIntoDatabase(forDate: dateToLoad).newlyCreateBlogEntries.count
         } while (count == 0)
     }
     
-    private func loadMonthIntoDatabase(forDate date: Date) throws -> LoadBlogEntriesResult {
+    private func loadMonthIntoDatabase(forDate date: Date) async throws -> LoadBlogEntriesResult {
         let rawEntries: [RawEntry]
         do {
-            rawEntries = try downloadAndParseRawEntries(forDate: date)
+            rawEntries = try await downloadAndParseRawEntries(forDate: date)
         } catch let error as FefeBlogError {
             throw error
         } catch {
@@ -137,29 +140,30 @@ class FefeBlogService : ObservableObject {
         
         var createdBlogEntries: [BlogEntry] = []
         
-        for rawEntry in rawEntries {
-            if let blogEntry = persistance.getBlogEntry(withId: rawEntry.id) {
-                // Update content
-                if blogEntry.content != rawEntry.content {
-                    blogEntry.content = rawEntry.content
-                    if blogEntry.isRead {
-                        blogEntry.updatedSinceLastRead = true
+        CoreDataStack.shared.withWorkingContext { context in
+            for rawEntry in rawEntries {
+                if let blogEntry = CoreDataAccess.shared.getBlogEntry(withId: rawEntry.id) {
+                    // Update content
+                    if blogEntry.content != rawEntry.content {
+                        blogEntry.content = rawEntry.content
+                        if blogEntry.isRead {
+                            blogEntry.updatedSinceLastRead = true
+                        }
                     }
+                    blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
+                } else {
+                    // Create entry
+                    let newBlogEntry = CoreDataAccess.shared.createBlogEntry(context: context, from: rawEntry)
+                    createdBlogEntries.append(newBlogEntry)
                 }
-                blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
-            } else {
-                // Create entry
-                let newBlogEntry = persistance.createBlogEntry(from: rawEntry)
-                createdBlogEntries.append(newBlogEntry)
             }
         }
-        persistance.save()
         
         return LoadBlogEntriesResult(newlyCreateBlogEntries: createdBlogEntries, numberOfLoadedEntries: rawEntries.count)
     }
     
-    private func downloadAndParseRawEntries(forDate date: Date) throws -> [RawEntry] {
-        let result = try downloadHtmlForMonth(date: date)
+    private func downloadAndParseRawEntries(forDate date: Date) async throws -> [RawEntry] {
+        let result = try await downloadHtmlForMonth(date: date)
         return try parseHtmlToRawEntries(html: result.html, relativeUrl: result.url)
     }
     
@@ -190,16 +194,17 @@ class FefeBlogService : ObservableObject {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
-    func loadTemporaryBlogEntryFor(id: Int) throws -> BlogEntry? {
-        if let entry = PersistenceController.shared.getBlogEntry(withId: id, onlyNormal: false) {
+    func loadTemporaryBlogEntryFor(id: Int) async throws -> BlogEntry? {
+        if let entry = CoreDataAccess.shared.getBlogEntry(withId: id, onlyNormal: false) {
             return entry
         }
         
-        let html = try downloadHtmlFor(url: getUrlFor(id: id))
+        let html = try await downloadString(url: getUrlFor(id: id))
         if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
-            let entry = PersistenceController.shared.createBlogEntry(from: rawEntry, temporary: true)
-            PersistenceController.shared.save()
-            return entry
+            return CoreDataStack.shared.withMainContext { context in
+                let entry = CoreDataAccess.shared.createBlogEntry(context: context, from: rawEntry, temporary: true)
+                return entry
+            }
         }
         return nil
     }
@@ -259,22 +264,51 @@ class FefeBlogService : ObservableObject {
         }
     }
     
-    private func downloadHtmlForMonth(date: Date) throws -> (url: URL, html: String) {
+    private func downloadHtmlForMonth(date: Date) async throws -> (url: URL, html: String) {
         if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
-            return (url: url, html: try downloadHtmlFor(url: url))
+            return (url: url, html: try await downloadString(url: url))
         } else {
             print("URL was not valid")
             throw FefeBlogError.urlConstructionFailed
         }
     }
     
-    private func downloadHtmlFor(url: URL) throws -> String {
+    /*private func downloadHtmlFor(url: URL) throws -> String {
         do {
             return try String(contentsOf: url)
         } catch {
             print("Unable to load content for URL: ", url)
             throw FefeBlogError.downloadFailed(url: url, error: error)
         }
+    }*/
+    
+    private func downloadString(url: URL) async throws -> String {
+        var request = URLRequest(url: url, timeoutInterval: 10)
+        request.addValue("text/html", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "GET"
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard response is HTTPURLResponse else { throw FefeBlogError.downloadFailed(url: url, error: nil) }
+        let httpResponse = response as! HTTPURLResponse
+        guard 200..<300 ~= httpResponse.statusCode else { throw FefeBlogError.downloadFailed(url: url, error: nil) }
+        if let content = String(data: data, encoding: httpResponse.encoding) {
+            return content
+        } else {
+            throw FefeBlogError.downloadFailed(url: url, error: nil)
+        }
+    }
+}
+
+fileprivate extension HTTPURLResponse {
+    var encoding: String.Encoding {
+        var usedEncoding = String.Encoding.utf8 // Some fallback value
+        if let encodingName = self.textEncodingName {
+            let encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(encodingName as CFString))
+            if encoding != UInt(kCFStringEncodingInvalidId) {
+                usedEncoding = String.Encoding(rawValue: encoding)
+            }
+        }
+        return usedEncoding
     }
 }
 
@@ -294,7 +328,7 @@ struct LoadBlogEntriesResult {
 }
 
 enum FefeBlogError : Error {
-    case downloadFailed(url: URL, error: Error)
+    case downloadFailed(url: URL, error: Error?)
     case urlConstructionFailed
     case invalidUrl(url: URL)
     case parsingException(exception: Exception)
