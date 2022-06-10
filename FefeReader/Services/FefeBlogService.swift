@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftSoup
+import CoreData
 
 class FefeBlogService : ObservableObject {
     static let shared = FefeBlogService()
@@ -38,35 +39,36 @@ class FefeBlogService : ObservableObject {
         return formatter
     }()
     
+    private init() {}
+    
+    private let dataAccess = DataAccess.shared
+    private let stack = CoreDataStack.shared
+
     @Published
     private(set) var canLoadMore: Bool = {
-        if let oldestEntryDate = CoreDataAccess.shared.getOldestBlogEntry()?.date {
+        if let oldestEntryDate = DataAccess.shared.getOldestBlogEntry()?.date {
             return oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
         } else {
             return true
         }
     }()
     
-    private init() {}
-    
     func createUrl(forId id: Int) -> URL {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
     func markAsRead(_ blogEntry: BlogEntry) {
-        blogEntry.readTimestamp = Date()
-        blogEntry.updatedSinceLastRead = false
-        // TODO: FIX that!
-        try! blogEntry.managedObjectContext!.save()
-        //persistance.save()
+        stack.update(blogEntry) {
+            $0.readTimestamp = Date()
+            $0.updatedSinceLastRead = false
+        }
     }
     
     func markAsUnread(_ blogEntry: BlogEntry) {
-        blogEntry.readTimestamp = nil
-        blogEntry.updatedSinceLastRead = false
-        // TODO: FIX that!
-        try! blogEntry.managedObjectContext!.save()
-        //persistance.save()
+        stack.update(blogEntry) {
+            $0.readTimestamp = nil
+            $0.updatedSinceLastRead = false
+        }
     }
     
     func toggleRead(_ blogEntry: BlogEntry) {
@@ -78,30 +80,29 @@ class FefeBlogService : ObservableObject {
     }
     
     func toggleBookmark(for blogEntry: BlogEntry) {
-        blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
-        // TODO: FIX that!
-        try! blogEntry.managedObjectContext!.save()
-        //persistance.save()
+        stack.update(blogEntry) {
+            $0.bookmarkDate = $0.isBookmarked ? nil : Date()
+        }
     }
     
     func refreshWithNotifications(origin: String) async throws {
-        let blogEntries = try await FefeBlogService.shared.refresh(origin: origin)
+        let blogEntries = try await refresh(origin: origin)
         NotificationService.shared.addNotifications(for: blogEntries)
     }
     
     @discardableResult
     func refresh(origin: String) async throws -> [BlogEntry] {
         print("Refresh...................", origin, Date())
-        CoreDataAccess.shared.createUpdateFetch(from: origin)
+        dataAccess.createUpdateFetch(from: origin)
         return try await loadCurrentMonth()
     }
         
     private func loadCurrentMonth() async throws -> [BlogEntry] {
-        return try await loadMonthIntoDatabase(forDate: Date()).newlyCreateBlogEntries
+        return try await loadMonthIntoDatabase(for: Date()).newlyCreateBlogEntries
     }
     
     func loadOlderEntries() async throws {
-        guard let oldestEntry = CoreDataAccess.shared.getOldestBlogEntry() else {
+        guard let oldestEntry = DataAccess.shared.getOldestBlogEntry(includingBookmarks:  false) else {
             _ = try await loadCurrentMonth()
             return
         }
@@ -124,11 +125,11 @@ class FefeBlogService : ObservableObject {
                 return
             }
         
-            count = try await loadMonthIntoDatabase(forDate: dateToLoad).newlyCreateBlogEntries.count
+            count = try await loadMonthIntoDatabase(for: dateToLoad).newlyCreateBlogEntries.count
         } while (count == 0)
     }
     
-    private func loadMonthIntoDatabase(forDate date: Date) async throws -> LoadBlogEntriesResult {
+    private func loadMonthIntoDatabase(for date: Date) async throws -> LoadBlogEntriesResult {
         let rawEntries: [RawEntry]
         do {
             rawEntries = try await downloadAndParseRawEntries(forDate: date)
@@ -140,9 +141,9 @@ class FefeBlogService : ObservableObject {
         
         var createdBlogEntries: [BlogEntry] = []
         
-        CoreDataStack.shared.withWorkingContext { context in
+        stack.withMainContext { context in
             for rawEntry in rawEntries {
-                if let blogEntry = CoreDataAccess.shared.getBlogEntry(withId: rawEntry.id) {
+                if let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
                     // Update content
                     if blogEntry.content != rawEntry.content {
                         blogEntry.content = rawEntry.content
@@ -153,7 +154,7 @@ class FefeBlogService : ObservableObject {
                     blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
                 } else {
                     // Create entry
-                    let newBlogEntry = CoreDataAccess.shared.createBlogEntry(context: context, from: rawEntry)
+                    let newBlogEntry = dataAccess.createBlogEntry(from: rawEntry)
                     createdBlogEntries.append(newBlogEntry)
                 }
             }
@@ -195,16 +196,14 @@ class FefeBlogService : ObservableObject {
     }
     
     func loadTemporaryBlogEntryFor(id: Int) async throws -> BlogEntry? {
-        if let entry = CoreDataAccess.shared.getBlogEntry(withId: id, onlyNormal: false) {
+        if let entry = dataAccess.getBlogEntry(withId: id, onlyNormal: false) {
             return entry
         }
         
         let html = try await downloadString(url: getUrlFor(id: id))
         if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
-            return CoreDataStack.shared.withMainContext { context in
-                let entry = CoreDataAccess.shared.createBlogEntry(context: context, from: rawEntry, temporary: true)
-                return entry
-            }
+            let entry = dataAccess.createBlogEntry(from: rawEntry, temporary: true)
+            return entry
         }
         return nil
     }
@@ -283,7 +282,7 @@ class FefeBlogService : ObservableObject {
     }*/
     
     private func downloadString(url: URL) async throws -> String {
-        var request = URLRequest(url: url, timeoutInterval: 10)
+        var request = URLRequest(url: url, timeoutInterval: Settings.shared.networkTimeoutInterval)
         request.addValue("text/html", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "GET"
         
@@ -349,7 +348,7 @@ enum FefeBlogError : Error {
 extension FefeBlogError : LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .downloadFailed(let url, let error):
+        case .downloadFailed(let url, _ /* let error*/):
             return "Unable to load content for URL: \(url)"
         default:
             return "ERROR, error"

@@ -77,7 +77,7 @@ struct BlogEntryListView: View {
             }
             .onChange(of: scenePhase) { newPhase in
                 if newPhase == .active {
-                    if let id = NotificationService.shared.idToOpen, let entry = CoreDataAccess.shared.getBlogEntry(withId: Int(id)) {
+                    if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
                         NotificationService.shared.idToOpen = nil
                         selectedBlogEntry = entry
                     }
@@ -105,7 +105,7 @@ struct BlogEntryListView: View {
                     })
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(action: {
-                            CoreDataAccess.shared.delete(blogEntry: blogEntry)
+                            DataAccess.shared.delete(object: blogEntry)
                         }, label: {
                             CommonIcons.shared.trashImage
                         })

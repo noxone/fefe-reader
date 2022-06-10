@@ -22,27 +22,50 @@ class CoreDataStack {
         return context
     }
     
-    @discardableResult
-    func withMainContext<T>(action: (NSManagedObjectContext) -> T) -> T {
-        defer {
-            saveContext()
+    func readForUi<T>(action: (NSManagedObjectContext) throws -> T) rethrows -> T {
+        try managedObjectContext.performAndWait {
+            return try action(managedObjectContext)
         }
-        var result: T? = nil
-        self.managedObjectContext.performAndWait {
-            result = action(managedObjectContext)
-        }
-        return result!
     }
     
     @discardableResult
-    func withWorkingContext<T>(action: (NSManagedObjectContext) -> T) -> T {
-        let context = workingContext
-        defer {
-            saveWorkingContext(context: context)
-        }
-        return action(context)
+    func withMainContext<T>(action: (NSManagedObjectContext) throws -> T) rethrows -> T {
+        return try with(context: managedObjectContext, action: action)
     }
-
+    
+    @discardableResult
+    func withWorkingContext<T>(action: (NSManagedObjectContext) throws -> T) rethrows -> T {
+        return try with(context: workingContext, action: action)
+    }
+    
+    func update<T: NSManagedObject>(_ object: T, action: (T) -> ()) {
+        with(context: object.managedObjectContext) { _ in
+            action(object)
+        }
+    }
+    
+    @discardableResult
+    func with<T>(context optionalContext: NSManagedObjectContext?, action: (NSManagedObjectContext) throws -> T) rethrows -> T {
+        let context = optionalContext ?? managedObjectContext
+        let isMainContext = context == managedObjectContext
+        defer {
+            if isMainContext {
+                saveContext()
+            } else {
+                saveWorkingContext(context)
+            }
+        }
+        if isMainContext {
+            var result: T? = nil
+            try self.managedObjectContext.performAndWait {
+                result = try action(managedObjectContext)
+            }
+            return result!
+        } else {
+            return try action(context)
+        }
+    }
+    
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
@@ -71,7 +94,7 @@ class CoreDataStack {
         }
     }
 
-    func saveWorkingContext(context: NSManagedObjectContext) {
+    func saveWorkingContext(_ context: NSManagedObjectContext) {
         do {
             try context.save()
             appPrint("Working context saved")

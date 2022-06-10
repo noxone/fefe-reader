@@ -35,7 +35,7 @@
 		C5583E0C285230110026F67B /* ErrorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0B285230110026F67B /* ErrorService.swift */; };
 		C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0D285325530026F67B /* CoreDataStack.swift */; };
 		C5583E10285325B20026F67B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0F285325B20026F67B /* Logging.swift */; };
-		C5583E12285327240026F67B /* CoreDataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E11285327240026F67B /* CoreDataAccess.swift */; };
+		C5583E12285327240026F67B /* DataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E11285327240026F67B /* DataAccess.swift */; };
 		C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
@@ -97,7 +97,7 @@
 		C5583E0B285230110026F67B /* ErrorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorService.swift; sourceTree = "<group>"; };
 		C5583E0D285325530026F67B /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C5583E0F285325B20026F67B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		C5583E11285327240026F67B /* CoreDataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataAccess.swift; sourceTree = "<group>"; };
+		C5583E11285327240026F67B /* DataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAccess.swift; sourceTree = "<group>"; };
 		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
@@ -265,7 +265,7 @@
 				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
 				C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */,
 				C5583E0D285325530026F67B /* CoreDataStack.swift */,
-				C5583E11285327240026F67B /* CoreDataAccess.swift */,
+				C5583E11285327240026F67B /* DataAccess.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -448,7 +448,7 @@
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
-				C5583E12285327240026F67B /* CoreDataAccess.swift in Sources */,
+				C5583E12285327240026F67B /* DataAccess.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
 				C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */,

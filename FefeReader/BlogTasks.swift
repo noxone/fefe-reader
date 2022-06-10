@@ -92,7 +92,7 @@ class BlogTasks {
         }
         
         let settings = Settings.shared
-        CoreDataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: settings.regularlyDeleteOldBlogEntries, keepBookmarks: settings.keepBookmarkedBlogEntries)
+        DataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: settings.regularlyDeleteOldBlogEntries, keepBookmarks: settings.keepBookmarkedBlogEntries)
         task.setTaskCompleted(success: true)
     }
 }

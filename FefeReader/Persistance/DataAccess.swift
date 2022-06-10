@@ -8,14 +8,14 @@
 import Foundation
 import CoreData
 
-class CoreDataAccess {
-    static let shared = CoreDataAccess()
+class DataAccess {
+    static let shared = DataAccess()
 
     static let PREDICATE_VALID_STATE_NORMAL = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
 
     private init() {}
     
-    let stack = CoreDataStack.shared
+    private let stack = CoreDataStack.shared
         
     func getBlogEntry(withId id: Int, onlyNormal: Bool = true) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
@@ -25,21 +25,27 @@ class CoreDataAccess {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [request.predicate!, PersistenceController.PREDICATE_VALID_STATE_NORMAL])
         }
         
-        return try? stack.managedObjectContext.fetch(request).first
+        return try? stack.readForUi { try $0.fetch(request) }.first
     }
     
-    func getOldestBlogEntry() -> BlogEntry? {
+    func getOldestBlogEntry(includingBookmarks includeBookmarks: Bool = true) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
         request.predicate = PersistenceController.PREDICATE_VALID_STATE_NORMAL
+        if !includeBookmarks {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                request.predicate!,
+                NSPredicate(format: "bookmarkDate == nil")
+            ])
+        }
         
-        return try? stack.managedObjectContext.fetch(request).first
+        return try? stack.readForUi { try $0.fetch(request) }.first
     }
     
-    func delete(blogEntry: BlogEntry) {
-        CoreDataStack.shared.withMainContext { context in
-            context.delete(blogEntry)
+    func delete(object: NSManagedObject) {
+        stack.with(context: object.managedObjectContext) { context in
+            context.delete(object)
         }
     }
     
@@ -80,15 +86,16 @@ class CoreDataAccess {
         }
     }
     
-    func createUpdateFetch(from: String) {
+    func createUpdateFetch(from origin: String) {
+        appPrint("Update from: \(origin)")
         /*let fetch = UpdateFetch(context: container.viewContext)
         fetch.date = Date()
         fetch.from = from
         save()*/
     }
     
-    func createBlogEntry(context: NSManagedObjectContext, from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
-        let blogEntry = BlogEntry(context: context)
+    func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
+        let blogEntry = BlogEntry(context: stack.managedObjectContext)
         blogEntry.validState = temporary ? BlogEntry.VALID_STATE_TEMPORARY : BlogEntry.VALID_STATE_NORMAL
         blogEntry.id = Int64(rawEntry.id)
         blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
@@ -102,11 +109,6 @@ class CoreDataAccess {
         blogEntry.uuid = UUID()
         return blogEntry
     }
-    
-    /*func delete(blogEntry: BlogEntry) {
-        container.viewContext.delete(blogEntry)
-        save()
-    }*/
     
     // TODO: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-updates--cms-25120
     func resetBookmarks() {

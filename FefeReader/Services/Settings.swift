@@ -29,6 +29,7 @@ class Settings : ObservableObject {
     let refreshInternal = TimeInterval(15 * 60)
     let notificationDelay = TimeInterval(1)
 #endif
+    let networkTimeoutInterval = TimeInterval(10)
     
     @Published var askForNotificationApproval: Bool = true
     { didSet { UserDefaults.standard.set(askForNotificationApproval, forKey: "askForNotoficationApproval") } }

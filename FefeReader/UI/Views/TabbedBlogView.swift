@@ -20,24 +20,17 @@ struct TabbedBlogView: View {
             }
             
             BookmarkListView()
-                .environment(\.managedObjectContext, viewContext)
-                .tabItem {
-                    CommonIcons.shared.bookmarkImage
-                    Text("Bookmarks")
-                }
+            .environment(\.managedObjectContext, viewContext)
+            .tabItem {
+                CommonIcons.shared.bookmarkImage
+                Text("Bookmarks")
+            }
             
             /*CommonIcons.shared.searchImage
-                .tabItem {
-                    CommonIcons.shared.searchImage
-                    Text("Search")
-                }*/
-            
-            /*UpdateFetchListView()
-                .environment(\.managedObjectContext, viewContext)
-                .tabItem {
-                    Image(systemName: "circle")
-                    Text("Updates")
-                }*/
+            .tabItem {
+                CommonIcons.shared.searchImage
+                Text("Search")
+            }*/
             
             SettingsView()
             .tabItem {
