@@ -41,11 +41,13 @@ struct BlogEntryDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                Button(action: {
-                    FefeBlogService.shared.toggleBookmark(for: blogEntry)
-                }, label: {
-                    blogEntry.bookmarkImage
-                })
+                if !blogEntry.isTemporary {
+                    Button(action: {
+                        FefeBlogService.shared.toggleBookmark(for: blogEntry)
+                    }, label: {
+                        blogEntry.bookmarkImage
+                    })
+                }
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {

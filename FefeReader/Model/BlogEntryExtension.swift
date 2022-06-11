@@ -23,6 +23,12 @@ extension BlogEntry {
         }
     }
     
+    var isTemporary: Bool {
+        get {
+            return validState == BlogEntry.VALID_STATE_TEMPORARY
+        }
+    }
+    
     var secureDate: Date {
         get {
             return date ?? Date()
