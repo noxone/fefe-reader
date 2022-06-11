@@ -13,7 +13,13 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="validState" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="Log" representedClassName="Log" syncable="YES" codeGenerationType="class">
+        <attribute name="category" attributeType="String" defaultValueString="none"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" attributeType="String" defaultValueString=""/>
+    </entity>
     <elements>
         <element name="BlogEntry" positionX="-63" positionY="-9" width="128" height="194"/>
+        <element name="Log" positionX="-63" positionY="72" width="128" height="74"/>
     </elements>
 </model>

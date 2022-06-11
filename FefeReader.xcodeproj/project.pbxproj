@@ -14,7 +14,6 @@
 		C51FA2CA284F30D3007FAD56 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C9284F30D3007FAD56 /* LicensesView.swift */; };
 		C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */; };
 		C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */; };
-		C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */; };
 		C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EAE2845CABC001CBA3D /* TextExtension.swift */; };
 		C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */; };
 		C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */; };
@@ -22,7 +21,6 @@
 		C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */; };
 		C524AD052843FD8C00EF24F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C524AD042843FD8C00EF24F1 /* Assets.xcassets */; };
 		C524AD082843FD8C00EF24F1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C524AD072843FD8C00EF24F1 /* Preview Assets.xcassets */; };
-		C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD092843FD8C00EF24F1 /* Persistence.swift */; };
 		C524AD0D2843FD8C00EF24F1 /* FefeReader.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */; };
 		C524AD172843FD8C00EF24F1 /* FefeReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD162843FD8C00EF24F1 /* FefeReaderTests.swift */; };
 		C524AD212843FD8C00EF24F1 /* FefeReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD202843FD8C00EF24F1 /* FefeReaderUITests.swift */; };
@@ -36,6 +34,12 @@
 		C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0D285325530026F67B /* CoreDataStack.swift */; };
 		C5583E10285325B20026F67B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0F285325B20026F67B /* Logging.swift */; };
 		C5583E12285327240026F67B /* DataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E11285327240026F67B /* DataAccess.swift */; };
+		C5583E14285464D40026F67B /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E13285464D40026F67B /* PreviewData.swift */; };
+		C5583E1C2854722C0026F67B /* Allison.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E1A2854722C0026F67B /* Allison.license */; };
+		C5583E1D2854722C0026F67B /* FefeReader.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E1B2854722C0026F67B /* FefeReader.license */; };
+		C5583E1F2854837E0026F67B /* PopupView.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E1E2854837E0026F67B /* PopupView.license */; };
+		C5583E21285483AA0026F67B /* SwiftSoup.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E20285483AA0026F67B /* SwiftSoup.license */; };
+		C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E22285483CF0026F67B /* SwiftUIWebView.license */; };
 		C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
@@ -73,14 +77,12 @@
 		C51FA2C9284F30D3007FAD56 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseTextView.swift; sourceTree = "<group>"; };
 		C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryExtension.swift; sourceTree = "<group>"; };
-		C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPersistance.swift; sourceTree = "<group>"; };
 		C5243EAE2845CABC001CBA3D /* TextExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtension.swift; sourceTree = "<group>"; };
 		C5243EB12845CDDB001CBA3D /* FefeBlogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeBlogService.swift; sourceTree = "<group>"; };
 		C524ACFD2843FD8900EF24F1 /* FefeReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FefeReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderApp.swift; sourceTree = "<group>"; };
 		C524AD042843FD8C00EF24F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C524AD072843FD8C00EF24F1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		C524AD092843FD8C00EF24F1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		C524AD0C2843FD8C00EF24F1 /* FefeReader.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FefeReader.xcdatamodel; sourceTree = "<group>"; };
 		C524AD122843FD8C00EF24F1 /* FefeReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FefeReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C524AD162843FD8C00EF24F1 /* FefeReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FefeReaderTests.swift; sourceTree = "<group>"; };
@@ -98,6 +100,12 @@
 		C5583E0D285325530026F67B /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C5583E0F285325B20026F67B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		C5583E11285327240026F67B /* DataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAccess.swift; sourceTree = "<group>"; };
+		C5583E13285464D40026F67B /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		C5583E1A2854722C0026F67B /* Allison.license */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Allison.license; sourceTree = "<group>"; };
+		C5583E1B2854722C0026F67B /* FefeReader.license */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FefeReader.license; sourceTree = "<group>"; };
+		C5583E1E2854837E0026F67B /* PopupView.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = PopupView.license; sourceTree = "<group>"; };
+		C5583E20285483AA0026F67B /* SwiftSoup.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftSoup.license; sourceTree = "<group>"; };
+		C5583E22285483CF0026F67B /* SwiftUIWebView.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftUIWebView.license; sourceTree = "<group>"; };
 		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
@@ -255,6 +263,7 @@
 				C5243EAD2845CAA6001CBA3D /* UIKit */,
 				C530683928491D3D00082BA2 /* Shared */,
 				C5335263284F75CF0060A663 /* Fonts */,
+				C5583E15285470D30026F67B /* Licenses */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -262,10 +271,9 @@
 		C524AD302843FE8C00EF24F1 /* Persistance */ = {
 			isa = PBXGroup;
 			children = (
-				C524AD092843FD8C00EF24F1 /* Persistence.swift */,
-				C5243EAA2844F12D001CBA3D /* PreviewPersistance.swift */,
 				C5583E0D285325530026F67B /* CoreDataStack.swift */,
 				C5583E11285327240026F67B /* DataAccess.swift */,
+				C5583E13285464D40026F67B /* PreviewData.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -295,6 +303,18 @@
 				C533525E284F54EC0060A663 /* Allison-Regular.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		C5583E15285470D30026F67B /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				C5583E1A2854722C0026F67B /* Allison.license */,
+				C5583E1B2854722C0026F67B /* FefeReader.license */,
+				C5583E1E2854837E0026F67B /* PopupView.license */,
+				C5583E20285483AA0026F67B /* SwiftSoup.license */,
+				C5583E22285483CF0026F67B /* SwiftUIWebView.license */,
+			);
+			path = Licenses;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,7 +407,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
 			mainGroup = C524ACF42843FD8900EF24F1;
 			packageReferences = (
@@ -411,9 +430,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5583E1D2854722C0026F67B /* FefeReader.license in Resources */,
 				C524AD082843FD8C00EF24F1 /* Preview Assets.xcassets in Resources */,
 				C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */,
+				C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */,
+				C5583E1C2854722C0026F67B /* Allison.license in Resources */,
+				C5583E21285483AA0026F67B /* SwiftSoup.license in Resources */,
 				C524AD052843FD8C00EF24F1 /* Assets.xcassets in Resources */,
+				C5583E1F2854837E0026F67B /* PopupView.license in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,7 +466,6 @@
 				C5583E10285325B20026F67B /* Logging.swift in Sources */,
 				C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */,
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
-				C524AD0A2843FD8C00EF24F1 /* Persistence.swift in Sources */,
 				C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
@@ -454,6 +477,7 @@
 				C55EC2092850667E0049AFB3 /* BlogEntryDetailWrapper.swift in Sources */,
 				C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */,
 				C5E310B828474033005937FA /* HtmlService.swift in Sources */,
+				C5583E14285464D40026F67B /* PreviewData.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
@@ -461,7 +485,6 @@
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
 				C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */,
 				C5583E0C285230110026F67B /* ErrorService.swift in Sources */,
-				C5243EAC28453A21001CBA3D /* PreviewPersistance.swift in Sources */,
 				C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,
 				C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */,
