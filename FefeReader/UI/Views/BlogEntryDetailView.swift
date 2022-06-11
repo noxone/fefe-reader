@@ -107,7 +107,7 @@ struct BlogEntryDetailView: View {
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            BlogEntryDetailView(blogEntry: PersistenceController.preview.preview_BlogEntries[0])
+            BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0])
         }
     }
 }

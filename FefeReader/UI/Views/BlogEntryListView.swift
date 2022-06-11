@@ -168,6 +168,6 @@ struct BlogEntryListView: View {
 struct BlogEntryListView_Previews: PreviewProvider {
     static var previews: some View {
         BlogEntryListView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

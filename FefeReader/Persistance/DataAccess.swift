@@ -22,7 +22,7 @@ class DataAccess {
         request.predicate = NSPredicate(format: "id == %ld", Int64(id))
         request.fetchLimit = 1
         if onlyNormal {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [request.predicate!, PersistenceController.PREDICATE_VALID_STATE_NORMAL])
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [request.predicate!, DataAccess.PREDICATE_VALID_STATE_NORMAL])
         }
         
         return try? stack.readForUi { try $0.fetch(request) }.first
@@ -32,7 +32,7 @@ class DataAccess {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
-        request.predicate = PersistenceController.PREDICATE_VALID_STATE_NORMAL
+        request.predicate = DataAccess.PREDICATE_VALID_STATE_NORMAL
         if !includeBookmarks {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 request.predicate!,
@@ -95,6 +95,8 @@ class DataAccess {
     }
     
     func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
+        let preview = rawEntry.plainContent
+
         let blogEntry = BlogEntry(context: stack.managedObjectContext)
         blogEntry.validState = temporary ? BlogEntry.VALID_STATE_TEMPORARY : BlogEntry.VALID_STATE_NORMAL
         blogEntry.id = Int64(rawEntry.id)
@@ -102,11 +104,11 @@ class DataAccess {
         blogEntry.date = rawEntry.date
         blogEntry.content = rawEntry.content
         blogEntry.bookmarkDate = nil
-        let preview = rawEntry.plainContent
         blogEntry.teaser = preview
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
         blogEntry.uuid = UUID()
+        blogEntry.updatedSinceLastRead = false
         return blogEntry
     }
     

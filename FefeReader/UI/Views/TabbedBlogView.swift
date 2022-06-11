@@ -44,6 +44,6 @@ struct TabbedBlogView: View {
 struct TabbedBlogView_Previews: PreviewProvider {
     static var previews: some View {
         TabbedBlogView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

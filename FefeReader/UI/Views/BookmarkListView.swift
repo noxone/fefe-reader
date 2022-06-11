@@ -17,7 +17,7 @@ struct BookmarkListView: View {
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
         ],
         predicate: NSCompoundPredicate(andPredicateWithSubpredicates: [
-            PersistenceController.PREDICATE_VALID_STATE_NORMAL,
+            DataAccess.PREDICATE_VALID_STATE_NORMAL,
             NSPredicate(format: "bookmarkDate != nil")]),
         animation: .default)
     private var blogEntries: FetchedResults<BlogEntry>
@@ -54,6 +54,6 @@ struct BookmarkListView: View {
 struct BookmarkListView_Previews: PreviewProvider {
     static var previews: some View {
         BookmarkListView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

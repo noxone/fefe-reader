@@ -67,11 +67,11 @@ struct BlogEntryRowView: View {
 struct BlogEntryRowView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            BlogEntryRowView(blogEntry: PersistenceController.preview.preview_BlogEntries[0], showDate: true)
-            BlogEntryRowView(blogEntry: PersistenceController.preview.preview_BlogEntries[1])
-            BlogEntryRowView(blogEntry: PersistenceController.preview.preview_BlogEntries[2])
+            BlogEntryRowView(blogEntry: PreviewData.shared.preview_BlogEntries[0], showDate: true)
+            BlogEntryRowView(blogEntry: PreviewData.shared.preview_BlogEntries[1])
+            BlogEntryRowView(blogEntry: PreviewData.shared.preview_BlogEntries[2])
                 .preferredColorScheme(.dark)
-            BlogEntryRowView(blogEntry: PersistenceController.preview.preview_BlogEntries[3])
+            BlogEntryRowView(blogEntry: PreviewData.shared.preview_BlogEntries[3])
                 .preferredColorScheme(.dark)
         }
         .previewLayout(PreviewLayout.fixed(width: 400, height: 50))
