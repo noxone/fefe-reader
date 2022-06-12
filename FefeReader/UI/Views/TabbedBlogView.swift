@@ -23,7 +23,7 @@ struct TabbedBlogView: View {
             .environment(\.managedObjectContext, viewContext)
             .tabItem {
                 CommonIcons.shared.bookmarkImage
-                Text("Bookmarks")
+                Text("Lesezeichen")
             }
             
             /*CommonIcons.shared.searchImage
@@ -35,7 +35,7 @@ struct TabbedBlogView: View {
             SettingsView()
             .tabItem {
                 CommonIcons.shared.settingsImage
-                Text("Settings")
+                Text("Einstellungen")
             }
         }
     }

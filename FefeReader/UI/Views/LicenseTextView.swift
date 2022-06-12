@@ -8,15 +8,18 @@
 import SwiftUI
 
 struct LicenseTextView: View {
-    // private var licensePath: String
-    private var licenseText: String = "No license loaded."
+    private let displayName: String
+    private let licenseText: String
+    private let url: URL?
     
-    init(name: String) {
-        if let path = Bundle.main.path(forResource: name, ofType: "license"), let licenseText = try? String(contentsOfFile: path) {
+    init(displayName: String, fileName: String, url: URL? = nil) {
+        if let path = Bundle.main.path(forResource: fileName, ofType: "license"), let licenseText = try? String(contentsOfFile: path) {
             self.licenseText = licenseText
         } else {
-            licenseText = "Could not load license."
+            licenseText = "Lizenz konnte nicht geladen werden."
         }
+        self.displayName = displayName
+        self.url = url
     }
     
     var body: some View {
@@ -34,6 +37,6 @@ struct LicenseTextView: View {
 
 struct LicenseTextView_Previews: PreviewProvider {
     static var previews: some View {
-        LicenseTextView(name: "Allison")
+        LicenseTextView(displayName: "Allison", fileName: "Allison", url: URL(string: "https://google.de"))
     }
 }

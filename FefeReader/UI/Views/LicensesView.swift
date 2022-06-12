@@ -26,14 +26,14 @@ struct LicensesView: View {
             
             Section("Applikation") {
                 NavigationLink("FefeReader") {
-                    LicenseTextView(name: "FefeReader")
+                    LicenseTextView(displayName: "FefeReader", fileName: "FefeReader")
                         .navigationTitle("FefeReader")
                 }
             }
             Section("Bibliotheken") {
                 ForEach(LicensesView.libraries, id: \.self) { library in
                     NavigationLink(library) {
-                        LicenseTextView(name: library)
+                        LicenseTextView(displayName: library, fileName: library)
                             .navigationTitle(library)
                     }
                 }
@@ -41,7 +41,7 @@ struct LicensesView: View {
             Section("Fonts") {
                 ForEach(LicensesView.fonts, id: \.self) { font in
                     NavigationLink(font) {
-                        LicenseTextView(name: font)
+                        LicenseTextView(displayName: font, fileName: font)
                             .navigationTitle(font)
                     }
                 }
@@ -50,14 +50,6 @@ struct LicensesView: View {
         .navigationTitle("Lizenzen")
     }
 }
-
-/*
-struct Library {
-    let name: String
-    let filename: String
-    let link: URL
-}
- */
 
 struct LicensesView_Previews: PreviewProvider {
     static var previews: some View {

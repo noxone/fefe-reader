@@ -53,7 +53,7 @@ struct BlogEntryListView: View {
                             Button(action: {
                                 loadOlderEntries()
                             }, label: {
-                                Text("Load older entries")
+                                Text("Ältere Einträge laden")
                                     .frame(maxWidth: .infinity)
                             })
                             .buttonStyle(.bordered)
@@ -136,7 +136,7 @@ struct BlogEntryListView: View {
     
     private var notificationPopup: some View {
         VStack(spacing: 10) {
-            Text("Do you want to receive notifications when Fefe publishes new blog entries?")
+            Text("Möchtest Du benachrichtigt werden, wenn Fefe neue Blogeinträge veröffentlicht?")
                 .font(.system(size: 16))
                 .foregroundColor(.black)
             HStack {
@@ -144,17 +144,21 @@ struct BlogEntryListView: View {
                     Settings.shared.askForNotificationApproval = false
                     showNotificationPopup = false
                 }, label: {
-                    Text("No")
+                    Text("Nein")
+                        .frame(maxWidth: .infinity)
                 })
                 .buttonStyle(.bordered)
+                .frame(maxWidth: .infinity)
                 Button(action: {
                     Settings.shared.askForNotificationApproval = false
                     NotificationService.shared.requestAuthorizationExplicitly()
                     showNotificationPopup = false
                 }, label: {
-                    Text("Yes")
+                    Text("Ja")
+                    .frame(maxWidth: .infinity)
                 })
                 .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
             }
         }
         .padding(16)

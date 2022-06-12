@@ -33,8 +33,11 @@ struct BookmarkListView: View {
                     })
                 }
                 if blogEntries.isEmpty {
-                    Text("To add a bookmark, go to the \(CommonIcons.shared.blogImage) blog tab and mark blog posts with the \(CommonIcons.shared.bookmarkImage) icon. These posts will be displayed here.")
-                        .listRowSeparator(.hidden)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Um ein Lesezeichen hinzuzufügen, öffne den \(CommonIcons.shared.blogImage) blog tab und markiere einen Blogeintrag mit dem Lesenzeichen \(CommonIcons.shared.bookmarkImage) Icon. Diese markierten Einträge werden dann hier angezeigt.")
+                        Text("Um einen Blogeintrag als Lesezeichen zu markieren, wische in der Liste von links nach rechts. Alternativ kannst du einen Blogeintrag öffnen und in der Toolbar auf das Lesezeichen klicken.")
+                    }
+                    .listRowSeparator(.hidden)
                 }
             }
             .listStyle(.plain)

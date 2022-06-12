@@ -34,7 +34,7 @@ struct ExternalLinkView: View {
                             .frame(width: 30, height: 30)
                     })
                     .buttonStyle(PlainButtonStyle())
-                    .accessibilityLabel(Text("Close"))
+                    .accessibilityLabel(Text("Schließen"))
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -44,7 +44,7 @@ struct ExternalLinkView: View {
                         Image(systemName: "safari")
                             .imageScale(.large)
                     })
-                    .accessibilityLabel(Text("Open in Safari"))
+                    .accessibilityLabel(Text("Im Browser öffnen"))
                 }
                 
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -53,8 +53,8 @@ struct ExternalLinkView: View {
                     }, label: {
                         Image(systemName: "chevron.left")
                     })
-                    .accessibilityLabel(Text("Go Back"))
-                    .accessibility(hint: Text("Tap to go back in browser."))
+                    .accessibilityLabel(Text("Zurück"))
+                    .accessibility(hint: Text("Drücken, um im Browser zurückzugehen."))
                     .disabled(!state.canGoBack)
                     
                     Button(action: {
@@ -62,8 +62,8 @@ struct ExternalLinkView: View {
                     }, label: {
                         Image(systemName: "chevron.right")
                     })
-                    .accessibilityLabel(Text("Go Forward"))
-                    .accessibility(hint: Text("Tap to go forward in browser."))
+                    .accessibilityLabel(Text("Vorwärst"))
+                    .accessibility(hint: Text("Drücken, um im Browser vorwärts zu gehen."))
                     .disabled(!state.canGoForward)
                     
                     Spacer()
@@ -73,7 +73,7 @@ struct ExternalLinkView: View {
                     }, label: {
                         CommonIcons.shared.shareImage
                     })
-                    .accessibilityLabel(Text("Share URL"))
+                    .accessibilityLabel(Text("URL teilen"))
                     .disabled(state.isLoading)
 
                     Spacer()
@@ -83,7 +83,7 @@ struct ExternalLinkView: View {
                     }, label: {
                         Image(systemName: "arrow.clockwise")
                     })
-                    .accessibilityLabel(Text("Reload"))
+                    .accessibilityLabel(Text("Neu laden"))
                     .disabled(state.isLoading)
                 }
             }
@@ -94,7 +94,7 @@ struct ExternalLinkView: View {
                 action = .load(URLRequest(url: url))
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(state.isLoading ? "Loading..." : (state.pageTitle ?? "no page"))
+            .navigationTitle(state.isLoading ? "Lade..." : (state.pageTitle ?? "keine Seite geladen"))
         }
     }
 }

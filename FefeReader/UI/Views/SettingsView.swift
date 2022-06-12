@@ -23,14 +23,14 @@ struct SettingsView: View {
                 sectionOther
                 sectionLicenses
             }
-            .navigationTitle("Settings")
+            .navigationTitle("Einstellungen")
         }
     }
     
     private var sectionApplication: some View {
-        Section("Application behaviour") {
-            Toggle("Open links in internal browser", isOn: $settings.openUrlsInInternalBrowser)
-            Picker("Number of lines in list", selection: $settings.overviewLineLimit) {
+        Section("Verhalten") {
+            Toggle("Links im internen Browser öffnen", isOn: $settings.openUrlsInInternalBrowser)
+            Picker("Anzahl Vorschauzeilen in der Liste", selection: $settings.overviewLineLimit) {
                 ForEach(1 ..< 5) { lineLimit in
                     Text("\(lineLimit)")
                         .tag(lineLimit)
@@ -50,9 +50,9 @@ struct SettingsView: View {
     }
     
     private var sectionFont: some View {
-        Section("Font") {
+        Section("Schrift") {
             HStack {
-                Text("Font size: \(settings.fontSize)")
+                Text("Schriftgröße: \(settings.fontSize)")
                 Spacer()
                 Button(action: {
                     settings.fontSize += 1
@@ -73,7 +73,7 @@ struct SettingsView: View {
                 })
                 .buttonStyle(.bordered)
             }
-            Picker("Font", selection: $settings.font) {
+            Picker("Schriftart", selection: $settings.font) {
                 ForEach(Settings.availableFonts, id: \.displayName) { font in
                     Text(font.displayName)
                         .font(font.font)
@@ -91,20 +91,20 @@ struct SettingsView: View {
     }
     
     private var sectionBlogEntries: some View {
-        Section("Blog entries") {
+        Section("Blogeinträge") {
             VStack(alignment: .leading, spacing: 10) {
-                Toggle("Delete old blog entries", isOn: $settings.regularlyDeleteOldBlogEntries)
+                Toggle("Alte Blogeinträge löschen", isOn: $settings.regularlyDeleteOldBlogEntries)
                 if settings.regularlyDeleteOldBlogEntries {
-                    Text("The app stores a copy of the loaded blog entries locally on your device. Blog entries older than half a year will be deleted to save some space. Older entries can always be re-downloaded by scrolling down.")
+                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Blogeinträge, die älter als ein Jahr sind, werden vom Gerät gelöscht, um Speicherplatz zu sparen. Ältere Einträge können jederzeit neu heruntergeladen werden, indem weiter nach unten gescrollt wird.")
                         .lineLimit(10)
                         .font(.footnote)
                 } else {
-                    Text("The app stores a copy of the loaded blog entries locally on your device. Old blog entries will not be deleted.")
+                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Alte Einträge werden nicht gelöscht.")
                         .font(.footnote)
                 }
             }
             if settings.regularlyDeleteOldBlogEntries {
-                Toggle("Keep bookmarked blog entries", isOn: $settings.keepBookmarkedBlogEntries)
+                Toggle("Lesezeichen dennoch behalten", isOn: $settings.keepBookmarkedBlogEntries)
             }
             Button(action: {
                 showClearBookmarksConfirmation = true
@@ -140,8 +140,8 @@ struct SettingsView: View {
     }
     
     private var sectionLicenses: some View {
-        Section("Licenses") {
-            NavigationLink("View licenses") {
+        Section("Lizenzen") {
+            NavigationLink("Lizenzen ansehen") {
                 LicensesView()
             }
         }

@@ -50,7 +50,7 @@ struct BlogEntryRowView: View {
             HStack(alignment: .center, spacing: 3) {
                 let teaser = blogEntry.teaser
                 
-                Text(teaser ?? "No teaser")
+                Text(teaser ?? "Keine Vorschau")
                     .active(teaser == nil, Text.italic)
                     .opacity(opacity)
                     .lineLimit(lineLimit ?? settings.overviewLineLimit)
