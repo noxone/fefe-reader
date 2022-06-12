@@ -1,4 +1,4 @@
-# Fefe Reader [![Test app](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml/badge.svg)](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml) ![Icon](readme/icon.png)
+# Fefe Reader [![Test app](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml/badge.svg)](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml) ![Icon](readme/icon2.png)
 
 An iOS app to easier read [Fefes Blog](https://blog.fefe.de).
 
