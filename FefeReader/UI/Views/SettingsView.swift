@@ -19,11 +19,29 @@ struct SettingsView: View {
             List {
                 sectionApplication
                 sectionFont
+                sectionBlog
                 sectionBlogEntries
                 sectionOther
                 sectionLicenses
             }
             .navigationTitle("Einstellungen")
+        }
+    }
+    
+    private var sectionBlog: some View {
+        Section("Blog") {
+            Button(FefeBlogService.baseUrl.absoluteString) {
+                UrlService.openUrl(FefeBlogService.baseUrl)
+            }
+            Button("FAQ") {
+                UrlService.openUrl(URL(string: "https://blog.fefe.de/faq.html")!)
+            }
+            Button("Email an Fefe") {
+                UrlService.openUrl(URL(string: "mailto:felix-bloginput@fefe.de")!)
+            }
+            Button("Podcast 'Alternativlos'") {
+                UrlService.openUrl(URL(string: "https://podcasts.apple.com/de/podcast/alternativlos/id384290007")!)
+            }
         }
     }
     

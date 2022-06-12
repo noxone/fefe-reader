@@ -12,7 +12,7 @@ import CoreData
 class FefeBlogService : ObservableObject {
     static let shared = FefeBlogService()
     
-    private static let baseUrl = URL(string: "https://blog.fefe.de")!
+    static let baseUrl = URL(string: "https://blog.fefe.de")!
     
     private static let earliestPost: Date = {
         var dateComponents = DateComponents()
