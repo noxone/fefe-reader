@@ -143,7 +143,8 @@ class FefeBlogService : ObservableObject {
         
         var createdBlogEntries: [BlogEntry] = []
         
-        stack.withWorkingContext { context in
+        // if not using the main context, but a working context, that UI will become very laggy when inporting the change into the database.
+        stack.withMainContext { context in
             for rawEntry in rawEntries {
                 if let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
                     // Update content

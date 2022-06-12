@@ -113,7 +113,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle("Alte Blogeinträge löschen", isOn: $settings.regularlyDeleteOldBlogEntries)
                 if settings.regularlyDeleteOldBlogEntries {
-                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Blogeinträge, die älter als ein Jahr sind, werden vom Gerät gelöscht, um Speicherplatz zu sparen. Ältere Einträge können jederzeit neu heruntergeladen werden, indem weiter nach unten gescrollt wird.")
+                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Blogeinträge, die älter als ein halbes Jahr sind, werden vom Gerät gelöscht, um Speicherplatz zu sparen. Ältere Einträge können jederzeit neu heruntergeladen werden, indem weiter nach unten gescrollt wird.")
                         .lineLimit(10)
                         .font(.footnote)
                 } else {
@@ -147,7 +147,7 @@ struct SettingsView: View {
             Button(role: .destructive, action: {
                 showClearBlogEntriesConfirmation = true
             }, label: {
-                Text("Geladenen Blogeinträge löschen")
+                Text("Geladene Blogeinträge löschen")
             })
             .confirmationDialog("Alle geladenen Blogeinträge und Lesezeichen vom Gerät entfernen?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
                 Button("Alles löschen", role: .destructive) {

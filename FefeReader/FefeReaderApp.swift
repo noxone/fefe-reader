@@ -36,7 +36,9 @@ struct FefeReaderApp: App {
                     }
                 }
                 .task {
-                    DataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
+                    Task(priority: .utility) {
+                        DataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
+                    }
                 }
                 .onReceive(timer) { input in
                     Task {

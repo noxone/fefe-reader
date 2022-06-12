@@ -2,27 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>org.olafneumann.fefe-reader.FefeBlog.refresh</string>
-	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Allison-Regular.ttf</string>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+		<key>UIColorName</key>
+		<string>LaunchScreenBackground</string>
+		<key>UIImageName</key>
+		<string>LaunchScreenImage</string>
+	</dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>org.olafneumann.fefe-reader.FefeBlog.cleanUpDatabase</string>
+		<string>org.olafneumann.fefe-reader.FefeBlog.refresh</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>LaunchScreenBackground</string>
-		<key>UIImageName</key>
-		<string>LaunchScreenImage</string>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

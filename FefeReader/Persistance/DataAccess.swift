@@ -78,8 +78,8 @@ class DataAccess {
             let request = BlogEntry.fetchRequest()
             request.predicate = NSPredicate(format: "validState == %@", BlogEntry.VALID_STATE_TEMPORARY)
             if let entries = try? context.fetch(request) {
-                for entry in entries {
-                    callback(context, entry)
+                entries.forEach {
+                    callback(context, $0)
                 }
                 appPrint("Handled \(entries.count) temporary entries.")
             }

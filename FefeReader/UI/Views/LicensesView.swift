@@ -14,7 +14,7 @@ struct LicensesView: View {
     var body: some View {
         List {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Alle Blog-Inhalte stammen von [Fefes Blog](https://blog.fefe.de). Dies wird ist unter der Adresse [https://blog.fefe.de](https://blog.fefe.de) erreichbar und hat ein eigenes Impressum.")
+                Text("Alle Blog-Inhalte stammen von [Fefes Blog](https://blog.fefe.de). Dies ist unter der Adresse [https://blog.fefe.de](https://blog.fefe.de) erreichbar und hat ein eigenes Impressum.")
                 Text("Der Blog-Autor hat keine Verbindung zu dieser App.")
                 Text("Diese App stellt lediglich Blog-Inhalte in einer für dieses Gerät passenden Form dar. Es werden keine Inhalte verändert.")
             }.padding(.vertical, 7)
