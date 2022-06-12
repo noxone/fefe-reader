@@ -96,7 +96,8 @@ class FefeBlogService : ObservableObject {
         dataAccess.createUpdateFetch(from: origin)
         return try await loadCurrentMonth()
     }
-        
+    
+    @discardableResult
     private func loadCurrentMonth() async throws -> [BlogEntry] {
         return try await loadMonthIntoDatabase(for: Date()).newlyCreateBlogEntries
     }
@@ -129,6 +130,7 @@ class FefeBlogService : ObservableObject {
         } while (count == 0)
     }
     
+    @discardableResult
     private func loadMonthIntoDatabase(for date: Date) async throws -> LoadBlogEntriesResult {
         let rawEntries: [RawEntry]
         do {
@@ -141,7 +143,7 @@ class FefeBlogService : ObservableObject {
         
         var createdBlogEntries: [BlogEntry] = []
         
-        stack.withMainContext { context in
+        stack.withWorkingContext { context in
             for rawEntry in rawEntries {
                 if let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
                     // Update content
@@ -154,8 +156,8 @@ class FefeBlogService : ObservableObject {
                     blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
                 } else {
                     // Create entry
-                    let newBlogEntry = dataAccess.createBlogEntry(from: rawEntry)
-                    createdBlogEntries.append(newBlogEntry)
+                    let blogEntry = dataAccess.createBlogEntry(from: rawEntry)
+                    createdBlogEntries.append(blogEntry)
                 }
             }
         }

@@ -94,6 +94,7 @@ class DataAccess {
         save()*/
     }
     
+    @discardableResult
     func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
         let preview = rawEntry.plainContent
 
@@ -134,16 +135,34 @@ class DataAccess {
         stack.withWorkingContext { context in
             do {
                 let request = BlogEntry.fetchRequest()
-                _ = (\BlogEntry.isBookmarked) // Reminder, that "isBookmarked" is used here
+                _ = (\BlogEntry.bookmarkDate) // Reminder, that "bookmarkDate" is used here
                 request.predicate = NSPredicate(format: "bookmarkDate != nil")
                 
                 let entries = try context.fetch(request)
-                for entry in entries {
-                    entry.bookmarkDate = nil
+                entries.forEach {
+                    $0.bookmarkDate = nil
                 }
             } catch {
                 // TODO: Properly handle error
                 print("Error resetting bookmarks.", error)
+            }
+        }
+    }
+    
+    func resetRead() {
+        stack.withWorkingContext { context in
+            do {
+                let request = BlogEntry.fetchRequest()
+                _ = (\BlogEntry.readTimestamp) // Reminder, that "readTimestamp" is used here
+                request.predicate = NSPredicate(format: "readTimestamp != nil")
+                
+                let entries = try context.fetch(request)
+                entries.forEach {
+                    $0.readTimestamp = nil
+                }
+            } catch {
+                // TODO: Properly handle error
+                print("Error resetting read state.", error)
             }
         }
     }

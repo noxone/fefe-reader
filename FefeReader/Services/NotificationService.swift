@@ -33,8 +33,8 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     func addNotifications(for blogEntries: [BlogEntry]) {
         center.delegate = self
         addBadge(withNumber: blogEntries.count)
-        for blogEntry in blogEntries {
-            addNotification(for: blogEntry)
+        blogEntries.forEach {
+            addNotification(for: $0)
         }
     }
     

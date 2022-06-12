@@ -12,6 +12,7 @@ struct SettingsView: View {
     
     @State private var showClearBlogEntriesConfirmation = false
     @State private var showClearBookmarksConfirmation = false
+    @State private var showClearReadConfirmation = false
     
     var body: some View {
         NavigationView {
@@ -108,20 +109,30 @@ struct SettingsView: View {
             Button(action: {
                 showClearBookmarksConfirmation = true
             }, label: {
-                Text("Reset bookmarks")
+                Text("Lesezeichen zurücksetzen")
             })
-            .confirmationDialog("Reset all bookmarks?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
-                Button("Reset bookmarks", role: .destructive) {
+            .confirmationDialog("Alle Lesezeichen zurücksetzen?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
+                Button("Lesezeichen zurücksetzen", role: .destructive) {
                     DataAccess.shared.resetBookmarks()
+                }
+            }
+            Button(action: {
+                showClearReadConfirmation = true
+            }, label: {
+                Text("Gelesene Einträge zurücksetzen")
+            })
+            .confirmationDialog("Alle gelesenen Einträge zurücksetzen?", isPresented: $showClearReadConfirmation, titleVisibility: .visible) {
+                Button("Gelesene Einträge zurücksetzen", role: .destructive) {
+                    DataAccess.shared.resetRead()
                 }
             }
             Button(role: .destructive, action: {
                 showClearBlogEntriesConfirmation = true
             }, label: {
-                Text("Clear all loaded blog entries")
+                Text("Geladenen Blogeinträge löschen")
             })
-            .confirmationDialog("Permanently erase all loaded blog entries and bookmarks?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
-                Button("Delete all", role: .destructive) {
+            .confirmationDialog("Alle geladenen Blogeinträge und Lesezeichen vom Gerät entfernen?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
+                Button("Alles löschen", role: .destructive) {
                     DataAccess.shared.clearBlogEntries()
                 }
             }
