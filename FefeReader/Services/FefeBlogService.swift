@@ -275,15 +275,6 @@ class FefeBlogService : ObservableObject {
         }
     }
     
-    /*private func downloadHtmlFor(url: URL) throws -> String {
-        do {
-            return try String(contentsOf: url)
-        } catch {
-            print("Unable to load content for URL: ", url)
-            throw FefeBlogError.downloadFailed(url: url, error: error)
-        }
-    }*/
-    
     private func downloadString(url: URL) async throws -> String {
         var request = URLRequest(url: url, timeoutInterval: Settings.shared.networkTimeoutInterval)
         request.addValue("text/html", forHTTPHeaderField: "Content-Type")
@@ -351,10 +342,18 @@ enum FefeBlogError : Error {
 extension FefeBlogError : LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .downloadFailed(let url, _ /* let error*/):
-            return "Unable to load content for URL: \(url)"
-        default:
-            return "ERROR, error"
+        case .urlConstructionFailed:
+            return "Fehler beim Kontaktieren des Blogs. URL nicht erzeugbar."
+        case .invalidUrl(let url):
+            return "Fehler beim Kontaktieren des Servers: \(url.absoluteString)"
+        case .downloadFailed(let url, let error):
+            return "Fehler beim Laden von \(url)\n\(error?.localizedDescription ?? "")"
+        case .invalidDocumentStructure:
+            return "Unerwartete Antwort vom Blog. Daten können nicht ausgewertet werden."
+        case .parsingException(let exception):
+            return "Unerwartete Antwort vom Blog. Fehler beim Lesen: \(exception.localizedDescription)"
+        case .unexpectedException(let error):
+            return "Fehler beim Aktualisieren: \(error.localizedDescription)"
         }
     }
 }
