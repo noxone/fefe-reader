@@ -17,10 +17,9 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
-                sectionApplication
-                sectionFont
                 sectionBlog
                 sectionBlogEntries
+                sectionFont
                 sectionOther
                 sectionLicenses
             }
@@ -38,21 +37,6 @@ struct SettingsView: View {
             }
             Button("Email an Fefe") {
                 UrlService.openUrl(URL(string: "mailto:felix-bloginput@fefe.de")!)
-            }
-            Button("Podcast 'Alternativlos'") {
-                UrlService.openUrl(URL(string: "https://podcasts.apple.com/de/podcast/alternativlos/id384290007")!)
-            }
-        }
-    }
-    
-    private var sectionApplication: some View {
-        Section("Verhalten") {
-            Toggle("Links im internen Browser öffnen", isOn: $settings.openUrlsInInternalBrowser)
-            Picker("Anzahl Vorschauzeilen in der Liste", selection: $settings.overviewLineLimit) {
-                ForEach(1 ..< 5) { lineLimit in
-                    Text("\(lineLimit)")
-                        .tag(lineLimit)
-                }
             }
         }
     }
@@ -110,17 +94,15 @@ struct SettingsView: View {
     
     private var sectionBlogEntries: some View {
         Section("Blogeinträge") {
-            VStack(alignment: .leading, spacing: 10) {
-                Toggle("Alte Blogeinträge löschen", isOn: $settings.regularlyDeleteOldBlogEntries)
-                if settings.regularlyDeleteOldBlogEntries {
-                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Blogeinträge, die älter als ein halbes Jahr sind, werden vom Gerät gelöscht, um Speicherplatz zu sparen. Ältere Einträge können jederzeit neu heruntergeladen werden, indem weiter nach unten gescrollt wird.")
-                        .lineLimit(10)
-                        .font(.footnote)
-                } else {
-                    Text("Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Alte Einträge werden nicht gelöscht.")
-                        .font(.footnote)
+            Toggle("Links im internen Browser öffnen", isOn: $settings.openUrlsInInternalBrowser)
+            Picker("Anzahl Vorschauzeilen in der Liste", selection: $settings.overviewLineLimit) {
+                ForEach(1 ..< 5) { lineLimit in
+                    Text("\(lineLimit)")
+                        .tag(lineLimit)
                 }
             }
+            ToggleWithDescription(title: "Updates im Hintergrund", isOn: $settings.checkForUpdatesInBackground, descriptionForOn: "Die App sucht regelmäßig nach neuen Blogeinträgen, auch wenn sie nicht im Vordergrund ist. Wird die App ganz geschlossen, findet keine Suche nach Updates statt.", descriptionForOff: "Die App wird nicht im Hintergrund nach Updates suchen.")
+            ToggleWithDescription(title: "Alte Blogeinträge löschen", isOn: $settings.regularlyDeleteOldBlogEntries, descriptionForOn: "Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Blogeinträge, die älter als ein halbes Jahr sind, werden vom Gerät gelöscht, um Speicherplatz zu sparen. Ältere Einträge können jederzeit neu heruntergeladen werden, indem weiter nach unten gescrollt wird.", descriptionForOff: "Die App speichert eine Kopie der Blogeinträge lokal auf Deinem Gerät. Alte Einträge werden nicht gelöscht.")
             if settings.regularlyDeleteOldBlogEntries {
                 Toggle("Lesezeichen dennoch behalten", isOn: $settings.keepBookmarkedBlogEntries)
             }

@@ -18,6 +18,7 @@ class Settings : ObservableObject {
     private let KEY_OVERVIEW_LINE_LIMIT = "overviewLineLimit"
     private let KEY_DELETE_OLD_BLOG_ENTRIES = "regularlyDeleteOldBlogEntries"
     private let KEY_KEEP_BOOKMARKS = "keepBookmarkedBlogEntries"
+    private let KEY_CHECK_FOR_UPDATES = "checkForUpdatesInBackground"
     
     static let availableFonts = [
         AppFont(displayName: "Standard", font: .body, html: "font:-apple-system-body"),
@@ -60,6 +61,9 @@ class Settings : ObservableObject {
     @Published var keepBookmarkedBlogEntries = true
     { didSet { UserDefaults.standard.set(keepBookmarkedBlogEntries, forKey: KEY_KEEP_BOOKMARKS) } }
     
+    @Published var checkForUpdatesInBackground = true
+    { didSet { UserDefaults.standard.set(checkForUpdatesInBackground, forKey: KEY_CHECK_FOR_UPDATES) } }
+    
     private init() {
         let userDefaults = UserDefaults.standard
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
@@ -71,6 +75,7 @@ class Settings : ObservableObject {
         self.askForNotificationApproval = userDefaults.bool(forKey: KEY_NOTIFICATION_APPROVAL, withDefault: true)
         self.regularlyDeleteOldBlogEntries = userDefaults.bool(forKey: KEY_DELETE_OLD_BLOG_ENTRIES, withDefault: true)
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
+        self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
     }
 }
 

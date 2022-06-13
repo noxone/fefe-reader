@@ -39,13 +39,17 @@ class BlogTasks {
     }
     
     private func scheduleRefreshTask() {
-        print("--- Schedule refresh task")
-        let request = BGAppRefreshTaskRequest(identifier: BlogTasks.TASK_REFRESH_ID)
-        request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
-        do {
-            try BGTaskScheduler.shared.submit(request)
-        } catch {
-            print("Could not schedule refresh task: \(error)")
+        if Settings.shared.checkForUpdatesInBackground {
+            print("--- Schedule refresh task")
+            let request = BGAppRefreshTaskRequest(identifier: BlogTasks.TASK_REFRESH_ID)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
+            do {
+                try BGTaskScheduler.shared.submit(request)
+            } catch {
+                print("Could not schedule refresh task: \(error)")
+            }
+        } else {
+            print("--- Background refresh is deactivated")
         }
     }
     
