@@ -17,9 +17,9 @@ The app does not change any content.
 
 ## Screenshots
 
-| Main tab | Settings |
-| --- | --- |
-| ![main screen](readme/screenshot-main.png) | ![settings view](readme/screenshot-settings.png) |
+| Main scren | Entry screen | Settings |
+| --- | --- | --- |
+| ![main screen](readme/screenshot-main.png) | ![entry screen](readme/screenshot-entry.png) | ![settings view](readme/screenshot-settings.png) |
 
 ## Disclaimer
 
