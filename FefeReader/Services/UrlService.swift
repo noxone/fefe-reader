@@ -17,3 +17,9 @@ class UrlService {
         UIApplication.shared.open(url)
     }
 }
+
+extension URL {
+    func open() {
+        UrlService.openUrl(self)
+    }
+}

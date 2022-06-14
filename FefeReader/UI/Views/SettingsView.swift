@@ -44,7 +44,12 @@ struct SettingsView: View {
     private var sectionOther: some View {
         Section("Feedback") {
             Button(action: {
-                UIApplication.shared.open(Settings.issueUrl)
+                Settings.discussionUrl.open()
+            }, label: {
+                Text("Github Discussions")
+            })
+            Button(action: {
+                Settings.issueUrl.open()
             }, label: {
                 Text("Issue tracker")
             })
