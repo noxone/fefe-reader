@@ -25,13 +25,16 @@ struct BlogEntryListView: View {
         animation: .default)
     private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
     
+    @Binding var tabSelection: TabbedBlogView.TabItem
+    
     @State private var selectedBlogEntry: BlogEntry? = nil
     
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
     
-    init() {
+    init(tabSelection: Binding<TabbedBlogView.TabItem>) {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
+        self._tabSelection = tabSelection
     }
     
     private func loadOlderEntries() {
@@ -90,6 +93,7 @@ struct BlogEntryListView: View {
                     if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
                         NotificationService.shared.idToOpen = nil
                         selectedBlogEntry = entry
+                        tabSelection = .blog
                     }
                 }
             }
@@ -171,7 +175,7 @@ struct BlogEntryListView: View {
 
 struct BlogEntryListView_Previews: PreviewProvider {
     static var previews: some View {
-        BlogEntryListView()
+        BlogEntryListView(tabSelection: .constant(.blog))
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

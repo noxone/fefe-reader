@@ -10,14 +10,17 @@ import SwiftUI
 struct TabbedBlogView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
+    @State private var tabSelection: TabItem = .blog
+    
     var body: some View {
-        TabView {
-            BlogEntryListView()
+        TabView(selection: $tabSelection) {
+            BlogEntryListView(tabSelection: $tabSelection)
             .environment(\.managedObjectContext, viewContext)
             .tabItem {
                 CommonIcons.shared.blogImage
                 Text("Blog")
             }
+            .tag(TabItem.blog)
             
             BookmarkListView()
             .environment(\.managedObjectContext, viewContext)
@@ -25,6 +28,7 @@ struct TabbedBlogView: View {
                 CommonIcons.shared.bookmarkImage
                 Text("Lesezeichen")
             }
+            .tag(TabItem.bookmarks)
             
             /*CommonIcons.shared.searchImage
             .tabItem {
@@ -37,7 +41,14 @@ struct TabbedBlogView: View {
                 CommonIcons.shared.settingsImage
                 Text("Einstellungen")
             }
+            .tag(TabItem.settings)
         }
+    }
+    
+    enum TabItem : Hashable {
+        case blog
+        case bookmarks
+        case settings
     }
 }
 
