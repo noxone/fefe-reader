@@ -106,16 +106,7 @@ struct SettingsView: View {
             if settings.regularlyDeleteOldBlogEntries {
                 Toggle("Lesezeichen dennoch behalten", isOn: $settings.keepBookmarkedBlogEntries)
             }
-            Button(action: {
-                showClearBookmarksConfirmation = true
-            }, label: {
-                Text("Lesezeichen zurücksetzen")
-            })
-            .confirmationDialog("Alle Lesezeichen zurücksetzen?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
-                Button("Lesezeichen zurücksetzen", role: .destructive) {
-                    DataAccess.shared.resetBookmarks()
-                }
-            }
+            
             Button(action: {
                 showClearReadConfirmation = true
             }, label: {
@@ -126,6 +117,18 @@ struct SettingsView: View {
                     DataAccess.shared.resetRead()
                 }
             }
+            
+            Button(action: {
+                showClearBookmarksConfirmation = true
+            }, label: {
+                Text("Lesezeichen zurücksetzen")
+            })
+            .confirmationDialog("Alle Lesezeichen zurücksetzen?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
+                Button("Lesezeichen zurücksetzen", role: .destructive) {
+                    DataAccess.shared.resetBookmarks()
+                }
+            }
+            
             Button(role: .destructive, action: {
                 showClearBlogEntriesConfirmation = true
             }, label: {
