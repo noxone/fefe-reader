@@ -13,6 +13,7 @@ struct BlogEntryListView: View {
     @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject var fefeBlog = FefeBlogService.shared
+    @ObservedObject var settings = Settings.shared
     
     @SectionedFetchRequest(
         entity: BlogEntry.entity(),
@@ -107,7 +108,7 @@ struct BlogEntryListView: View {
                     NavigationLink(tag: blogEntry, selection: $selectedBlogEntry) {
                         BlogEntryDetailView(blogEntry: blogEntry)
                     } label: {
-                        BlogEntryRowView(blogEntry: blogEntry)
+                        BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: settings.tintReadBlogentries)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
                         Button(action: {

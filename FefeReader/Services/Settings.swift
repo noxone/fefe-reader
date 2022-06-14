@@ -19,6 +19,7 @@ class Settings : ObservableObject {
     private let KEY_DELETE_OLD_BLOG_ENTRIES = "regularlyDeleteOldBlogEntries"
     private let KEY_KEEP_BOOKMARKS = "keepBookmarkedBlogEntries"
     private let KEY_CHECK_FOR_UPDATES = "checkForUpdatesInBackground"
+    private let KEY_TINT_READ_BLOGENTRIES = "tintReadBlogentries"
     
     static let availableFonts = [
         AppFont(displayName: "Standard", font: .body, html: "font:-apple-system-body"),
@@ -30,6 +31,7 @@ class Settings : ObservableObject {
     ]
 
     static let issueUrl = URL(string: "https://github.com/noxone/fefe-reader/issues")!
+    static let discussionUrl = URL(string: "https://github.com/noxone/fefe-reader/discussions")!
     
 #if targetEnvironment(simulator)
     let refreshInternal = TimeInterval(5 * 60)
@@ -64,6 +66,9 @@ class Settings : ObservableObject {
     @Published var checkForUpdatesInBackground = true
     { didSet { UserDefaults.standard.set(checkForUpdatesInBackground, forKey: KEY_CHECK_FOR_UPDATES) } }
     
+    @Published var tintReadBlogentries = true
+    { didSet { UserDefaults.standard.set(tintReadBlogentries, forKey: KEY_TINT_READ_BLOGENTRIES) } }
+    
     private init() {
         let userDefaults = UserDefaults.standard
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
@@ -76,6 +81,7 @@ class Settings : ObservableObject {
         self.regularlyDeleteOldBlogEntries = userDefaults.bool(forKey: KEY_DELETE_OLD_BLOG_ENTRIES, withDefault: true)
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
         self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
+        self.tintReadBlogentries = userDefaults.bool(forKey: KEY_TINT_READ_BLOGENTRIES, withDefault: true)
     }
 }
 
