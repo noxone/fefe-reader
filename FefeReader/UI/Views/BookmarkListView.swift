@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookmarkListView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    
     @FetchRequest(
         entity: BlogEntry.entity(),
         sortDescriptors: [
@@ -17,8 +17,9 @@ struct BookmarkListView: View {
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
         ],
         predicate: NSCompoundPredicate(andPredicateWithSubpredicates: [
-            DataAccess.PREDICATE_VALID_STATE_NORMAL,
-            NSPredicate(format: "bookmarkDate != nil")]),
+            NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL),
+            NSPredicate(format: "bookmarkDate != nil")
+        ]),
         animation: .default)
     private var blogEntries: FetchedResults<BlogEntry>
 
@@ -26,11 +27,11 @@ struct BookmarkListView: View {
         NavigationView {
             List {
                 ForEach(blogEntries) { blogEntry in
-                    NavigationLink(destination: {
+                    NavigationLink {
                         BlogEntryDetailView(blogEntry: blogEntry)
-                    }, label: {
+                    } label: {
                         BlogEntryRowView(blogEntry: blogEntry, showDate: true, tintReadEntries: false, showBookmarkIcon: false, lineLimit: 4)
-                    })
+                    }
                 }
                 if blogEntries.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
@@ -41,7 +42,7 @@ struct BookmarkListView: View {
                 }
             }
             .listStyle(.plain)
-            .navigationTitle("Bookmarks")
+            .navigationTitle("Lesezeichen")
             // TODO: Show possibility to change sort direction
             /*.toolbar {
                 ToolbarItem {
