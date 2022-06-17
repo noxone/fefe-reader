@@ -11,7 +11,7 @@ import CoreData
 class DataAccess {
     static let shared = DataAccess()
 
-    static let PREDICATE_VALID_STATE_NORMAL = NSPredicate(format: "validState = %@", BlogEntry.VALID_STATE_NORMAL)
+    static let PREDICATE_VALID_STATE_NORMAL = NSPredicate(format: "validState = %@", BlogEntry.ValidState.normal.rawValue)
 
     private init() {}
     
@@ -70,13 +70,13 @@ class DataAccess {
     }
     
     func deleteTemporaryBlogEntries() {
-        changeNonValidBlogEntries { $0.delete($1) }
+        changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.temporary) { $0.delete($1) }
     }
 
-    private func changeNonValidBlogEntries(callback: @escaping (NSManagedObjectContext, BlogEntry) -> ()) {
+    private func changeNonValidBlogEntries(withValidState validState: BlogEntry.ValidState, callback: @escaping (NSManagedObjectContext, BlogEntry) -> ()) {
         stack.withWorkingContext { context in
             let request = BlogEntry.fetchRequest()
-            request.predicate = NSPredicate(format: "validState == %@", BlogEntry.VALID_STATE_TEMPORARY)
+            request.predicate = NSPredicate(format: "validState == %@", validState.rawValue)
             if let entries = try? context.fetch(request) {
                 entries.forEach {
                     callback(context, $0)
@@ -95,11 +95,11 @@ class DataAccess {
     }
     
     @discardableResult
-    func createBlogEntry(from rawEntry: RawEntry, temporary: Bool = false) -> BlogEntry {
+    func createBlogEntry(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState = .normal) -> BlogEntry {
         let preview = rawEntry.plainContent
 
         let blogEntry = BlogEntry(context: stack.managedObjectContext)
-        blogEntry.validState = temporary ? BlogEntry.VALID_STATE_TEMPORARY : BlogEntry.VALID_STATE_NORMAL
+        blogEntry.validState = validState.rawValue
         blogEntry.id = Int64(rawEntry.id)
         blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
         blogEntry.date = rawEntry.date
@@ -116,7 +116,7 @@ class DataAccess {
     func createTemporaryBlogEntry(from blogEntry: BlogEntry) -> BlogEntry {
         return stack.withMainContext { context in
             let blogEntry = BlogEntry(context: context)
-            blogEntry.validState = BlogEntry.VALID_STATE_TEMPORARY
+            blogEntry.validState = BlogEntry.ValidState.temporary.rawValue
             blogEntry.id = blogEntry.id
             blogEntry.relativeNumber = blogEntry.relativeNumber
             blogEntry.date = blogEntry.date

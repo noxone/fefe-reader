@@ -38,7 +38,7 @@ class PreviewData {
     
     private func preview_createBlogEntry(id: Int, teaser: String, read: Bool, bookmark: Bool, temporary: Bool) -> BlogEntry {
         let blogEntry = BlogEntry(context: container.viewContext)
-        blogEntry.validState = temporary ? BlogEntry.VALID_STATE_TEMPORARY : BlogEntry.VALID_STATE_NORMAL
+        blogEntry.validState = temporary ? BlogEntry.ValidState.temporary.rawValue : BlogEntry.ValidState.normal.rawValue
         blogEntry.id = Int64(id)
         blogEntry.relativeNumber = Int16(relNumber)
         relNumber += 1

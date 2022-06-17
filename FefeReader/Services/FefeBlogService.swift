@@ -206,7 +206,7 @@ class FefeBlogService : ObservableObject {
         
         let html = try await downloadString(url: getUrlFor(id: id))
         if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
-            let entry = dataAccess.createBlogEntry(from: rawEntry, temporary: true)
+            let entry = dataAccess.createBlogEntry(from: rawEntry, withValidState: .temporary)
             return entry
         }
         return nil

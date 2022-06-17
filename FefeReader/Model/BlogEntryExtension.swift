@@ -8,9 +8,6 @@
 import SwiftUI
 
 extension BlogEntry {
-    static let VALID_STATE_NORMAL = "N"
-    static let VALID_STATE_TEMPORARY = "T"
-    
     var isRead: Bool {
         get {
             return readTimestamp != nil
@@ -25,7 +22,7 @@ extension BlogEntry {
     
     var isTemporary: Bool {
         get {
-            return validState == BlogEntry.VALID_STATE_TEMPORARY
+            return validState == ValidState.temporary.rawValue
         }
     }
     
@@ -62,5 +59,12 @@ extension BlogEntry {
                 return []
             }
         }
+    }
+    
+    enum ValidState : String, Hashable, CaseIterable, Identifiable {
+        case normal = "N"
+        case temporary = "T"
+        
+        var id: String { rawValue }
     }
 }
