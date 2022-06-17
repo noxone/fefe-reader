@@ -146,9 +146,15 @@ class FefeBlogService : ObservableObject {
     
     @discardableResult
     private func loadMonthIntoDatabase(for date: Date) async throws -> LoadBlogEntriesResult {
+        let url = try getUrlForMonth(date: date)
+        return try await loadEntriesIntoDatabase(from: url, withValidState: .normal)
+    }
+    
+    @discardableResult
+    private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState) async throws -> LoadBlogEntriesResult {
         let rawEntries: [RawEntry]
         do {
-            rawEntries = try await downloadAndParseRawEntries(forDate: date)
+            rawEntries = try await downloadAndParseRawEntries(for: url)
         } catch let error as FefeBlogError {
             throw error
         } catch {
@@ -171,7 +177,7 @@ class FefeBlogService : ObservableObject {
                     blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
                 } else {
                     // Create entry
-                    let blogEntry = dataAccess.createBlogEntry(from: rawEntry)
+                    let blogEntry = dataAccess.createBlogEntry(from: rawEntry, withValidState: validState)
                     createdBlogEntries.append(blogEntry)
                 }
             }
@@ -180,9 +186,9 @@ class FefeBlogService : ObservableObject {
         return LoadBlogEntriesResult(newlyCreateBlogEntries: createdBlogEntries, numberOfLoadedEntries: rawEntries.count)
     }
     
-    private func downloadAndParseRawEntries(forDate date: Date) async throws -> [RawEntry] {
-        let result = try await downloadHtmlForMonth(date: date)
-        return try parseHtmlToRawEntries(html: result.html, relativeUrl: result.url)
+    private func downloadAndParseRawEntries(for url: URL) async throws -> [RawEntry] {
+        let html = try await downloadString(url: url)
+        return try parseHtmlToRawEntries(html: html, relativeUrl: url)
     }
     
     private func getDate(forElement element: Element) throws -> Date? {
@@ -267,9 +273,9 @@ class FefeBlogService : ObservableObject {
         }
     }
     
-    private func downloadHtmlForMonth(date: Date) async throws -> (url: URL, html: String) {
+    private func getUrlForMonth(date: Date) throws -> URL {
         if let url = URL(string: "?mon=\(FefeBlogService.urlDateFormatter.string(for: date)!)", relativeTo: FefeBlogService.baseUrl) {
-            return (url: url, html: try await downloadString(url: url))
+            return url
         } else {
             print("URL was not valid")
             throw FefeBlogError.urlConstructionFailed
