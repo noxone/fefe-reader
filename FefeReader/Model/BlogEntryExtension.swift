@@ -64,6 +64,7 @@ extension BlogEntry {
     enum ValidState : String, Hashable, CaseIterable, Identifiable {
         case normal = "N"
         case temporary = "T"
+        case search = "S"
         
         var id: String { rawValue }
     }

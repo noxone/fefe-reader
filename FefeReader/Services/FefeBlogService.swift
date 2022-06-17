@@ -111,6 +111,21 @@ class FefeBlogService : ObservableObject {
         return try await loadCurrentMonth()
     }
     
+    func search(for searchString: String) async throws {
+        let url = try getUrlForSearch(searchString)
+        try await loadEntriesIntoDatabase(from: url, withValidState: .search)
+    }
+    
+    private func getUrlForSearch(_ searchString: String) throws -> URL {
+        let queryString = searchString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        if let url = URL(string: "?q=\(queryString ?? "")", relativeTo: FefeBlogService.baseUrl) {
+            return url
+        } else {
+            print("URL was not valid")
+            throw FefeBlogError.urlConstructionFailed
+        }
+    }
+    
     @discardableResult
     private func loadCurrentMonth() async throws -> [BlogEntry] {
         return try await loadMonthIntoDatabase(for: Date()).newlyCreateBlogEntries

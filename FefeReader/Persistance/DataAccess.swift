@@ -69,6 +69,10 @@ class DataAccess {
         }
     }
     
+    func deleteSearchBlogEntries() {
+        changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.search) { $0.delete($1) }
+    }
+    
     func deleteTemporaryBlogEntries() {
         changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.temporary) { $0.delete($1) }
     }
