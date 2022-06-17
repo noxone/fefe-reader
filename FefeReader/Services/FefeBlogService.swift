@@ -85,6 +85,20 @@ class FefeBlogService : ObservableObject {
         }
     }
     
+    func isFefeBlogEntryUrl(_ url: URL) -> Bool {
+        return url.host == FefeBlogService.baseUrl.host && (url.query?.contains("ts=") ?? false)
+    }
+    
+    func getIdFromFefeUrl(_ url: URL) -> Int? {
+        let href = url.absoluteString
+        if let firstIndex = href.firstIndex(of: "=") {
+            let index = href.index(firstIndex, offsetBy: 1)
+            let idString = String(href[index...])
+            return Int(idString, radix: 16)!
+        }
+        return nil
+    }
+    
     func refreshWithNotifications(origin: String) async throws {
         let blogEntries = try await refresh(origin: origin)
         NotificationService.shared.addNotifications(for: blogEntries)
@@ -178,20 +192,6 @@ class FefeBlogService : ObservableObject {
             print("Unable to parse date from element.", error)
             throw FefeBlogError.parsingException(exception: error)
         }
-    }
-    
-    func isFefeBlogEntryUrl(_ url: URL) -> Bool {
-        return url.host == FefeBlogService.baseUrl.host && (url.query?.contains("ts=") ?? false)
-    }
-    
-    func getIdFromFefeUrl(_ url: URL) -> Int? {
-        let href = url.absoluteString
-        if let firstIndex = href.firstIndex(of: "=") {
-            let index = href.index(firstIndex, offsetBy: 1)
-            let idString = String(href[index...])
-            return Int(idString, radix: 16)!
-        }
-        return nil
     }
     
     private func getUrlFor(id: Int) -> URL {
