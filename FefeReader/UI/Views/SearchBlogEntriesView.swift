@@ -11,7 +11,7 @@ import Combine
 struct SearchBlogEntriesView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @StateObject var textObserver = TextFieldObserver()
+    @StateObject private var textObserver = TextDebouncer()
     @State private var searching = false
     
     @SectionedFetchRequest(
@@ -78,23 +78,6 @@ struct SearchBlogEntriesView: View {
         }
     }
 }
-
-class TextFieldObserver : ObservableObject {
-    @Published var debouncedText = ""
-    @Published var searchText = ""
-    
-    private var subscriptions = Set<AnyCancellable>()
-    
-    init() {
-        $searchText
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] t in
-                self?.debouncedText = t
-            } )
-            .store(in: &subscriptions)
-    }
-}
-
 
 struct SearchBlogEntriesView_Previews: PreviewProvider {
     static var previews: some View {
