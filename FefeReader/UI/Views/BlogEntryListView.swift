@@ -16,7 +16,6 @@ struct BlogEntryListView: View {
     @ObservedObject var settings = Settings.shared
     
     @SectionedFetchRequest(
-        entity: BlogEntry.entity(),
         sectionIdentifier: \BlogEntry.date,
         sortDescriptors: [
             NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),

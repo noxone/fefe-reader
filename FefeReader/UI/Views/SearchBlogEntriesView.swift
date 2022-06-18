@@ -11,11 +11,7 @@ import Combine
 struct SearchBlogEntriesView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @StateObject private var textObserver = TextDebouncer()
-    @State private var searching = false
-    
     @SectionedFetchRequest(
-        entity: BlogEntry.entity(),
         sectionIdentifier: \BlogEntry.date,
         sortDescriptors: [
             NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
@@ -24,32 +20,25 @@ struct SearchBlogEntriesView: View {
         predicate: NSPredicate(format: "validState = %@", BlogEntry.ValidState.search.rawValue),
         animation: .default)
     private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
-
     
+    @ObservedObject private var searchText = TextDebouncer()
+    @State private var showSearchingIndicator = false
+
     var body: some View {
         NavigationView {
-            VStack {
-                List {
-                    if !searching {
-                        listContent
-                    } else {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                            .listRowSeparator(.hidden)
-                    }
+            List {
+                listContent
+                if showSearchingIndicator {
+                    ProgressView()
+                        .listRowSeparator(.hidden)
+                        .frame(maxWidth: .infinity)
                 }
-                .searchable(text: $textObserver.searchText, placement: .navigationBarDrawer(displayMode: .always))
-                .listStyle(.plain)
             }
+            .listStyle(.plain)
+            .searchable(text: $searchText.searchText)
+            .disableAutocorrection(true)
             .navigationTitle("Suche")
-        }
-        .onChange(of: textObserver.debouncedText) {
-            self.search(for: $0)
-        }
-        .onAppear {
-            if textObserver.debouncedText.isEmpty {
-                DataAccess.shared.deleteSearchBlogEntries()
-            }
+            .onChange(of: searchText.debouncedText) { search(for: $0) }
         }
     }
     
@@ -68,13 +57,13 @@ struct SearchBlogEntriesView: View {
     }
     
     private func search(for searchString: String) {
-        searching = true
+        showSearchingIndicator = true
         ErrorService.shared.executeShowingError {
             DataAccess.shared.deleteSearchBlogEntries()
             if !searchString.isEmpty {
                 try await FefeBlogService.shared.search(for: searchString)
             }
-            searching = false
+            showSearchingIndicator = false
         }
     }
 }

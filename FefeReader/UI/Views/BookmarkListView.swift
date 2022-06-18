@@ -11,7 +11,6 @@ struct BookmarkListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(
-        entity: BlogEntry.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \BlogEntry.bookmarkDate, ascending: false),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
