@@ -12,6 +12,10 @@ struct TabbedBlogView: View {
     
     @State private var tabSelection: TabItem = .blog
     
+    init() {
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
+    }
+    
     var body: some View {
         TabView(selection: $tabSelection) {
             BlogEntryListView(tabSelection: $tabSelection)

@@ -32,11 +32,6 @@ struct BlogEntryListView: View {
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
     
-    init(tabSelection: Binding<TabbedBlogView.TabItem>) {
-        UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
-        self._tabSelection = tabSelection
-    }
-    
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
             print("Load older entries")
