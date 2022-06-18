@@ -25,8 +25,6 @@ struct BlogEntryDetailView: View {
     @State private var showSubEntry = false
     @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
     
-    //@State private var urls: [URL] = []
-    
     var body: some View {
         VStack(alignment: .leading) {
             let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
@@ -78,7 +76,7 @@ struct BlogEntryDetailView: View {
             ExternalLinkView(url: $externalUrl)
         }
         .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [blogEntry.url])
+            ShareSheet(activityItems: [blogEntry.url.absoluteURL])
         }
     }
     
