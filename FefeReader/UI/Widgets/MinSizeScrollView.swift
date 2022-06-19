@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// https://github.com/onmyway133/blog/issues/769#issue-802788982
 struct MinSizeScrollView<Content>: View where Content : View {
     @State private var scrollViewContentSize: CGSize = .zero
     var maxHeight: CGFloat = 300

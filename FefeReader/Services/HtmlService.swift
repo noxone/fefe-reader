@@ -45,11 +45,11 @@ class HtmlService {
         }
     }
     
-    func extractLinks(html: String) -> [URL] {
+    func extractLinks(html: String) -> [Link] {
         do {
             let document = try SwiftSoup.parse(html)
             let links = try document.select("a")
-            return try links.compactMap { URL(string: try $0.attr("href")) }
+            return try links.compactMap { Link(label: try? $0.text(), url: URL(string: try $0.attr("href"))) }
         } catch {
             // TODO: better error handling
             print(error)

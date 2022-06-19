@@ -12,12 +12,20 @@ class ErrorService : ObservableObject {
     
     @Published var showError = false
     @Published var errorMessage = ""
+    @Published var color = Color.errorBackground
     
     private init() {}
     
     func showError(message: String) {
         showError = true
         errorMessage = message
+        color = Color.errorBackground
+    }
+    
+    func showSuccess(message: String) {
+        showError = true
+        errorMessage = message
+        color = Color.successBackground
     }
     
     func executeShowingError(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) {

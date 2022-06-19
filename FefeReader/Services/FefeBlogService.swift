@@ -337,6 +337,19 @@ struct RawEntry {
     var date: Date = Date()
 }
 
+struct Link : Identifiable {
+    let label: String?
+    let url: URL
+    
+    var id: String { url.absoluteString }
+    
+    init?(label: String?, url: URL?) {
+        guard let url = url else { return nil }
+        self.label = label
+        self.url = url
+    }
+}
+
 struct LoadBlogEntriesResult {
     let newlyCreateBlogEntries: [BlogEntry]
     let numberOfLoadedEntries: Int

@@ -36,15 +36,18 @@ struct BlogEntryDetailView: View {
                     .popup(isPresented: $showLinkList, type: .floater(), position: .bottom, closeOnTap: false, closeOnTapOutside: true) {
                                     linkListSheet
                                 }
+                
                 HStack(spacing: 10) {
-                    Button(action: {
-                        showLinkList.toggle()
-                    }, label: {
-                        CommonIcons.shared.linkListImage
-                            .frame(width: 20, height: 15)
-                            .padding()
-                    })
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+                    if !blogEntry.links.isEmpty {
+                        Button(action: {
+                            showLinkList.toggle()
+                        }, label: {
+                            CommonIcons.shared.linkListImage
+                                .frame(width: 20, height: 15)
+                                .padding()
+                        })
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+                    }
                     
                     Button(action: {
                         showShareSheet = true
@@ -107,7 +110,7 @@ struct BlogEntryDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .background(.background)
+        .background(.ultraThinMaterial)
         .shadow(color: .shadow, radius: 10, x: 0, y: 0)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding()
@@ -115,14 +118,25 @@ struct BlogEntryDetailView: View {
     }
     
     private var linkListSheetContent: some View {
-        ForEach(blogEntry.linkUrls, id: \.absoluteURL) { url in
-            Button(action: {
-                UIPasteboard.general.setValue(url.absoluteString, forPasteboardType: UTType.url.identifier)
-            }, label: {
-                Text(url.absoluteString)
-                    .lineLimit(1)
-            })
-            .buttonStyle(.bordered)
+        VStack(alignment: .leading) {
+            ForEach(blogEntry.links) { link in
+                Button(action: {
+                    UIPasteboard.general.url = link.url
+                    ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
+                    showLinkList = false
+                }, label: {
+                    VStack(alignment: .leading) {
+                        if let label = link.label {
+                            Text(label)
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+                        Text(link.url.absoluteString)
+                            .lineLimit(1)
+                    }
+                })
+                .buttonStyle(.bordered)
+            }
         }
     }
     
