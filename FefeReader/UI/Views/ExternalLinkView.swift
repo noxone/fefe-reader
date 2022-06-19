@@ -19,10 +19,11 @@ struct ExternalLinkView: View {
     
     @State private var showShareSheet = false
     
+    private let config = WebViewConfig(javaScriptEnabled: true, allowsBackForwardNavigationGestures: true, allowsInlineMediaPlayback: true, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
+
     var body: some View {
         NavigationView {
             VStack {
-                let config = WebViewConfig(javaScriptEnabled: true, allowsBackForwardNavigationGestures: true, allowsInlineMediaPlayback: true, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
                 WebView(config: config, action: $action, state: $state)
             }
             .toolbar {
