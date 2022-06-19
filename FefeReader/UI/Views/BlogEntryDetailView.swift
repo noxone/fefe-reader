@@ -134,10 +134,12 @@ struct BlogEntryDetailView: View {
                         Text(link.url.absoluteString)
                             .lineLimit(1)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 })
                 .buttonStyle(.bordered)
             }
         }
+        .padding(5)
     }
     
     private func handleHttpLinks(url: URL) {
