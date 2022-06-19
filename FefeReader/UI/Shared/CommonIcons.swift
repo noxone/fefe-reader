@@ -24,8 +24,9 @@ class CommonIcons {
     
     private let settingsImageName = "gear"
     
-    private init() {
-    }
+    private let linkListImageName = "link.circle"
+    
+    private init() {}
     
     func bookmarkImage(for blogEntry: BlogEntry) -> some View {
         return bookmarkImage(active: blogEntry.isBookmarked)
@@ -36,39 +37,17 @@ class CommonIcons {
             .foregroundColor(bookmarkColor)
     }
     
-    var blogImage: Image {
-        get {
-            Image(systemName: blogImageName)
-        }
-    }
+    var blogImage: Image { Image(systemName: blogImageName) }
     
-    var bookmarkImage: Image {
-        get {
-            Image(systemName: bookmarkImageActiveName)
-        }
-    }
+    var bookmarkImage: Image { Image(systemName: bookmarkImageActiveName) }
     
-    var shareImage: Image {
-        get {
-            Image(systemName: shareImageName)
-        }
-    }
+    var shareImage: Image { Image(systemName: shareImageName) }
     
-    var searchImage: Image {
-        get {
-            Image(systemName: searchImageName)
-        }
-    }
+    var searchImage: Image { Image(systemName: searchImageName) }
+
+    var trashImage: Image { Image(systemName: trashImageName) }
     
-    var trashImage: Image {
-        get {
-            Image(systemName: trashImageName)
-        }
-    }
+    var settingsImage: Image { Image(systemName: settingsImageName) }
     
-    var settingsImage: Image {
-        get {
-            Image(systemName: settingsImageName)
-        }
-    }
+    var linkListImage: Image { Image(systemName: linkListImageName) }
 }

@@ -54,6 +54,7 @@
 		C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* TabbedBlogView.swift */; };
 		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
 		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
+		C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		C5E310B928475840005937FA /* TabbedBlogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBlogView.swift; sourceTree = "<group>"; };
 		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinSizeScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +294,7 @@
 				C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */,
 				C5E310B428473EC7005937FA /* ExitButtonView.swift */,
 				C552BA74285706E20033855C /* ToggleWithDescription.swift */,
+				C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */,
 				C552BA77285C95300033855C /* SearchBlogEntriesView.swift in Sources */,
+				C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,

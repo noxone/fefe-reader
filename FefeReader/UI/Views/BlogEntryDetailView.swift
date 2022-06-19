@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUIWebView
+import UniformTypeIdentifiers
 
 struct BlogEntryDetailView: View {
     private static let dummyBlogEntry = BlogEntry()
@@ -20,15 +21,42 @@ struct BlogEntryDetailView: View {
     @State private var externalUrl: URL = URL(string: "https://blog.fefe.de")!
     
     @State private var showShareSheet = false
+    @State private var showLinkList = false
     
     @State private var showPreparingSubEntry = false
     @State private var showSubEntry = false
     @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
     
+    private let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
+    
     var body: some View {
         VStack(alignment: .leading) {
-            let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
-            WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
+            ZStack(alignment: .bottomTrailing) {
+                WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
+                    .popup(isPresented: $showLinkList, type: .floater(), position: .bottom, closeOnTap: false, closeOnTapOutside: true) {
+                                    linkListSheet
+                                }
+                HStack(spacing: 10) {
+                    Button(action: {
+                        showLinkList.toggle()
+                    }, label: {
+                        CommonIcons.shared.linkListImage
+                            .frame(width: 20, height: 15)
+                            .padding()
+                    })
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+                    
+                    Button(action: {
+                        showShareSheet = true
+                    }, label: {
+                        CommonIcons.shared.shareImage
+                            .frame(width: 20, height: 15)
+                            .padding()
+                    })
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+                }
+                .padding()
+            }
             NavigationLink(isActive: $showSubEntry, destination: {
                 BlogEntryDetailWrapper(blogEntry: $subEntry)
             }, label: {
@@ -46,14 +74,6 @@ struct BlogEntryDetailView: View {
                         blogEntry.bookmarkImage
                     })
                 }
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    showShareSheet = true
-                }, label: {
-                    CommonIcons.shared.shareImage
-                })
             }
             
             ToolbarItem(placement: .principal) {
@@ -77,6 +97,32 @@ struct BlogEntryDetailView: View {
         }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [blogEntry.url.absoluteURL])
+        }
+    }
+    
+    private var linkListSheet: some View {
+        MinSizeScrollView {
+            VStack(alignment: .leading) {
+                linkListSheetContent
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(.background)
+        .shadow(color: .shadow, radius: 10, x: 0, y: 0)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .padding()
+        .padding(.bottom, 50)
+    }
+    
+    private var linkListSheetContent: some View {
+        ForEach(blogEntry.linkUrls, id: \.absoluteURL) { url in
+            Button(action: {
+                UIPasteboard.general.setValue(url.absoluteString, forPasteboardType: UTType.url.identifier)
+            }, label: {
+                Text(url.absoluteString)
+                    .lineLimit(1)
+            })
+            .buttonStyle(.bordered)
         }
     }
     
