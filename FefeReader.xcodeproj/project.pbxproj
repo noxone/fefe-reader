@@ -30,7 +30,6 @@
 		C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683C2849DA6300082BA2 /* BookmarkListView.swift */; };
 		C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C533525E284F54EC0060A663 /* Allison-Regular.ttf */; };
 		C552BA75285706E20033855C /* ToggleWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA74285706E20033855C /* ToggleWithDescription.swift */; };
-		C552BA77285C95300033855C /* SearchBlogEntriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA76285C95300033855C /* SearchBlogEntriesView.swift */; };
 		C552BA79285DBA400033855C /* TextDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA78285DBA400033855C /* TextDebouncer.swift */; };
 		C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0928512B9F0026F67B /* DateExtension.swift */; };
 		C5583E0C285230110026F67B /* ErrorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0B285230110026F67B /* ErrorService.swift */; };
@@ -55,6 +54,8 @@
 		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
 		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
 		C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */; };
+		C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */; };
+		C5FD07A628623C260030F081 /* SearchableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A528623C260030F081 /* SearchableList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +101,6 @@
 		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
 		C552BA74285706E20033855C /* ToggleWithDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleWithDescription.swift; sourceTree = "<group>"; };
-		C552BA76285C95300033855C /* SearchBlogEntriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBlogEntriesView.swift; sourceTree = "<group>"; };
 		C552BA78285DBA400033855C /* TextDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDebouncer.swift; sourceTree = "<group>"; };
 		C5583E0928512B9F0026F67B /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		C5583E0B285230110026F67B /* ErrorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorService.swift; sourceTree = "<group>"; };
@@ -124,6 +124,8 @@
 		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinSizeScrollView.swift; sourceTree = "<group>"; };
+		C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedFetchedObjectsView.swift; sourceTree = "<group>"; };
+		C5FD07A528623C260030F081 /* SearchableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchableList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,7 +198,6 @@
 				C5E310BD28476130005937FA /* SettingsView.swift */,
 				C51FA2C9284F30D3007FAD56 /* LicensesView.swift */,
 				C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */,
-				C552BA76285C95300033855C /* SearchBlogEntriesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -295,6 +296,8 @@
 				C5E310B428473EC7005937FA /* ExitButtonView.swift */,
 				C552BA74285706E20033855C /* ToggleWithDescription.swift */,
 				C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */,
+				C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */,
+				C5FD07A528623C260030F081 /* SearchableList.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -480,10 +483,11 @@
 				C552BA79285DBA400033855C /* TextDebouncer.swift in Sources */,
 				C5243EAF2845CABC001CBA3D /* TextExtension.swift in Sources */,
 				C5243EB22845CDDB001CBA3D /* FefeBlogService.swift in Sources */,
-				C552BA77285C95300033855C /* SearchBlogEntriesView.swift in Sources */,
 				C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
+				C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */,
+				C5FD07A628623C260030F081 /* SearchableList.swift in Sources */,
 				C530683D2849DA6300082BA2 /* BookmarkListView.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C5583E12285327240026F67B /* DataAccess.swift in Sources */,
@@ -665,7 +669,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
@@ -697,7 +701,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;

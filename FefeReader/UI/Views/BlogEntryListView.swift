@@ -15,7 +15,7 @@ struct BlogEntryListView: View {
     @ObservedObject var fefeBlog = FefeBlogService.shared
     @ObservedObject var settings = Settings.shared
     
-    @SectionedFetchRequest(
+    /*@SectionedFetchRequest(
         sectionIdentifier: \BlogEntry.date,
         sortDescriptors: [
             NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
@@ -23,7 +23,7 @@ struct BlogEntryListView: View {
         ],
         predicate: NSPredicate(format: "validState = %@", BlogEntry.ValidState.normal.rawValue),
         animation: .default)
-    private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>
+    private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>*/
     
     @Binding var tabSelection: TabbedBlogView.TabItem
     
@@ -32,6 +32,10 @@ struct BlogEntryListView: View {
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
     
+    @State private var isSearching: Bool = false
+    @State private var searchText: String = ""
+    @State private var showSearchingIndicator = false
+        
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
             print("Load older entries")
@@ -40,12 +44,12 @@ struct BlogEntryListView: View {
             showLoadingIndicator = false
         }
     }
-
+    
     var body: some View {
         NavigationView {
-            List {
-                listContent
-                if fefeBlog.canLoadMore {
+            SearchableList(indicator: $isSearching) { isSearching in
+                createListBody(validState: isSearching ? .search : .normal)
+                if !isSearching && fefeBlog.canLoadMore {
                     HStack(alignment: .center) {
                         if !showLoadingIndicator {
                             Button(action: {
@@ -65,6 +69,11 @@ struct BlogEntryListView: View {
                         loadOlderEntries()
                     }
                 }
+                if isSearching && showSearchingIndicator {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden)
+                }
             }
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
@@ -80,6 +89,16 @@ struct BlogEntryListView: View {
                     }
                 }
             }
+            .searchable(text: $searchText)
+            .onChange(of: isSearching) {
+                if $0 {
+                    DataAccess.shared.deleteSearchBlogEntries()
+                }
+            }
+            .onSubmit(of: .search) {
+                search(for: searchText)
+            }
+            .disableAutocorrection(true)
             .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
                 notificationPopup
             }
@@ -95,38 +114,47 @@ struct BlogEntryListView: View {
         }
     }
     
-    private var listContent: some View {
-        ForEach(sectionedBlogEntries) { blogEntries in
-            Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
-                ForEach(blogEntries) { blogEntry in
-                    NavigationLink(tag: blogEntry, selection: $selectedBlogEntry) {
-                        BlogEntryDetailView(blogEntry: blogEntry)
-                    } label: {
-                        BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: settings.tintReadBlogentries)
-                    }
-                    .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
-                        Button(action: {
-                            fefeBlog.toggleBookmark(for: blogEntry)
-                        }, label: {
-                            CommonIcons.shared.bookmarkImage()
+    private func createListBody(validState: BlogEntry.ValidState) -> some View {
+        SectionedFetchedObjectsView(
+            sectionIdentifier: \BlogEntry.date,
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
+                NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
+            ],
+            predicate: NSPredicate(format: "validState = %@", validState.rawValue)
+        ) { sectionedBlogEntries in
+            ForEach(sectionedBlogEntries) { blogEntries in
+                Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
+                    ForEach(blogEntries) { blogEntry in
+                        NavigationLink(tag: blogEntry, selection: $selectedBlogEntry) {
+                            BlogEntryDetailView(blogEntry: blogEntry)
+                        } label: {
+                            BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: !isSearching && settings.tintReadBlogentries)
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
+                            Button(action: {
+                                fefeBlog.toggleBookmark(for: blogEntry)
+                            }, label: {
+                                CommonIcons.shared.bookmarkImage()
+                            })
+                            .tint(CommonIcons.shared.bookmarkColor)
                         })
-                        .tint(CommonIcons.shared.bookmarkColor)
-                    })
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(action: {
-                            DataAccess.shared.delete(object: blogEntry)
-                        }, label: {
-                            CommonIcons.shared.trashImage
-                        })
-                        .tint(.red)
-                    }
-                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button(action: {
-                            fefeBlog.toggleRead(blogEntry)
-                        }, label: {
-                            Image(systemName: "app.badge")
-                        })
-                        .tint(.blue)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(action: {
+                                DataAccess.shared.delete(object: blogEntry)
+                            }, label: {
+                                CommonIcons.shared.trashImage
+                            })
+                            .tint(.red)
+                        }
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button(action: {
+                                fefeBlog.toggleRead(blogEntry)
+                            }, label: {
+                                Image(systemName: "app.badge")
+                            })
+                            .tint(.blue)
+                        }
                     }
                 }
             }
@@ -165,6 +193,18 @@ struct BlogEntryListView: View {
         .shadow(color: .black.opacity(0.08), radius: 2, x: 0, y: 0)
         .shadow(color: .black.opacity(0.16), radius: 24, x: 0, y: 0)
         .padding(.horizontal, 16)
+    }
+    
+    
+    private func search(for searchString: String) {
+        showSearchingIndicator = true
+        ErrorService.shared.executeShowingError {
+            DataAccess.shared.deleteSearchBlogEntries()
+            if !searchString.isEmpty {
+                try await FefeBlogService.shared.search(for: searchString)
+            }
+            showSearchingIndicator = false
+        }
     }
 }
 

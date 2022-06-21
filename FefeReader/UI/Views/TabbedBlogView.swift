@@ -34,13 +34,6 @@ struct TabbedBlogView: View {
             }
             .tag(TabItem.bookmarks)
             
-            SearchBlogEntriesView()
-            .environment(\.managedObjectContext, viewContext)
-            .tabItem {
-                CommonIcons.shared.searchImage
-                Text("Search")
-            }
-            
             SettingsView()
             .tabItem {
                 CommonIcons.shared.settingsImage

@@ -40,6 +40,8 @@ class ErrorService : ObservableObject {
         }
         do {
             try await action()
+        } catch FefeBlogError.cancelled {
+            // do nothing
         } catch let error as FefeBlogError {
             let description = error.localizedDescription
             showError(message: description)

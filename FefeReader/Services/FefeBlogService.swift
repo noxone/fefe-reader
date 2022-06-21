@@ -112,7 +112,7 @@ class FefeBlogService : ObservableObject {
     }
     
     func search(for searchString: String) async throws {
-        let url = try getUrlForSearch(searchString)
+        let url = try getUrlForSearch(searchString.trimmingCharacters(in: .whitespacesAndNewlines))
         try await loadEntriesIntoDatabase(from: url, withValidState: .search)
     }
     
@@ -235,6 +235,8 @@ class FefeBlogService : ObservableObject {
     
     private func parseHtmlToRawEntries(html: String, relativeUrl: URL) throws -> [RawEntry] {
         do {
+            guard !Task.isCancelled else { throw FefeBlogError.cancelled }
+            
             let doc = try SwiftSoup.parse(html)
             let elements = try doc.select("body > h3, body > ul > li")
             
@@ -244,7 +246,8 @@ class FefeBlogService : ObservableObject {
             var relativeNumber = 1
             
             for element in elements {
-                // print(element)
+                guard !Task.isCancelled else { throw FefeBlogError.cancelled }
+                
                 if element.tagName() == "h3" {
                     date = try getDate(forElement: element)
                     relativeNumber = 1
@@ -362,6 +365,7 @@ enum FefeBlogError : Error {
     case parsingException(exception: Exception)
     case invalidDocumentStructure
     case unexpectedException(error: Error)
+    case cancelled
 }
 
 /*extension FefeBlogError : CustomStringConvertible {
@@ -389,6 +393,8 @@ extension FefeBlogError : LocalizedError {
             return "Unerwartete Antwort vom Blog. Fehler beim Lesen: \(exception.localizedDescription)"
         case .unexpectedException(let error):
             return "Fehler beim Aktualisieren: \(error.localizedDescription)"
+        case .cancelled:
+            return "Der Vorgang wurde abgebrochen."
         }
     }
 }
