@@ -181,6 +181,10 @@ class FefeBlogService : ObservableObject {
         
         // if not using the main context, but a working context, that UI will become very laggy when inporting the change into the database.
         try stack.withWorkingContext { context in
+            appPrint("Reading existing entries...")
+            let readEntries = dataAccess.getBlogEntries(withIds: rawEntries.map {Int64($0.id)}).reduce(into: [Int64: BlogEntry]()) {
+                $0[$1.id] = $1
+            }
             appPrint("Persisting \(rawEntries.count) entries to database...")
             for rawEntry in rawEntries {
                 guard !Task.isCancelled else {
@@ -188,7 +192,7 @@ class FefeBlogService : ObservableObject {
                     throw FefeBlogError.cancelled
                 }
                 
-                if validState == .normal || validState == .temporary, let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
+                if validState == .normal || validState == .temporary, let blogEntry = readEntries[Int64(rawEntry.id)] {
                     // Update content
                     if blogEntry.content != rawEntry.content {
                         blogEntry.content = rawEntry.content

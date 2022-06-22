@@ -28,6 +28,16 @@ class DataAccess {
         return try? stack.readForUi { try $0.fetch(request) }.first
     }
     
+    func getBlogEntries(withIds ids: [Int64]) -> [BlogEntry] {
+        let request = BlogEntry.fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DataAccess.PREDICATE_VALID_STATE_NORMAL,
+            NSPredicate(format: "id IN %@", ids)
+        ])
+        let entries = try? stack.readForUi { try $0.fetch(request) }
+        return entries ?? []
+    }
+    
     func getOldestBlogEntry(includingBookmarks includeBookmarks: Bool = true) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
