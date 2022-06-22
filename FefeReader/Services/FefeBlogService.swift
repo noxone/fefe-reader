@@ -176,12 +176,19 @@ class FefeBlogService : ObservableObject {
             throw FefeBlogError.unexpectedException(error: error)
         }
         
+        var updatedBlogEntries = 0
         var createdBlogEntries: [BlogEntry] = []
         
         // if not using the main context, but a working context, that UI will become very laggy when inporting the change into the database.
-        stack.withMainContext { context in
+        try stack.withWorkingContext { context in
+            appPrint("Persisting \(rawEntries.count) entries to database...")
             for rawEntry in rawEntries {
-                if let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
+                guard !Task.isCancelled else {
+                    appPrint("Cancelled task!")
+                    throw FefeBlogError.cancelled
+                }
+                
+                if validState == .normal || validState == .temporary, let blogEntry = dataAccess.getBlogEntry(withId: rawEntry.id) {
                     // Update content
                     if blogEntry.content != rawEntry.content {
                         blogEntry.content = rawEntry.content
@@ -190,12 +197,14 @@ class FefeBlogService : ObservableObject {
                         }
                     }
                     blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
+                    updatedBlogEntries += 1
                 } else {
                     // Create entry
                     let blogEntry = dataAccess.createBlogEntry(from: rawEntry, withValidState: validState)
                     createdBlogEntries.append(blogEntry)
                 }
             }
+            appPrint("Updated: \(updatedBlogEntries); created \(createdBlogEntries.count)")
         }
         
         return LoadBlogEntriesResult(newlyCreateBlogEntries: createdBlogEntries, numberOfLoadedEntries: rawEntries.count)
@@ -235,10 +244,16 @@ class FefeBlogService : ObservableObject {
     
     private func parseHtmlToRawEntries(html: String, relativeUrl: URL) throws -> [RawEntry] {
         do {
-            guard !Task.isCancelled else { throw FefeBlogError.cancelled }
+            guard !Task.isCancelled else {
+                appPrint("Cancelled task!")
+                throw FefeBlogError.cancelled
+            }
             
+            appPrint("Parsing HTML...")
             let doc = try SwiftSoup.parse(html)
+            appPrint("HTML parsed")
             let elements = try doc.select("body > h3, body > ul > li")
+            appPrint("Elements selected from HTML")
             
             var result: [RawEntry] = []
             
@@ -246,7 +261,10 @@ class FefeBlogService : ObservableObject {
             var relativeNumber = 1
             
             for element in elements {
-                guard !Task.isCancelled else { throw FefeBlogError.cancelled }
+                guard !Task.isCancelled else {
+                    appPrint("Cancelled task!")
+                    throw FefeBlogError.cancelled
+                }
                 
                 if element.tagName() == "h3" {
                     date = try getDate(forElement: element)
@@ -263,6 +281,7 @@ class FefeBlogService : ObservableObject {
                     }
                 }
             }
+            appPrint("Extracted \(result.count) raw entries!")
             
             return result
         } catch let error as Exception {
@@ -309,6 +328,7 @@ class FefeBlogService : ObservableObject {
         guard response is HTTPURLResponse else { throw FefeBlogError.downloadFailed(url: url, error: nil) }
         let httpResponse = response as! HTTPURLResponse
         guard 200..<300 ~= httpResponse.statusCode else { throw FefeBlogError.downloadFailed(url: url, error: nil) }
+        appPrint("Loaded \(data.count) bytes from \(url.absoluteString)")
         if let content = String(data: data, encoding: httpResponse.encoding) {
             return content
         } else {

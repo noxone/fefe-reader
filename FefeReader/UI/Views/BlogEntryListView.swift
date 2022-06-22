@@ -78,8 +78,10 @@ struct BlogEntryListView: View {
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
             .refreshable {
-                await ErrorService.shared.executeShowingErrorAsync {
-                    try await FefeBlogService.shared.refresh(origin: "manual refresh")
+                if !isSearching {
+                    await ErrorService.shared.executeShowingErrorAsync {
+                        try await FefeBlogService.shared.refresh(origin: "manual refresh")
+                    }
                 }
             }
             .onAppear {
@@ -92,7 +94,13 @@ struct BlogEntryListView: View {
             .searchable(text: $searchText)
             .onChange(of: isSearching) {
                 if $0 {
+                    showSearchingIndicator = false
                     DataAccess.shared.deleteSearchBlogEntries()
+                } else {
+                    TaskService.shared.cancelTask(for: "search")
+                    Task {
+                        DataAccess.shared.deleteSearchBlogEntries()
+                    }
                 }
             }
             .onSubmit(of: .search) {
@@ -197,14 +205,17 @@ struct BlogEntryListView: View {
     
     
     private func search(for searchString: String) {
+        TaskService.shared.cancelTask(for: "search")
+        appPrint("Searching for: \(searchString)")
         showSearchingIndicator = true
-        ErrorService.shared.executeShowingError {
+        let task = ErrorService.shared.executeShowingError {
             DataAccess.shared.deleteSearchBlogEntries()
             if !searchString.isEmpty {
                 try await FefeBlogService.shared.search(for: searchString)
             }
-            showSearchingIndicator = false
+            showLoadingIndicator = false
         }
+        TaskService.shared.set(task: task, for: "search")
     }
 }
 

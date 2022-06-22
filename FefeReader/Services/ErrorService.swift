@@ -28,8 +28,9 @@ class ErrorService : ObservableObject {
         color = Color.successBackground
     }
     
-    func executeShowingError(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) {
-        Task {
+    @discardableResult
+    func executeShowingError(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) -> Task<(), Error> {
+        return Task {
             await executeShowingErrorAsync(action, andAlwaysDo: deferredAction)
         }
     }

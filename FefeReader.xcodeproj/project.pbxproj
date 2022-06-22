@@ -56,6 +56,7 @@
 		C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */; };
 		C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */; };
 		C5FD07A628623C260030F081 /* SearchableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A528623C260030F081 /* SearchableList.swift */; };
+		C5FD07A82862E5310030F081 /* TaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A72862E5310030F081 /* TaskService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,7 @@
 		C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinSizeScrollView.swift; sourceTree = "<group>"; };
 		C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedFetchedObjectsView.swift; sourceTree = "<group>"; };
 		C5FD07A528623C260030F081 /* SearchableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchableList.swift; sourceTree = "<group>"; };
+		C5FD07A72862E5310030F081 /* TaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				C5E310BB28475A9A005937FA /* Settings.swift */,
 				C51FA2C7284E5802007FAD56 /* UrlService.swift */,
 				C5583E0B285230110026F67B /* ErrorService.swift */,
+				C5FD07A72862E5310030F081 /* TaskService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 				C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */,
 				C5E310B828474033005937FA /* HtmlService.swift in Sources */,
 				C5583E14285464D40026F67B /* PreviewData.swift in Sources */,
+				C5FD07A82862E5310030F081 /* TaskService.swift in Sources */,
 				C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */,
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,

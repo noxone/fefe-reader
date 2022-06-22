@@ -52,7 +52,11 @@ class CoreDataStack {
             if isMainContext {
                 saveContext()
             } else {
-                saveWorkingContext(context)
+                if Task.isCancelled {
+                    context.rollback()
+                } else {
+                    saveWorkingContext(context)
+                }
             }
         }
         if isMainContext {
