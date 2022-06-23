@@ -15,16 +15,6 @@ struct BlogEntryListView: View {
     @ObservedObject var fefeBlog = FefeBlogService.shared
     @ObservedObject var settings = Settings.shared
     
-    /*@SectionedFetchRequest(
-        sectionIdentifier: \BlogEntry.date,
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
-            NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
-        ],
-        predicate: NSPredicate(format: "validState = %@", BlogEntry.ValidState.normal.rawValue),
-        animation: .default)
-    private var sectionedBlogEntries: SectionedFetchResults<Date?, BlogEntry>*/
-    
     @Binding var tabSelection: TabbedBlogView.TabItem
     
     @State private var selectedBlogEntry: BlogEntry? = nil
@@ -50,40 +40,14 @@ struct BlogEntryListView: View {
             SearchableList(indicator: $isSearching) { isSearching in
                 createListBody(validState: isSearching ? .search : .normal)
                 if !isSearching && fefeBlog.canLoadMore {
-                    HStack(alignment: .center) {
-                        if !showLoadingIndicator {
-                            Button(action: {
-                                loadOlderEntries()
-                            }, label: {
-                                Text("Ältere Einträge laden")
-                                    .frame(maxWidth: .infinity)
-                            })
-                            .buttonStyle(.bordered)
-                        } else {
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                        }
-                    }
-                    .listRowSeparator(.hidden)
-                    .onAppear {
-                        loadOlderEntries()
-                    }
+                    moreListEntriesAvailableView
                 }
                 if isSearching && showSearchingIndicator {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .listRowSeparator(.hidden)
+                    searchingIndicator
                 }
             }
             .listStyle(.plain)
             .navigationTitle("Fefes Blog")
-            .refreshable {
-                if !isSearching {
-                    await ErrorService.shared.executeShowingErrorAsync {
-                        try await FefeBlogService.shared.refresh(origin: "manual refresh")
-                    }
-                }
-            }
             .onAppear {
                 if Settings.shared.askForNotificationApproval {
                     NotificationService.shared.checkExplicitAuthorization {
@@ -91,7 +55,24 @@ struct BlogEntryListView: View {
                     }
                 }
             }
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+                    if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
+                        NotificationService.shared.idToOpen = nil
+                        selectedBlogEntry = entry
+                        tabSelection = .blog
+                    }
+                }
+            }
+            .refreshable {
+                if !isSearching {
+                    await ErrorService.shared.executeShowingErrorAsync {
+                        try await FefeBlogService.shared.refresh(origin: "manual refresh")
+                    }
+                }
+            }
             .searchable(text: $searchText)
+            .disableAutocorrection(true)
             .onChange(of: isSearching) {
                 if $0 {
                     showSearchingIndicator = false
@@ -106,20 +87,37 @@ struct BlogEntryListView: View {
             .onSubmit(of: .search) {
                 search(for: searchText)
             }
-            .disableAutocorrection(true)
             .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
                 notificationPopup
             }
-            .onChange(of: scenePhase) { newPhase in
-                if newPhase == .active {
-                    if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
-                        NotificationService.shared.idToOpen = nil
-                        selectedBlogEntry = entry
-                        tabSelection = .blog
-                    }
-                }
+        }
+    }
+    
+    private var moreListEntriesAvailableView: some View {
+        HStack(alignment: .center) {
+            if !showLoadingIndicator {
+                Button(action: {
+                    loadOlderEntries()
+                }, label: {
+                    Text("Ältere Einträge laden")
+                        .frame(maxWidth: .infinity)
+                })
+                .buttonStyle(.bordered)
+            } else {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
             }
         }
+        .listRowSeparator(.hidden)
+        .onAppear {
+            loadOlderEntries()
+        }
+    }
+    
+    private var searchingIndicator: some View {
+        ProgressView()
+            .frame(maxWidth: .infinity)
+            .listRowSeparator(.hidden)
     }
     
     private func createListBody(validState: BlogEntry.ValidState) -> some View {
@@ -147,14 +145,14 @@ struct BlogEntryListView: View {
                             })
                             .tint(CommonIcons.shared.bookmarkColor)
                         })
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        /*.swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(action: {
                                 DataAccess.shared.delete(object: blogEntry)
                             }, label: {
                                 CommonIcons.shared.trashImage
                             })
                             .tint(.red)
-                        }
+                        }*/
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(action: {
                                 fefeBlog.toggleRead(blogEntry)

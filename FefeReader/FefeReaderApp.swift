@@ -22,7 +22,7 @@ struct FefeReaderApp: App {
     private let timer = Timer.publish(every: Settings.shared.refreshInternal, on: .main, in: .common).autoconnect()
         
     init() {
-        BlogTasks.shared.registerBackgroundTaks()
+        BackgroundTaskService.shared.registerBackgroundTaks()
     }
 
     var body: some Scene {
@@ -30,7 +30,7 @@ struct FefeReaderApp: App {
             TabbedBlogView()
                 .environment(\.managedObjectContext, coreDataStack.managedObjectContext)
                 .task {
-                    BlogTasks.shared.cancelAllPendingBackgroundTasks()
+                    BackgroundTaskService.shared.cancelAllPendingBackgroundTasks()
                     ErrorService.shared.executeShowingError {
                         try await FefeBlogService.shared.refresh(origin: "init")
                     }
@@ -59,8 +59,8 @@ struct FefeReaderApp: App {
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
             if newPhase == .background {
-                BlogTasks.shared.cancelAllPendingBackgroundTasks()
-                BlogTasks.shared.scheduleBackgroundTasks()
+                BackgroundTaskService.shared.cancelAllPendingBackgroundTasks()
+                BackgroundTaskService.shared.scheduleBackgroundTasks()
             }
         }
     }

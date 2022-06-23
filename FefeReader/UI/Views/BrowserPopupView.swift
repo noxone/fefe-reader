@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftUIWebView
 
-struct ExternalLinkView: View {
+struct BrowserPopupView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @Binding var url: URL
@@ -100,8 +100,8 @@ struct ExternalLinkView: View {
     }
 }
 
-struct ExternalLinkView_Previews: PreviewProvider {
+struct BrowserPopupView_Previews: PreviewProvider {
     static var previews: some View {
-        ExternalLinkView(url: .constant(URL(string: "https://www.apple.com")!))
+        BrowserPopupView(url: .constant(URL(string: "https://www.apple.com")!))
     }
 }

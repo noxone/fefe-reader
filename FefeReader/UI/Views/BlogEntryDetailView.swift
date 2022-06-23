@@ -12,23 +12,27 @@ import UniformTypeIdentifiers
 struct BlogEntryDetailView: View {
     private static let dummyBlogEntry = BlogEntry()
     
+    // The blog entry we want to display
     @ObservedObject var blogEntry: BlogEntry
     
+    // For controlling the integrated browser
     @State private var action = WebViewAction.idle
     @State private var state = WebViewState.empty
-    
+    private let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
+
+    // If an external link shall be displayed
     @State private var showExternalContent = false
     @State private var externalUrl: URL = URL(string: "https://blog.fefe.de")!
     
+    // If a link shall be shared
     @State private var showShareSheet = false
     @State private var showLinkList = false
     
+    // If another blog entry shall be shown
     @State private var showPreparingSubEntry = false
     @State private var showSubEntry = false
     @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
-    
-    private let config = WebViewConfig(javaScriptEnabled: false, allowsBackForwardNavigationGestures: false, allowsInlineMediaPlayback: false, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .bottomTrailing) {
@@ -37,28 +41,7 @@ struct BlogEntryDetailView: View {
                                     linkListSheet
                                 }
                 
-                HStack(spacing: 10) {
-                    if !blogEntry.links.isEmpty {
-                        Button(action: {
-                            showLinkList.toggle()
-                        }, label: {
-                            CommonIcons.shared.linkListImage
-                                .frame(width: 20, height: 15)
-                                .padding()
-                        })
-                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-                    }
-                    
-                    Button(action: {
-                        showShareSheet = true
-                    }, label: {
-                        CommonIcons.shared.shareImage
-                            .frame(width: 20, height: 15)
-                            .padding()
-                    })
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-                }
-                .padding()
+                overlayButtons
             }
             NavigationLink(isActive: $showSubEntry, destination: {
                 BlogEntryDetailWrapper(blogEntry: $subEntry)
@@ -96,50 +79,58 @@ struct BlogEntryDetailView: View {
             }
         }
         .sheet(isPresented: $showExternalContent) {
-            ExternalLinkView(url: $externalUrl)
+            BrowserPopupView(url: $externalUrl)
         }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [blogEntry.url.absoluteURL])
         }
     }
     
+    private var overlayButtons: some View {
+        HStack(spacing: 10) {
+            if !blogEntry.links.isEmpty {
+                Button(action: {
+                    showLinkList.toggle()
+                }, label: {
+                    CommonIcons.shared.linkListImage
+                        .frame(width: 20, height: 15)
+                        .padding()
+                })
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+            }
+            
+            Button(action: {
+                showShareSheet = true
+            }, label: {
+                CommonIcons.shared.shareImage
+                    .frame(width: 20, height: 15)
+                    .padding()
+            })
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+        }
+        .padding()
+    }
+    
     private var linkListSheet: some View {
         MinSizeScrollView {
             VStack(alignment: .leading) {
-                linkListSheetContent
+                ForEach(blogEntry.links) { link in
+                    LinkDisplayButton(link: link) {
+                        UIPasteboard.general.url = link.url
+                        ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
+                        showLinkList = false
+                    }
+                }
+
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(5)
         }
         .background(.ultraThinMaterial)
         .shadow(color: .shadow, radius: 10, x: 0, y: 0)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding()
         .padding(.bottom, 50)
-    }
-    
-    private var linkListSheetContent: some View {
-        VStack(alignment: .leading) {
-            ForEach(blogEntry.links) { link in
-                Button(action: {
-                    UIPasteboard.general.url = link.url
-                    ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
-                    showLinkList = false
-                }, label: {
-                    VStack(alignment: .leading) {
-                        if let label = link.label {
-                            Text(label)
-                                .font(.caption)
-                                .lineLimit(1)
-                        }
-                        Text(link.url.absoluteString)
-                            .lineLimit(1)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                })
-                .buttonStyle(.bordered)
-            }
-        }
-        .padding(5)
     }
     
     private func handleHttpLinks(url: URL) {

@@ -7,8 +7,8 @@
 
 import BackgroundTasks
 
-class BlogTasks {
-    static let shared = BlogTasks()
+class BackgroundTaskService {
+    static let shared = BackgroundTaskService()
     
     static let TASK_REFRESH_ID = "org.olafneumann.fefe-reader.FefeBlog.refresh"
     static let TASK_CLEANUP_ID = "org.olafneumann.fefe-reader.FefeBlog.cleanUpDatabase"
@@ -19,10 +19,10 @@ class BlogTasks {
     func registerBackgroundTaks() {
         cancelAllPendingBackgroundTasks()
         print("--- Register background tasks")
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: BlogTasks.TASK_REFRESH_ID, using: .main) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: BackgroundTaskService.TASK_REFRESH_ID, using: .main) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: BlogTasks.TASK_CLEANUP_ID, using: .main) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: BackgroundTaskService.TASK_CLEANUP_ID, using: .main) { task in
             self.handleCleanUpTask(task: task as! BGProcessingTask)
         }
     }
@@ -41,7 +41,7 @@ class BlogTasks {
     private func scheduleRefreshTask() {
         if Settings.shared.checkForUpdatesInBackground {
             print("--- Schedule refresh task")
-            let request = BGAppRefreshTaskRequest(identifier: BlogTasks.TASK_REFRESH_ID)
+            let request = BGAppRefreshTaskRequest(identifier: BackgroundTaskService.TASK_REFRESH_ID)
             request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
             do {
                 try BGTaskScheduler.shared.submit(request)
@@ -55,7 +55,7 @@ class BlogTasks {
     
     private func scheduleCleanUpTask() {
         print("--- Schedule clean up task")
-        let request = BGProcessingTaskRequest(identifier: BlogTasks.TASK_CLEANUP_ID)
+        let request = BGProcessingTaskRequest(identifier: BackgroundTaskService.TASK_CLEANUP_ID)
         // TODO: Set to one daily processing
         request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
         request.requiresExternalPower = false

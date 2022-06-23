@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */; };
+		C51FA2BD284C78E4007FAD56 /* BlogTaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTaskService.swift */; };
 		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
 		C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C51FA2C5284E2945007FAD56 /* PopupView */; };
 		C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C7284E5802007FAD56 /* UrlService.swift */; };
@@ -46,7 +46,7 @@
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
 		C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */ = {isa = PBXBuildFile; productRef = C5E310AB28471DA6005937FA /* SwiftUIWebView */; };
-		C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* ExternalLinkView.swift */; };
+		C5E310AE28472EEA005937FA /* BrowserPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* BrowserPopupView.swift */; };
 		C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AF284738E3005937FA /* ShareSheet.swift */; };
 		C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B428473EC7005937FA /* ExitButtonView.swift */; };
 		C5E310B828474033005937FA /* HtmlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlService.swift */; };
@@ -57,6 +57,7 @@
 		C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */; };
 		C5FD07A628623C260030F081 /* SearchableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A528623C260030F081 /* SearchableList.swift */; };
 		C5FD07A82862E5310030F081 /* TaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A72862E5310030F081 /* TaskService.swift */; };
+		C5FD07AA28643EAA0030F081 /* LinkDisplayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A928643EAA0030F081 /* LinkDisplayButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTasks.swift; sourceTree = "<group>"; };
+		C51FA2BC284C78E4007FAD56 /* BlogTaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTaskService.swift; sourceTree = "<group>"; };
 		C51FA2C1284DF31F007FAD56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C51FA2C7284E5802007FAD56 /* UrlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlService.swift; sourceTree = "<group>"; };
 		C51FA2C9284F30D3007FAD56 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
@@ -117,7 +118,7 @@
 		C55EC2082850667E0049AFB3 /* BlogEntryDetailWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailWrapper.swift; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
-		C5E310AD28472EEA005937FA /* ExternalLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkView.swift; sourceTree = "<group>"; };
+		C5E310AD28472EEA005937FA /* BrowserPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPopupView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C5E310B428473EC7005937FA /* ExitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButtonView.swift; sourceTree = "<group>"; };
 		C5E310B728474033005937FA /* HtmlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlService.swift; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 		C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedFetchedObjectsView.swift; sourceTree = "<group>"; };
 		C5FD07A528623C260030F081 /* SearchableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchableList.swift; sourceTree = "<group>"; };
 		C5FD07A72862E5310030F081 /* TaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskService.swift; sourceTree = "<group>"; };
+		C5FD07A928643EAA0030F081 /* LinkDisplayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkDisplayButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +168,7 @@
 				C51FA2C1284DF31F007FAD56 /* NotificationService.swift */,
 				C5E310BB28475A9A005937FA /* Settings.swift */,
 				C51FA2C7284E5802007FAD56 /* UrlService.swift */,
+				C51FA2BC284C78E4007FAD56 /* BlogTaskService.swift */,
 				C5583E0B285230110026F67B /* ErrorService.swift */,
 				C5FD07A72862E5310030F081 /* TaskService.swift */,
 			);
@@ -197,7 +200,7 @@
 				C524AD342843FF5C00EF24F1 /* BlogEntryListView.swift */,
 				C530683C2849DA6300082BA2 /* BookmarkListView.swift */,
 				C5E310A828464623005937FA /* BlogEntryDetailView.swift */,
-				C5E310AD28472EEA005937FA /* ExternalLinkView.swift */,
+				C5E310AD28472EEA005937FA /* BrowserPopupView.swift */,
 				C5E310BD28476130005937FA /* SettingsView.swift */,
 				C51FA2C9284F30D3007FAD56 /* LicensesView.swift */,
 				C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */,
@@ -230,7 +233,6 @@
 			children = (
 				C530683E2849E2A600082BA2 /* Info.plist */,
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
-				C51FA2BC284C78E4007FAD56 /* BlogTasks.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
 				C51FA2C3284E2212007FAD56 /* Model */,
 				C51FA2C0284DF30B007FAD56 /* Services */,
@@ -301,6 +303,7 @@
 				C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */,
 				C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */,
 				C5FD07A528623C260030F081 /* SearchableList.swift */,
+				C5FD07A928643EAA0030F081 /* LinkDisplayButton.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -506,11 +509,12 @@
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
 				C51FA2CA284F30D3007FAD56 /* LicensesView.swift in Sources */,
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
-				C51FA2BD284C78E4007FAD56 /* BlogTasks.swift in Sources */,
+				C51FA2BD284C78E4007FAD56 /* BlogTaskService.swift in Sources */,
 				C5583E0C285230110026F67B /* ErrorService.swift in Sources */,
+				C5FD07AA28643EAA0030F081 /* LinkDisplayButton.swift in Sources */,
 				C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,
-				C5E310AE28472EEA005937FA /* ExternalLinkView.swift in Sources */,
+				C5E310AE28472EEA005937FA /* BrowserPopupView.swift in Sources */,
 				C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */,
 				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
 				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
@@ -673,7 +677,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
@@ -705,7 +709,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
