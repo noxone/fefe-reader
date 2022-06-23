@@ -111,15 +111,30 @@ struct BlogEntryDetailView: View {
         .padding()
     }
     
+    private func copy(_ link: Link) {
+        UIPasteboard.general.url = link.url
+        ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
+        showLinkList = false
+    }
+    
     private var linkListSheet: some View {
         MinSizeScrollView {
             VStack(alignment: .leading) {
                 ForEach(blogEntry.links) { link in
-                    LinkDisplayButton(link: link) {
-                        UIPasteboard.general.url = link.url
-                        ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
-                        showLinkList = false
+                    LinkDisplayButton(link: link) { isLongPress in
+                        if !isLongPress {
+                            copy(link)
+                        } else {
+                            print("loooooong")
+                        }
                     }
+                    .contextMenu(menuItems: {
+                        Button("URL kopieren") { copy(link) }
+                        Button("URL öffnen") {
+                            handleHttpLinks(url: link.url)
+                            showLinkList = false
+                        }
+                    })
                 }
 
             }

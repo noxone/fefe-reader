@@ -9,10 +9,10 @@ import SwiftUI
 
 struct LinkDisplayButton: View {
     let link: Link
-    let action: () -> ()
+    let action: (Bool) -> ()
     
     var body: some View {
-        Button(action: action, label: {
+        Button(action: {action(false)}, label: {
             VStack(alignment: .leading) {
                 if let label = link.label {
                     Text(label)
@@ -22,6 +22,12 @@ struct LinkDisplayButton: View {
                 Text(link.url.absoluteString)
                     .lineLimit(1)
             }
+            .onTapGesture {
+                action(false)
+            }
+            .onLongPressGesture {
+                action(true)
+            }
             .frame(maxWidth: .infinity, alignment: .leading)
         })
         .buttonStyle(.bordered)
@@ -30,6 +36,6 @@ struct LinkDisplayButton: View {
 
 struct LinkDisplayButton_Previews: PreviewProvider {
     static var previews: some View {
-        LinkDisplayButton(link: Link(label: "abc", url: URL(string: "https://google.de")!)!,action: {})
+        LinkDisplayButton(link: Link(label: "abc", url: URL(string: "https://google.de")!)!,action: {_ in})
     }
 }
