@@ -233,6 +233,7 @@
 			children = (
 				C530683E2849E2A600082BA2 /* Info.plist */,
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
+				C5583E0F285325B20026F67B /* Logging.swift */,
 				C524AD2F2843FE8000EF24F1 /* UI */,
 				C51FA2C3284E2212007FAD56 /* Model */,
 				C51FA2C0284DF30B007FAD56 /* Services */,
@@ -240,7 +241,6 @@
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
-				C5583E0F285325B20026F67B /* Logging.swift */,
 			);
 			path = FefeReader;
 			sourceTree = "<group>";
