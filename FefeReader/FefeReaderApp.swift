@@ -15,7 +15,6 @@ struct FefeReaderApp: App {
     private let coreDataStack = CoreDataStack.shared
     
     @Environment(\.scenePhase) private var scenePhase
-    @State var set: Bool = true
     
     @ObservedObject var errorService = ErrorService.shared
     
