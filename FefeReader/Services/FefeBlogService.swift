@@ -14,6 +14,8 @@ class FefeBlogService : ObservableObject {
     
     static let baseUrl = URL(string: "https://blog.fefe.de")!
     
+    private let semaphoreForLoading = DispatchSemaphore(value: 1)
+    
     private static let earliestPost: Date = {
         var dateComponents = DateComponents()
         dateComponents.year = 2005
@@ -167,6 +169,13 @@ class FefeBlogService : ObservableObject {
     
     @discardableResult
     private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState) async throws -> LoadBlogEntriesResult {
+        // make sure only one thread is loading stuff
+        semaphoreForLoading.wait()
+        defer {
+            semaphoreForLoading.signal()
+        }
+        
+        // do the actual work
         let rawEntries: [RawEntry]
         do {
             rawEntries = try await downloadAndParseRawEntries(for: url)
