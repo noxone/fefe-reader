@@ -29,18 +29,20 @@ struct FefeReaderApp: App {
             TabbedBlogView()
                 .environment(\.managedObjectContext, coreDataStack.managedObjectContext)
                 .task {
-                    BackgroundTaskService.shared.cancelAllPendingBackgroundTasks()
-                    ErrorService.shared.executeShowingError {
-                        try await FefeBlogService.shared.refresh(origin: "init")
+                    Task.detached {
+                        BackgroundTaskService.shared.cancelAllPendingBackgroundTasks()
+                        ErrorService.shared.executeShowingError {
+                            try await FefeBlogService.shared.refresh(origin: "init")
+                        }
                     }
                 }
                 .task {
-                    Task(priority: .utility) {
+                    Task.detached(priority: .utility) {
                         DataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: Settings.shared.regularlyDeleteOldBlogEntries, keepBookmarks: Settings.shared.keepBookmarkedBlogEntries)
                     }
                 }
                 .onReceive(timer) { input in
-                    Task {
+                    Task.detached {
                         do {
                             try await FefeBlogService.shared.refreshWithNotifications(origin: "timer")
                         } catch {

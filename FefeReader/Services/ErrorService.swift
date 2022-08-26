@@ -28,10 +28,15 @@ class ErrorService : ObservableObject {
         color = Color.successBackground
     }
     
-    @discardableResult
-    func executeShowingError(_ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) -> Task<(), Error> {
-        return Task {
-            await executeShowingErrorAsync(action, andAlwaysDo: deferredAction)
+    // @discardableResult
+    func executeShowingError(for category: String? = nil, _ action: @escaping () async throws -> (), andAlwaysDo deferredAction: @escaping () -> () = {} ) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let task = Task.detached(priority: .userInitiated) {
+                await self.executeShowingErrorAsync(action, andAlwaysDo: deferredAction)
+            } as Task<(), Error>
+            if let category = category {
+                TaskService.shared.set(task: task, for: category)
+            }
         }
     }
 

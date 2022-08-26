@@ -79,7 +79,7 @@ struct BlogEntryListView: View {
                     DataAccess.shared.deleteSearchBlogEntries()
                 } else {
                     TaskService.shared.cancelTask(for: "search")
-                    Task {
+                    Task.detached(priority: .utility) {
                         DataAccess.shared.deleteSearchBlogEntries()
                     }
                 }
@@ -206,14 +206,13 @@ struct BlogEntryListView: View {
         TaskService.shared.cancelTask(for: "search")
         appPrint("Searching for: \(searchString)")
         showSearchingIndicator = true
-        let task = ErrorService.shared.executeShowingError {
+        ErrorService.shared.executeShowingError(for: "search") {
             DataAccess.shared.deleteSearchBlogEntries()
             if !searchString.isEmpty {
                 try await FefeBlogService.shared.search(for: searchString)
             }
             showLoadingIndicator = false
         }
-        TaskService.shared.set(task: task, for: "search")
     }
 }
 
