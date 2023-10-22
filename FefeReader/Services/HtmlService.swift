@@ -15,7 +15,7 @@ class HtmlService {
     
     func enhance(html: String) -> String {
         do {
-            let preparedHtmlString = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\"><style>:root {color-scheme: light dark;--link-color: blue;}@media screen and (prefers-color-scheme: dark){:root{--link-color: #93d5ff;}}body{\(Settings.shared.font.html);font-size:\(Settings.shared.fontSize)pt;}a{color:var(--link-color);}</style></head><body></body></html>"
+            let preparedHtmlString = "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\"><style>:root {color-scheme: light dark;--link-color: blue;}@media screen and (prefers-color-scheme: dark){:root{--link-color: #93d5ff;}}html{-webkit-text-size-adjust:none;}body{\(Settings.shared.font.html);font-size:\(Settings.shared.fontSize)pt;}a{color:var(--link-color);}</style></head><body></body></html>"
             let preparedHtml = try SwiftSoup.parse(preparedHtmlString)
             let preparedBody = try preparedHtml.select("body")[0]
             
