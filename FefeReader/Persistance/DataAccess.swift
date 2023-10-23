@@ -53,6 +53,18 @@ class DataAccess {
         return try? stack.readForUi { try $0.fetch(request) }.first
     }
     
+    func getYoungestBlogEntry(olderThan date: Date) -> BlogEntry? {
+        let request = BlogEntry.fetchRequest()
+        request.fetchLimit = 1
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false)]
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DataAccess.PREDICATE_VALID_STATE_NORMAL,
+            NSPredicate(format: "date < %@", date as NSDate)
+        ])
+        
+        return try? stack.readForUi { try $0.fetch(request) }.first
+    }
+    
     func delete(object: NSManagedObject) {
         stack.with(context: object.managedObjectContext) { context in
             context.delete(object)

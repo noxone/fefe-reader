@@ -108,6 +108,14 @@ class FefeBlogService : ObservableObject {
     func refresh(origin: String) async throws -> [BlogEntry] {
         print("Refresh...................", origin, Date())
         dataAccess.createUpdateFetch(from: origin)
+        if (origin == "init") {
+            // if this is the first fetch of the application after start, check if there are posts from the previous month. If yes, update that month, too.
+            let startOfMonth = Date().startOfMonth
+            if let youngestBlogEntry = DataAccess.shared.getYoungestBlogEntry(olderThan: startOfMonth) {
+                try await loadMonthsUntilToday(startingFrom: youngestBlogEntry.secureDate)
+                return []
+            }
+        }
         return try await loadCurrentMonth()
     }
     
@@ -129,6 +137,18 @@ class FefeBlogService : ObservableObject {
     @discardableResult
     private func loadCurrentMonth() async throws -> [BlogEntry] {
         return try await loadMonthIntoDatabase(for: Date()).newlyCreateBlogEntries
+    }
+    
+    private func loadMonthsUntilToday(startingFrom date: Date) async throws {
+        var dateToLoad = date
+        while dateToLoad < Date() {
+            print("Load until, for ", dateToLoad)
+            try await loadMonthIntoDatabase(for: date)
+            
+            var dateComponent = DateComponents()
+            dateComponent.month = 1
+            dateToLoad = Calendar.current.date(byAdding: dateComponent, to: dateToLoad)!.startOfMonth
+        }
     }
     
     func loadOlderEntries() async throws {
