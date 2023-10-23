@@ -26,6 +26,10 @@ class CommonIcons {
     
     private let linkListImageName = "link.circle"
     
+    private let arrowUpImageName = "arrow.up"
+    
+    private let arrowDownImageName = "arrow.down"
+    
     private init() {}
     
     func bookmarkImage(for blogEntry: BlogEntry) -> some View {
@@ -50,4 +54,8 @@ class CommonIcons {
     var settingsImage: Image { Image(systemName: settingsImageName) }
     
     var linkListImage: Image { Image(systemName: linkListImageName) }
+    
+    var arrowUp: Image { Image(systemName: arrowUpImageName) }
+    
+    var arrowDown: Image { Image(systemName: arrowDownImageName) }
 }

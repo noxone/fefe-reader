@@ -88,6 +88,27 @@ struct BlogEntryDetailView: View {
     
     private var overlayButtons: some View {
         HStack(spacing: 10) {
+            /*Button(action: {
+                
+            }, label: {
+                CommonIcons.shared.arrowUp
+                    .frame(width: 20, height: 15)
+                    .padding()
+            })
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+            
+            Button(action: {
+                
+            }, label: {
+                CommonIcons.shared.arrowDown
+                    .frame(width: 20, height: 15)
+                    .padding()
+            })
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))*/
+            
+            
+            Spacer()
+            
             if !blogEntry.links.isEmpty {
                 Button(action: {
                     showLinkList.toggle()
