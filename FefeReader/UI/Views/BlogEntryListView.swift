@@ -25,6 +25,8 @@ struct BlogEntryListView: View {
     @State private var isSearching: Bool = false
     @State private var searchText: String = ""
     @State private var showSearchingIndicator = false
+    
+    @State private var filterRead = false
         
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
@@ -90,6 +92,15 @@ struct BlogEntryListView: View {
             .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
                 notificationPopup
             }
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: {
+                        filterRead.toggle()
+                    }, label: {
+                        CommonIcons.shared.filterUnread(active: filterRead)
+                    })
+                }
+            }
         }
     }
     
@@ -127,7 +138,13 @@ struct BlogEntryListView: View {
                 NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
                 NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
             ],
-            predicate: NSPredicate(format: "validState = %@", validState.rawValue)
+            predicate:
+                filterRead 
+            ?   NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "validState = %@", validState.rawValue),
+                NSPredicate(format: "readTimestamp = nil", validState.rawValue)
+            ])
+            :   NSPredicate(format: "validState = %@", validState.rawValue)
         ) { sectionedBlogEntries in
             ForEach(sectionedBlogEntries) { blogEntries in
                 Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {

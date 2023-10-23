@@ -30,6 +30,9 @@ class CommonIcons {
     
     private let arrowDownImageName = "arrow.down"
     
+    private let filterUnreadInactiveImageName = "line.3.horizontal.decrease.circle"
+    private let filterUnreadActiveImageName = "line.3.horizontal.decrease.circle.fill"
+    
     private init() {}
     
     func bookmarkImage(for blogEntry: BlogEntry) -> some View {
@@ -58,4 +61,16 @@ class CommonIcons {
     var arrowUp: Image { Image(systemName: arrowUpImageName) }
     
     var arrowDown: Image { Image(systemName: arrowDownImageName) }
+    
+    var filterUnreadInactive: Image { Image(systemName: filterUnreadInactiveImageName) }
+    
+    var filterUnreadActive: Image { Image(systemName: filterUnreadActiveImageName) }
+    
+    func filterUnread(active: Bool) -> Image {
+        if active {
+            return filterUnreadActive
+        } else {
+            return filterUnreadInactive
+        }
+    }
 }
