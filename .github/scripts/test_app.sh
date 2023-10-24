@@ -6,5 +6,5 @@ set -eo pipefail
 
 xcodebuild -project FefeReader.xcodeproj \
             -scheme FefeReader \
-            -destination platform=iOS\ Simulator,OS=15.5,name=iPhone\ 13\ Pro \
+            -destination platform=iOS\ Simulator,OS=17.0,name=iPhone\ 15\ Pro \
             clean test | xcpretty
