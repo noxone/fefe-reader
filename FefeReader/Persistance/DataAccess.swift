@@ -98,6 +98,19 @@ class DataAccess {
     func deleteTemporaryBlogEntries() {
         changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.temporary) { $0.delete($1) }
     }
+    
+    func deleteAllNonDefaultBlogEntries() {
+        stack.withWorkingContext { context in
+            let request = BlogEntry.fetchRequest()
+            request.predicate = NSPredicate(format: "validState != %@", BlogEntry.ValidState.normal.rawValue)
+            if let entries = try? context.fetch(request) {
+                entries.forEach { entry in
+                    context.delete(entry)
+                }
+                appPrint("Deleted \(entries.count) non default entries.")
+            }
+        }
+    }
 
     private func changeNonValidBlogEntries(withValidState validState: BlogEntry.ValidState, callback: @escaping (NSManagedObjectContext, BlogEntry) -> ()) {
         stack.withWorkingContext { context in
@@ -213,6 +226,7 @@ class DataAccess {
     
     func cleanUpDatabase(deleteOldBlogEntries: Bool, keepBookmarks: Bool) {
         deleteTemporaryBlogEntries()
+        deleteAllNonDefaultBlogEntries()
         if deleteOldBlogEntries {
             let halfAYearAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date())!
             deleteBlogEntries(olderThan: halfAYearAgo, keepingBookmarks: keepBookmarks)
