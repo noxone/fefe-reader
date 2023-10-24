@@ -13,7 +13,7 @@ struct BlogEntryDetailView: View {
     private static let dummyBlogEntry = BlogEntry()
     
     // The blog entry we want to display
-    @ObservedObject var blogEntry: BlogEntry
+    @State var blogEntry: BlogEntry
     
     // For controlling the integrated browser
     @State private var action = WebViewAction.idle
@@ -32,6 +32,9 @@ struct BlogEntryDetailView: View {
     @State private var showPreparingSubEntry = false
     @State private var showSubEntry = false
     @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
+    
+    @State private var previousBlogEntry: BlogEntry? = nil
+    @State private var nextBlogEntry: BlogEntry? = nil
         
     var body: some View {
         VStack(alignment: .leading) {
@@ -68,7 +71,7 @@ struct BlogEntryDetailView: View {
                 }
             }
         }
-        .onAppear {
+        /*.onAppear {
             if let content = blogEntry.content {
                 action = .loadHTML(HtmlService.shared.enhance(html: content))
                 FefeBlogService.shared.markAsRead(blogEntry)
@@ -77,6 +80,9 @@ struct BlogEntryDetailView: View {
             } else {
                 action = .loadHTML("<i>No content to load.</i>")
             }
+        }*/
+        .onAppear {
+            loadStuff(for: blogEntry)
         }
         .sheet(isPresented: $showExternalContent) {
             BrowserPopupView(url: $externalUrl)
@@ -84,27 +90,50 @@ struct BlogEntryDetailView: View {
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [blogEntry.url.absoluteURL])
         }
+        .onChange(of: blogEntry) { newVal in
+            loadStuff(for: newVal)
+        }
+    }
+    
+    private func loadStuff(for blogEntry: BlogEntry) {
+        if let content = blogEntry.content {
+            action = .loadHTML(HtmlService.shared.enhance(html: content))
+            FefeBlogService.shared.markAsRead(blogEntry)
+            
+            //urls = blogEntry.linkUrls
+        } else {
+            action = .loadHTML("<i>No content to load.</i>")
+        }
+        
+        previousBlogEntry = DataAccess.shared.getPreviousBlogEntry(from: blogEntry)
+        nextBlogEntry = DataAccess.shared.getNextBlogEntry(from: blogEntry)
     }
     
     private var overlayButtons: some View {
         HStack(spacing: 10) {
-            /*Button(action: {
-                
+            Button(action: {
+                if let previousBlogEntry {
+                    blogEntry = previousBlogEntry
+                }
             }, label: {
                 CommonIcons.shared.arrowUp
                     .frame(width: 20, height: 15)
                     .padding()
             })
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+            .disabled(previousBlogEntry == nil)
             
             Button(action: {
-                
+                if let nextBlogEntry {
+                    blogEntry = nextBlogEntry
+                }
             }, label: {
                 CommonIcons.shared.arrowDown
                     .frame(width: 20, height: 15)
                     .padding()
             })
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))*/
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+            .disabled(nextBlogEntry == nil)
             
             
             Spacer()

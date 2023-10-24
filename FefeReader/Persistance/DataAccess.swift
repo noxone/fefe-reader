@@ -65,6 +65,28 @@ class DataAccess {
         return try? stack.readForUi { try $0.fetch(request) }.first
     }
     
+    func getPreviousBlogEntry(from blogEntry: BlogEntry) -> BlogEntry? {
+        return getCloseBlogEntry(from: blogEntry, sortingAscending: false)
+    }
+    
+    func getNextBlogEntry(from blogEntry: BlogEntry) -> BlogEntry? {
+        return getCloseBlogEntry(from: blogEntry, sortingAscending: true)
+    }
+    
+    private func getCloseBlogEntry(from blogEntry: BlogEntry, sortingAscending ascending: Bool) -> BlogEntry? {
+        let request = BlogEntry.fetchRequest()
+        request.fetchLimit = 1
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
+            NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: ascending)
+        ]
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            DataAccess.PREDICATE_VALID_STATE_NORMAL,
+            ascending ? NSPredicate(format: "relativeNumber > %i", blogEntry.relativeNumber) : NSPredicate(format: "relativeNumber < %i", blogEntry.relativeNumber)
+        ])
+        return try? stack.readForUi { try $0.fetch(request) }.first
+    }
+    
     func delete(object: NSManagedObject) {
         stack.with(context: object.managedObjectContext) { context in
             context.delete(object)
