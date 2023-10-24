@@ -143,7 +143,7 @@ class FefeBlogService : ObservableObject {
         var dateToLoad = date
         while dateToLoad < Date() {
             print("Load until, for ", dateToLoad)
-            try await loadMonthIntoDatabase(for: date)
+            try await loadMonthIntoDatabase(for: dateToLoad)
             
             var dateComponent = DateComponents()
             dateComponent.month = 1
@@ -181,6 +181,7 @@ class FefeBlogService : ObservableObject {
     
     @discardableResult
     private func loadMonthIntoDatabase(for date: Date) async throws -> LoadBlogEntriesResult {
+        print("Load month: ", date)
         let url = try getUrlForMonth(date: date)
         return try await loadEntriesIntoDatabase(from: url, withValidState: .normal)
     }
