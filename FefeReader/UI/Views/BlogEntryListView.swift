@@ -162,14 +162,6 @@ struct BlogEntryListView: View {
                             })
                             .tint(CommonIcons.shared.bookmarkColor)
                         })
-                        /*.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(action: {
-                                DataAccess.shared.delete(object: blogEntry)
-                            }, label: {
-                                CommonIcons.shared.trashImage
-                            })
-                            .tint(.red)
-                        }*/
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(action: {
                                 fefeBlog.toggleRead(blogEntry)
@@ -178,6 +170,14 @@ struct BlogEntryListView: View {
                             })
                             .tint(.blue)
                         }
+                        /*.swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(action: {
+                                DataAccess.shared.delete(object: blogEntry)
+                            }, label: {
+                                CommonIcons.shared.trashImage
+                            })
+                            .tint(.red)
+                        }*/
                     }
                 }
             }
