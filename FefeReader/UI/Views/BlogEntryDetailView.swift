@@ -46,6 +46,29 @@ struct BlogEntryDetailView: View {
                 
                 overlayButtons
             }
+            /*
+            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                .onEnded({ value in
+                    if value.translation.width < 0 {
+                        // left
+                        print("LEFT")
+                    }
+                    
+                    if value.translation.width > 0 {
+                        // right
+                        print("RIGHT")
+                    }
+                    if value.translation.height < 0 {
+                        // up
+                        print("UP")
+                    }
+                    
+                    if value.translation.height > 0 {
+                        // down
+                        print("DOWN")
+                    }
+                }))
+             */
             NavigationLink(isActive: $showSubEntry, destination: {
                 BlogEntryDetailWrapper(blogEntry: $subEntry)
             }, label: {
