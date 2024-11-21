@@ -17,7 +17,7 @@ struct BlogEntryListView: View {
     
     @Binding var tabSelection: TabbedBlogView.TabItem
     
-    @State private var selectedBlogEntry: BlogEntry? = nil
+    @Binding private var selectedBlogEntry: BlogEntry?
     
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
@@ -27,6 +27,11 @@ struct BlogEntryListView: View {
     @State private var showSearchingIndicator = false
     
     @State private var filterRead = false
+    
+    init(selectedBlogEntry: Binding<BlogEntry?>, tabSelection: Binding<TabbedBlogView.TabItem>) {
+        self._selectedBlogEntry = selectedBlogEntry
+        self._tabSelection = tabSelection
+    }
         
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
@@ -38,7 +43,7 @@ struct BlogEntryListView: View {
     }
     
     var body: some View {
-        SearchableList(indicator: $isSearching) { isSearching in
+        SearchableList(selection: $selectedBlogEntry, indicator: $isSearching) { isSearching in
             createListBody(validState: isSearching ? .search : .normal)
             if !isSearching && fefeBlog.canLoadMore {
                 moreListEntriesAvailableView
@@ -147,9 +152,7 @@ struct BlogEntryListView: View {
             ForEach(sectionedBlogEntries) { blogEntries in
                 Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
                     ForEach(blogEntries) { blogEntry in
-                        NavigationLink(tag: blogEntry, selection: $selectedBlogEntry) {
-                            BlogEntryDetailView(blogEntry: blogEntry)
-                        } label: {
+                        NavigationLink(value: blogEntry) {
                             BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: !isSearching && settings.tintReadBlogentries)
                         }
                         .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
@@ -234,7 +237,7 @@ struct BlogEntryListView: View {
 
 struct BlogEntryListView_Previews: PreviewProvider {
     static var previews: some View {
-        BlogEntryListView(tabSelection: .constant(.blog))
+        BlogEntryListView(selectedBlogEntry: .constant(nil), tabSelection: .constant(.blog))
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

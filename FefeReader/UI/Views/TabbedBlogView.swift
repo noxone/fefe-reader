@@ -10,25 +10,19 @@ import SwiftUI
 struct TabbedBlogView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
+    @State private var selectedBlogEntry: BlogEntry? = nil
     @State private var tabSelection: TabItem = .blog
+    
+    @State private var showOnlyBookmarks: Bool = false
+    
+    @State private var rerender: Bool = false
     
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
     }
     
     var body: some View {
-//        if #available(iOS 18, macOS 15, tvOS 18, watchOS 10, visionOS 1, *) {
-        TabView(selection: $tabSelection) {
-            tab("Blog", image: CommonIcons.shared.blogImage, tag: TabItem.blog) {
-                blogItem
-            }
-            tab("Lesezeichen", image: CommonIcons.shared.bookmarkImage, tag: TabItem.bookmarks) {
-                bookmarksItem
-            }
-            tab("Einstellungen", image: CommonIcons.shared.settingsImage, tag: TabItem.settings) {
-                settingsItem
-            }
-        }
+        blogItem
     }
     
     private func tab<Content, V>(_ title: LocalizedStringKey, image: Image, tag: V, @ViewBuilder content: () -> Content) -> some View where Content : View, V : Hashable {
@@ -41,8 +35,34 @@ struct TabbedBlogView: View {
     }
     
     private var blogItem: some View {
-        BlogEntryListView(tabSelection: $tabSelection)
-            .environment(\.managedObjectContext, viewContext)
+        NavigationSplitView {
+            BlogEntryListView(selectedBlogEntry: $selectedBlogEntry, tabSelection: $tabSelection)
+                .environment(\.managedObjectContext, viewContext)
+                /*.toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        Button(action: {
+                            showOnlyBookmarks.toggle()
+                        }, label: {
+                            CommonIcons.shared.bookmarkImage(active: showOnlyBookmarks)
+                        })
+                    }
+                    
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(action: {
+                            
+                        }, label: {
+                            CommonIcons.shared.settingsImage
+                        })
+                    }
+                }*/
+        } detail: {
+            if let blogEntry = selectedBlogEntry {
+                BlogEntryDetailView(blogEntry: blogEntry)
+            } else {
+                Text("Kein Blogeintrag zum Lesen ausgewählt.")
+            }
+        }
+        
     }
     
     private var bookmarksItem: some View {

@@ -108,7 +108,9 @@ struct BlogEntryDetailView: View {
             loadStuff(for: blogEntry)
         }
         .sheet(isPresented: $showExternalContent) {
-            BrowserPopupView(url: $externalUrl)
+            NavigationStack {
+                BrowserPopupView(url: $externalUrl)
+            }
         }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [blogEntry.url.absoluteURL])

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C507D50C2CEE81C2002C2FDC /* NavigatableBlogEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C507D50B2CEE81C2002C2FDC /* NavigatableBlogEntryView.swift */; };
 		C51FA2BD284C78E4007FAD56 /* BlogTaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2BC284C78E4007FAD56 /* BlogTaskService.swift */; };
 		C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51FA2C1284DF31F007FAD56 /* NotificationService.swift */; };
 		C51FA2C6284E2945007FAD56 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = C51FA2C5284E2945007FAD56 /* PopupView */; };
@@ -79,7 +78,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C507D50B2CEE81C2002C2FDC /* NavigatableBlogEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatableBlogEntryView.swift; sourceTree = "<group>"; };
 		C51FA2BC284C78E4007FAD56 /* BlogTaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogTaskService.swift; sourceTree = "<group>"; };
 		C51FA2C1284DF31F007FAD56 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C51FA2C7284E5802007FAD56 /* UrlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlService.swift; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 				C5E310BD28476130005937FA /* SettingsView.swift */,
 				C51FA2C9284F30D3007FAD56 /* LicensesView.swift */,
 				C51FA2CB284F331A007FAD56 /* LicenseTextView.swift */,
-				C507D50B2CEE81C2002C2FDC /* NavigatableBlogEntryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -514,7 +511,6 @@
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
 				C51FA2BD284C78E4007FAD56 /* BlogTaskService.swift in Sources */,
 				C5583E0C285230110026F67B /* ErrorService.swift in Sources */,
-				C507D50C2CEE81C2002C2FDC /* NavigatableBlogEntryView.swift in Sources */,
 				C5FD07AA28643EAA0030F081 /* LinkDisplayButton.swift in Sources */,
 				C5E310BA28475840005937FA /* TabbedBlogView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,

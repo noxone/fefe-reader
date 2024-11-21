@@ -12,14 +12,16 @@ struct SearchableList<Content>: View where Content: View {
     
     private let content: (Bool) -> Content
     private let isSearchingBinding: Binding<Bool>
+    private let selection: Binding<BlogEntry?>
     
-    init(indicator: Binding<Bool>, @ViewBuilder content: @escaping (Bool) -> Content) {
+    init(selection: Binding<BlogEntry?>, indicator: Binding<Bool>, @ViewBuilder content: @escaping (Bool) -> Content) {
+        self.selection = selection
         self.isSearchingBinding = indicator
         self.content = content
     }
     
     var body: some View {
-        List {
+        List(selection: selection) {
             content(isSearching)
         }
         .onChange(of: isSearching) {
@@ -30,7 +32,7 @@ struct SearchableList<Content>: View where Content: View {
 
 struct SearchableList_Previews: PreviewProvider {
     static var previews: some View {
-        SearchableList(indicator: .constant(true)) { _ in
+        SearchableList(selection: .constant(nil), indicator: .constant(true)) { _ in
             Text("hallo")
             Text("blub")
         }
