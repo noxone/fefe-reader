@@ -47,14 +47,11 @@ struct LicensesView: View {
                 }
             }
         }
-        .navigationTitle("Lizenzen")
     }
 }
 
 struct LicensesView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            LicensesView()
-        }
+        LicensesView()
     }
 }

@@ -38,68 +38,66 @@ struct BlogEntryListView: View {
     }
     
     var body: some View {
-        NavigationView {
-            SearchableList(indicator: $isSearching) { isSearching in
-                createListBody(validState: isSearching ? .search : .normal)
-                if !isSearching && fefeBlog.canLoadMore {
-                    moreListEntriesAvailableView
-                }
-                if isSearching && showSearchingIndicator {
-                    searchingIndicator
+        SearchableList(indicator: $isSearching) { isSearching in
+            createListBody(validState: isSearching ? .search : .normal)
+            if !isSearching && fefeBlog.canLoadMore {
+                moreListEntriesAvailableView
+            }
+            if isSearching && showSearchingIndicator {
+                searchingIndicator
+            }
+        }
+        .listStyle(.plain)
+        .navigationTitle("Fefes Blog")
+        .onAppear {
+            if Settings.shared.askForNotificationApproval {
+                NotificationService.shared.checkExplicitAuthorization {
+                    showNotificationPopup = true
                 }
             }
-            .listStyle(.plain)
-            .navigationTitle("Fefes Blog")
-            .onAppear {
-                if Settings.shared.askForNotificationApproval {
-                    NotificationService.shared.checkExplicitAuthorization {
-                        showNotificationPopup = true
-                    }
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
+                    NotificationService.shared.idToOpen = nil
+                    selectedBlogEntry = entry
+                    tabSelection = .blog
                 }
             }
-            .onChange(of: scenePhase) { newPhase in
-                if newPhase == .active {
-                    if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
-                        NotificationService.shared.idToOpen = nil
-                        selectedBlogEntry = entry
-                        tabSelection = .blog
-                    }
+        }
+        .refreshable {
+            if !isSearching {
+                await ErrorService.shared.executeShowingErrorAsync {
+                    try await FefeBlogService.shared.refresh(origin: "manual refresh")
                 }
             }
-            .refreshable {
-                if !isSearching {
-                    await ErrorService.shared.executeShowingErrorAsync {
-                        try await FefeBlogService.shared.refresh(origin: "manual refresh")
-                    }
-                }
-            }
-            .searchable(text: $searchText)
-            .disableAutocorrection(true)
-            .onChange(of: isSearching) {
-                if $0 {
-                    showSearchingIndicator = false
+        }
+        .searchable(text: $searchText)
+        .disableAutocorrection(true)
+        .onChange(of: isSearching) {
+            if $0 {
+                showSearchingIndicator = false
+                DataAccess.shared.deleteSearchBlogEntries()
+            } else {
+                TaskService.shared.cancelTask(for: "search")
+                Task {
                     DataAccess.shared.deleteSearchBlogEntries()
-                } else {
-                    TaskService.shared.cancelTask(for: "search")
-                    Task {
-                        DataAccess.shared.deleteSearchBlogEntries()
-                    }
                 }
             }
-            .onSubmit(of: .search) {
-                search(for: searchText)
-            }
-            .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
-                notificationPopup
-            }
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button(action: {
-                        filterRead.toggle()
-                    }, label: {
-                        CommonIcons.shared.filterUnread(active: filterRead)
-                    })
-                }
+        }
+        .onSubmit(of: .search) {
+            search(for: searchText)
+        }
+        .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
+            notificationPopup
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button(action: {
+                    filterRead.toggle()
+                }, label: {
+                    CommonIcons.shared.filterUnread(active: filterRead)
+                })
             }
         }
     }

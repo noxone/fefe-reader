@@ -17,8 +17,8 @@ struct BlogEntryDetailWrapper: View {
 
 struct BlogEntryDetailWrapper_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        //NavigationView {
             BlogEntryDetailWrapper(blogEntry: .constant(PreviewData.shared.preview_BlogEntries[2]))
-        }
+        //}
     }
 }

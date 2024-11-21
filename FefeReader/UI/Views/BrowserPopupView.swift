@@ -22,7 +22,7 @@ struct BrowserPopupView: View {
     private let config = WebViewConfig(javaScriptEnabled: true, allowsBackForwardNavigationGestures: true, allowsInlineMediaPlayback: true, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
 
     var body: some View {
-        NavigationView {
+        //NavigationView {
             VStack {
                 WebView(config: config, action: $action, state: $state)
             }
@@ -96,7 +96,7 @@ struct BrowserPopupView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(state.isLoading ? "Lade..." : (state.pageTitle ?? "keine Seite geladen"))
-        }
+        //}
     }
 }
 

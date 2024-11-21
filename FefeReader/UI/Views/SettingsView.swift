@@ -15,16 +15,14 @@ struct SettingsView: View {
     @State private var showClearReadConfirmation = false
     
     var body: some View {
-        NavigationView {
-            List {
-                sectionBlog
-                sectionBlogEntries
-                sectionFont
-                sectionOther
-                sectionLicenses
-            }
-            .navigationTitle("Einstellungen")
+        List {
+            sectionBlog
+            sectionBlogEntries
+            sectionFont
+            sectionOther
+            sectionLicenses
         }
+        .navigationTitle("Einstellungen")
     }
     
     private var sectionBlog: some View {
