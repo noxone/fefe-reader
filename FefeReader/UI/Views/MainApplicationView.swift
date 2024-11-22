@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct TabbedBlogView: View {
+struct MainApplicationView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @State private var selectedBlogEntry: BlogEntry? = nil
-    @State private var tabSelection: TabItem = .blog
+    @State private var currentBlogEntry: BlogEntry?
+    @State private var subBlogEntries = [BlogEntry]()
     
     @State private var showOnlyBookmarks: Bool = false
+    @State private var showSettingsSheet: Bool = false
     
     @State private var rerender: Bool = false
     
@@ -22,23 +23,10 @@ struct TabbedBlogView: View {
     }
     
     var body: some View {
-        blogItem
-    }
-    
-    private func tab<Content, V>(_ title: LocalizedStringKey, image: Image, tag: V, @ViewBuilder content: () -> Content) -> some View where Content : View, V : Hashable {
-        content()
-            .tabItem {
-                image
-                Text(title)
-            }
-            .tag(tag)
-    }
-    
-    private var blogItem: some View {
         NavigationSplitView {
-            BlogEntryListView(selectedBlogEntry: $selectedBlogEntry, tabSelection: $tabSelection)
+            BlogEntryListView(selectedBlogEntry: $currentBlogEntry)
                 .environment(\.managedObjectContext, viewContext)
-                /*.toolbar {
+                .toolbar {
                     ToolbarItem(placement: .automatic) {
                         Button(action: {
                             showOnlyBookmarks.toggle()
@@ -49,20 +37,29 @@ struct TabbedBlogView: View {
                     
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
-                            
+                            showSettingsSheet.toggle()
                         }, label: {
                             CommonIcons.shared.settingsImage
                         })
                     }
-                }*/
+                }
         } detail: {
-            if let blogEntry = selectedBlogEntry {
-                BlogEntryDetailView(blogEntry: blogEntry)
-            } else {
-                Text("Kein Blogeintrag zum Lesen ausgewählt.")
+            let navigateToSubEntry: (BlogEntry) -> Void = { subBlogEntries.append($0) }
+            NavigationStack(path: $subBlogEntries) {
+                if let currentBlogEntry {
+                    BlogEntryDetailView(blogEntry: currentBlogEntry, navigateToSubEntry: navigateToSubEntry)
+                } else {
+                    Text("Kein Blogeintrag zum Lesen ausgewählt.")
+                }
+            }
+            .navigationDestination(for: BlogEntry.self) { blogEntry in
+                BlogEntryDetailView(blogEntry: blogEntry, navigateToSubEntry: navigateToSubEntry)
+                    .navigationTitle("Hier muss noch der Titel geändert werden: blogEntry")
             }
         }
-        
+        .sheet(isPresented: $showSettingsSheet) {
+            settingsItem
+        }
     }
     
     private var bookmarksItem: some View {
@@ -75,13 +72,6 @@ struct TabbedBlogView: View {
             SettingsView()
         }
     }
-    
-    enum TabItem : Hashable {
-        case blog
-        case bookmarks
-        case settings
-    }
-
 }
 
 struct TabbedBlogView_Previews: PreviewProvider {
@@ -89,7 +79,7 @@ struct TabbedBlogView_Previews: PreviewProvider {
         // prevent crash of preview: https://stackoverflow.com/questions/72242577/fetching-data-in-preview-a-fetch-request-must-have-an-entity-uncaughtexception
         var blogEntry = BlogEntry(context: PreviewData.shared.container.viewContext)
         
-        TabbedBlogView()
+        MainApplicationView()
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

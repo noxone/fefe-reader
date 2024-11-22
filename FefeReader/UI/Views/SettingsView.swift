@@ -150,6 +150,7 @@ struct SettingsView: View {
         Section("Lizenzen") {
             NavigationLink("Lizenzen ansehen") {
                 LicensesView()
+                    .navigationTitle("Lizenzen")
             }
         }
     }

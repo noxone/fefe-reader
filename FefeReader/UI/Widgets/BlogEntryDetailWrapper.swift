@@ -11,7 +11,7 @@ struct BlogEntryDetailWrapper: View {
     @Binding var blogEntry: BlogEntry
     
     var body: some View {
-        BlogEntryDetailView(blogEntry: blogEntry)
+        BlogEntryDetailView(blogEntry: blogEntry, navigateToSubEntry: {_ in})
     }
 }
 

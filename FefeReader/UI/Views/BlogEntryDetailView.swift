@@ -13,7 +13,8 @@ struct BlogEntryDetailView: View {
     private static let dummyBlogEntry = BlogEntry()
     
     // The blog entry we want to display
-    @State var blogEntry: BlogEntry
+    let blogEntry: BlogEntry
+    let navigateToSubEntry: (BlogEntry) -> ()
     
     // For controlling the integrated browser
     @State private var action = WebViewAction.idle
@@ -30,8 +31,8 @@ struct BlogEntryDetailView: View {
     
     // If another blog entry shall be shown
     @State private var showPreparingSubEntry = false
-    @State private var showSubEntry = false
-    @State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
+    //@State private var showSubEntry = false
+    //@State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
     
     @State private var previousBlogEntry: BlogEntry? = nil
     @State private var nextBlogEntry: BlogEntry? = nil
@@ -69,11 +70,11 @@ struct BlogEntryDetailView: View {
                     }
                 }))
              */
-            NavigationLink(isActive: $showSubEntry, destination: {
+            /*NavigationLink(isActive: $showSubEntry, destination: {
                 BlogEntryDetailWrapper(blogEntry: $subEntry)
             }, label: {
                 EmptyView()
-            })
+            })*/
         }
         .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
@@ -136,7 +137,7 @@ struct BlogEntryDetailView: View {
     
     private var overlayButtons: some View {
         HStack(spacing: 10) {
-            Button(action: {
+            /*Button(action: {
                 if let previousBlogEntry {
                     blogEntry = previousBlogEntry
                 }
@@ -158,7 +159,7 @@ struct BlogEntryDetailView: View {
                     .padding()
             })
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-            .disabled(nextBlogEntry == nil)
+            .disabled(nextBlogEntry == nil)*/
             
             
             Spacer()
@@ -230,8 +231,9 @@ struct BlogEntryDetailView: View {
                 let id = FefeBlogService.shared.getIdFromFefeUrl(url),
                 let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
             {
-                subEntry = entry
-                showSubEntry = true
+                navigateToSubEntry(entry)
+                //subEntry = entry
+                //showSubEntry = true
                 return
             }
 
@@ -250,7 +252,7 @@ struct BlogEntryDetailView: View {
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0])
+            BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0], navigateToSubEntry: {_ in})
         }
     }
 }

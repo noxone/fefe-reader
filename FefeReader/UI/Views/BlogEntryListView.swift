@@ -15,10 +15,6 @@ struct BlogEntryListView: View {
     @ObservedObject var fefeBlog = FefeBlogService.shared
     @ObservedObject var settings = Settings.shared
     
-    @Binding var tabSelection: TabbedBlogView.TabItem
-    
-    @Binding private var selectedBlogEntry: BlogEntry?
-    
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
     
@@ -28,9 +24,10 @@ struct BlogEntryListView: View {
     
     @State private var filterRead = false
     
-    init(selectedBlogEntry: Binding<BlogEntry?>, tabSelection: Binding<TabbedBlogView.TabItem>) {
+    @Binding private var selectedBlogEntry: BlogEntry?
+    
+    init(selectedBlogEntry: Binding<BlogEntry?>) {
         self._selectedBlogEntry = selectedBlogEntry
-        self._tabSelection = tabSelection
     }
         
     private func loadOlderEntries() {
@@ -43,7 +40,7 @@ struct BlogEntryListView: View {
     }
     
     var body: some View {
-        SearchableList(selection: $selectedBlogEntry, indicator: $isSearching) { isSearching in
+        SearchableList(selection: _selectedBlogEntry, indicator: $isSearching) { isSearching in
             createListBody(validState: isSearching ? .search : .normal)
             if !isSearching && fefeBlog.canLoadMore {
                 moreListEntriesAvailableView
@@ -66,7 +63,6 @@ struct BlogEntryListView: View {
                 if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
                     NotificationService.shared.idToOpen = nil
                     selectedBlogEntry = entry
-                    tabSelection = .blog
                 }
             }
         }
@@ -237,7 +233,7 @@ struct BlogEntryListView: View {
 
 struct BlogEntryListView_Previews: PreviewProvider {
     static var previews: some View {
-        BlogEntryListView(selectedBlogEntry: .constant(nil), tabSelection: .constant(.blog))
+        BlogEntryListView(selectedBlogEntry: .constant(nil))
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }

@@ -27,7 +27,7 @@ struct BookmarkListView: View {
             List {
                 ForEach(blogEntries) { blogEntry in
                     NavigationLink {
-                        BlogEntryDetailView(blogEntry: blogEntry)
+                        BlogEntryDetailView(blogEntry: blogEntry, navigateToSubEntry: {_ in})
                     } label: {
                         BlogEntryRowView(blogEntry: blogEntry, showDate: true, tintReadEntries: false, showBookmarkIcon: false, lineLimit: 4)
                     }

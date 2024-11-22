@@ -27,7 +27,7 @@ struct FefeReaderApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabbedBlogView()
+            MainApplicationView()
                 .environment(\.managedObjectContext, coreDataStack.managedObjectContext)
                 .task {
                     BackgroundTaskService.shared.cancelAllPendingBackgroundTasks()
