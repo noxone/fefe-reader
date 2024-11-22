@@ -20,88 +20,88 @@ struct BrowserPopupView: View {
     @State private var showShareSheet = false
     
     private let config = WebViewConfig(javaScriptEnabled: true, allowsBackForwardNavigationGestures: true, allowsInlineMediaPlayback: true, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
-
+    
     var body: some View {
-        //NavigationView {
-            VStack {
-                WebView(config: config, action: $action, state: $state)
+        VStack {
+            WebView(config: config, action: $action, state: $state)
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    ExitButtonView()
+                        .frame(width: 30, height: 30)
+                })
+                .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel(Text("Schließen"))
             }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        ExitButtonView()
-                            .frame(width: 30, height: 30)
-                    })
-                    .buttonStyle(PlainButtonStyle())
-                    .accessibilityLabel(Text("Schließen"))
-                }
+            
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    UIApplication.shared.open(url)
+                }, label: {
+                    Image(systemName: "safari")
+                        .imageScale(.large)
+                })
+                .accessibilityLabel(Text("Im Browser öffnen"))
+            }
+            
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button(action: {
+                    action = .goBack
+                }, label: {
+                    Image(systemName: "chevron.left")
+                })
+                .accessibilityLabel(Text("Zurück"))
+                .accessibility(hint: Text("Drücken, um im Browser zurückzugehen."))
+                .disabled(!state.canGoBack)
                 
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        UIApplication.shared.open(url)
-                    }, label: {
-                        Image(systemName: "safari")
-                            .imageScale(.large)
-                    })
-                    .accessibilityLabel(Text("Im Browser öffnen"))
-                }
+                Button(action: {
+                    action = .goForward
+                }, label: {
+                    Image(systemName: "chevron.right")
+                })
+                .accessibilityLabel(Text("Vorwärst"))
+                .accessibility(hint: Text("Drücken, um im Browser vorwärts zu gehen."))
+                .disabled(!state.canGoForward)
                 
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: {
-                        action = .goBack
-                    }, label: {
-                        Image(systemName: "chevron.left")
-                    })
-                    .accessibilityLabel(Text("Zurück"))
-                    .accessibility(hint: Text("Drücken, um im Browser zurückzugehen."))
-                    .disabled(!state.canGoBack)
-                    
-                    Button(action: {
-                        action = .goForward
-                    }, label: {
-                        Image(systemName: "chevron.right")
-                    })
-                    .accessibilityLabel(Text("Vorwärst"))
-                    .accessibility(hint: Text("Drücken, um im Browser vorwärts zu gehen."))
-                    .disabled(!state.canGoForward)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        showShareSheet = true
-                    }, label: {
-                        CommonIcons.shared.shareImage
-                    })
-                    .accessibilityLabel(Text("URL teilen"))
-                    .disabled(state.isLoading)
-
-                    Spacer()
-                    
-                    Button(action: {
-                        action = .reload
-                    }, label: {
-                        Image(systemName: "arrow.clockwise")
-                    })
-                    .accessibilityLabel(Text("Neu laden"))
-                    .disabled(state.isLoading)
-                }
+                Spacer()
+                
+                Button(action: {
+                    showShareSheet = true
+                }, label: {
+                    CommonIcons.shared.shareImage
+                })
+                .accessibilityLabel(Text("URL teilen"))
+                .disabled(state.isLoading)
+                
+                Spacer()
+                
+                Button(action: {
+                    action = .reload
+                }, label: {
+                    Image(systemName: "arrow.clockwise")
+                })
+                .accessibilityLabel(Text("Neu laden"))
+                .disabled(state.isLoading)
             }
-            .sheet(isPresented: $showShareSheet) {
-                ShareSheet(activityItems: [url])
-            }
-            .onAppear {
-                action = .load(URLRequest(url: url))
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(state.isLoading ? "Lade..." : (state.pageTitle ?? "keine Seite geladen"))
-        //}
+        }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheet(activityItems: [url])
+        }
+        .onAppear {
+            action = .load(URLRequest(url: url))
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(state.isLoading ? "Lade..." : (state.pageTitle ?? "keine Seite geladen"))
     }
 }
 
 struct BrowserPopupView_Previews: PreviewProvider {
     static var previews: some View {
-        BrowserPopupView(url: .constant(URL(string: "https://www.apple.com")!))
+        NavigationStack {
+            BrowserPopupView(url: .constant(URL(string: "https://www.apple.com")!))
+        }
     }
 }

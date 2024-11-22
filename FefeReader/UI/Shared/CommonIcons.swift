@@ -16,7 +16,7 @@ class CommonIcons {
     
     private let blogImageName = "list.bullet"
     
-    private let shareImageName = "square.and.arrow.up"
+    let shareImageName = "square.and.arrow.up"
     
     private let searchImageName = "magnifyingglass"
     
@@ -24,11 +24,11 @@ class CommonIcons {
     
     private let settingsImageName = "gear"
     
-    private let linkListImageName = "link.circle"
+    let linkListImageName = "link.circle"
     
-    private let arrowUpImageName = "arrow.up"
+    let arrowUpImageName = "arrow.up"
     
-    private let arrowDownImageName = "arrow.down"
+    let arrowDownImageName = "arrow.down"
     
     private let filterUnreadInactiveImageName = "line.3.horizontal.decrease.circle"
     private let filterUnreadActiveImageName = "line.3.horizontal.decrease.circle.fill"

@@ -23,7 +23,7 @@ struct MainApplicationView: View {
         NavigationSplitView {
             BlogEntryListView(selectedBlogEntry: $currentBlogEntry)
                 .environment(\.managedObjectContext, viewContext)
-                /*.toolbar {
+                .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
                             showSettingsSheet.toggle()
@@ -31,7 +31,7 @@ struct MainApplicationView: View {
                             CommonIcons.shared.settingsImage
                         })
                     }
-                }*/
+                }
         } detail: {
             let navigateToEntry: (BlogEntry) -> Void = { currentBlogEntry = $0 }
             let navigateToSubEntry: (BlogEntry) -> Void = { subBlogEntries.append($0) }
@@ -59,7 +59,7 @@ struct MainApplicationView: View {
     }
 }
 
-struct TabbedBlogView_Previews: PreviewProvider {
+struct MainApplicationView_Previews: PreviewProvider {
     static var previews: some View {
         // prevent crash of preview: https://stackoverflow.com/questions/72242577/fetching-data-in-preview-a-fetch-request-must-have-an-entity-uncaughtexception
         var blogEntry = BlogEntry(context: PreviewData.shared.container.viewContext)

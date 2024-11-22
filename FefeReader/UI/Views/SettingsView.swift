@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @ObservedObject var settings = Settings.shared
     
     @State private var showClearBlogEntriesConfirmation = false
@@ -21,6 +23,18 @@ struct SettingsView: View {
             sectionFont
             sectionOther
             sectionLicenses
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    ExitButtonView()
+                        .frame(width: 30, height: 30)
+                })
+                .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel(Text("Schließen"))
+            }
         }
         .navigationTitle("Einstellungen")
     }
@@ -158,6 +172,8 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+        NavigationStack {
+            SettingsView()
+        }
     }
 }

@@ -43,44 +43,46 @@ struct BlogEntryDetailView: View {
                 linkListSheet
             }
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    HStack {
-                        if let navigateToEntry {
-                            Button(action: {
-                                if let previousBlogEntry {
-                                    navigateToEntry(previousBlogEntry)
-                                }
-                            }, label: {
-                                CommonIcons.shared.arrowUp
-                            })
-                            .disabled(previousBlogEntry == nil)
-                            
-                            Button(action: {
-                                if let nextBlogEntry {
-                                    navigateToEntry(nextBlogEntry)
-                                }
-                            }, label: {
-                                CommonIcons.shared.arrowDown
-                            })
-                            .disabled(nextBlogEntry == nil)
-                        }
-                        
-                        Spacer()
-                        
-                        if !blogEntry.links.isEmpty {
-                            Button(action: {
-                                showLinkList.toggle()
-                            }, label: {
-                                CommonIcons.shared.linkListImage
-                            })
-                        }
+                ToolbarItemGroup(placement: .bottomBar) {
+                    if let navigateToEntry {
+                        Button(action: {
+                            if let previousBlogEntry {
+                                navigateToEntry(previousBlogEntry)
+                            }
+                        }, label: {
+                            Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.arrowUpImageName)
+                        })
+                        .labelStyle(.iconOnly)
+                        .disabled(previousBlogEntry == nil)
                         
                         Button(action: {
-                            showShareSheet = true
+                            if let nextBlogEntry {
+                                navigateToEntry(nextBlogEntry)
+                            }
                         }, label: {
-                            CommonIcons.shared.shareImage
+                            Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.arrowDownImageName)
                         })
+                        .labelStyle(.iconOnly)
+                        .disabled(nextBlogEntry == nil)
                     }
+                    
+                    Spacer()
+                    
+                    if !blogEntry.links.isEmpty {
+                        Button(action: {
+                            showLinkList.toggle()
+                        }, label: {
+                            Label("Links", systemImage: CommonIcons.shared.linkListImageName)
+                        })
+                        .labelStyle(.iconOnly)
+                    }
+                    
+                    Button(action: {
+                        showShareSheet = true
+                    }, label: {
+                        Label("Teilen", systemImage: CommonIcons.shared.shareImageName)
+                    })
+                    .labelStyle(.iconOnly)
                 }
             }
         /*
