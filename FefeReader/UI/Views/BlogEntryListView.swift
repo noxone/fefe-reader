@@ -12,8 +12,8 @@ struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
     
-    @ObservedObject var fefeBlog = FefeBlogService.shared
-    @ObservedObject var settings = Settings.shared
+    @ObservedObject private var fefeBlog = FefeBlogService.shared
+    @ObservedObject private var settings = Settings.shared
     
     @State private var showNotificationPopup = false
     @State private var showLoadingIndicator = false
@@ -22,13 +22,10 @@ struct BlogEntryListView: View {
     @State private var searchText: String = ""
     @State private var showSearchingIndicator = false
     
-    @State private var filterRead = false
+    @State private var showOnlyUnread = false
+    @State private var showOnlyBookmarks = false
     
-    @Binding private var selectedBlogEntry: BlogEntry?
-    
-    init(selectedBlogEntry: Binding<BlogEntry?>) {
-        self._selectedBlogEntry = selectedBlogEntry
-    }
+    @Binding var selectedBlogEntry: BlogEntry?
         
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
@@ -95,9 +92,16 @@ struct BlogEntryListView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
-                    filterRead.toggle()
+                    showOnlyBookmarks.toggle()
                 }, label: {
-                    CommonIcons.shared.filterUnread(active: filterRead)
+                    CommonIcons.shared.bookmarkImage(active: showOnlyBookmarks)
+                })
+            }
+            ToolbarItem(placement: .automatic) {
+                Button(action: {
+                    showOnlyUnread.toggle()
+                }, label: {
+                    CommonIcons.shared.filterUnread(active: showOnlyUnread)
                 })
             }
         }
@@ -130,6 +134,22 @@ struct BlogEntryListView: View {
             .listRowSeparator(.hidden)
     }
     
+    private func createDynamicPredicate(validState: BlogEntry.ValidState) -> NSPredicate {
+        var predicates = [NSPredicate]()
+        predicates.append(NSPredicate(format: "validState = %@", validState.rawValue))
+        if showOnlyUnread {
+            predicates.append(NSPredicate(format: "readTimestamp = nil"))
+        }
+        if showOnlyBookmarks {
+            predicates.append(NSPredicate(format: "bookmarkDate != nil"))
+        }
+        if predicates.count == 1 {
+            return predicates.first!
+        } else {
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+    }
+    
     private func createListBody(validState: BlogEntry.ValidState) -> some View {
         SectionedFetchedObjectsView(
             sectionIdentifier: \BlogEntry.date,
@@ -137,13 +157,7 @@ struct BlogEntryListView: View {
                 NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
                 NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
             ],
-            predicate:
-                filterRead 
-            ?   NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "validState = %@", validState.rawValue),
-                NSPredicate(format: "readTimestamp = nil", validState.rawValue)
-            ])
-            :   NSPredicate(format: "validState = %@", validState.rawValue)
+            predicate: createDynamicPredicate(validState: validState)
         ) { sectionedBlogEntries in
             ForEach(sectionedBlogEntries) { blogEntries in
                 Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {

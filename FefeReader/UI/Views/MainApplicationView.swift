@@ -13,10 +13,7 @@ struct MainApplicationView: View {
     @State private var currentBlogEntry: BlogEntry?
     @State private var subBlogEntries = [BlogEntry]()
     
-    @State private var showOnlyBookmarks: Bool = false
     @State private var showSettingsSheet: Bool = false
-    
-    @State private var rerender: Bool = false
     
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font: UIFont(name: "Allison", size: 55)!]
@@ -26,15 +23,7 @@ struct MainApplicationView: View {
         NavigationSplitView {
             BlogEntryListView(selectedBlogEntry: $currentBlogEntry)
                 .environment(\.managedObjectContext, viewContext)
-                .toolbar {
-                    ToolbarItem(placement: .automatic) {
-                        Button(action: {
-                            showOnlyBookmarks.toggle()
-                        }, label: {
-                            CommonIcons.shared.bookmarkImage(active: showOnlyBookmarks)
-                        })
-                    }
-                    
+                .toolbar {                    
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
                             showSettingsSheet.toggle()
