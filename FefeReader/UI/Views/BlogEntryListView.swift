@@ -37,6 +37,17 @@ struct BlogEntryListView: View {
     }
     
     var body: some View {
+        ScrollViewReader { proxy in
+            list
+                .onChange(of: selectedBlogEntry) { entry in
+                    if let entry {
+                        proxy.scrollTo(entry.id)
+                    }
+                }
+        }
+    }
+    
+    private var list: some View {
         SearchableList(selection: _selectedBlogEntry, indicator: $isSearching) { isSearching in
             createListBody(validState: isSearching ? .search : .normal)
             if !isSearching && fefeBlog.canLoadMore {
@@ -165,6 +176,7 @@ struct BlogEntryListView: View {
                         NavigationLink(value: blogEntry) {
                             BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: !isSearching && settings.tintReadBlogentries)
                         }
+                        .id(blogEntry.id)
                         .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
                             Button(action: {
                                 fefeBlog.toggleBookmark(for: blogEntry)
