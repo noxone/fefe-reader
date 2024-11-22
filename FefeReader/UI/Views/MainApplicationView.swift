@@ -51,11 +51,6 @@ struct MainApplicationView: View {
         }
     }
     
-    private var bookmarksItem: some View {
-        BookmarkListView()
-            .environment(\.managedObjectContext, viewContext)
-    }
-    
     private var settingsItem: some View {
         NavigationStack {
             SettingsView()

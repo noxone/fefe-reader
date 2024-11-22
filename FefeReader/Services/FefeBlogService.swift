@@ -80,8 +80,11 @@ class FefeBlogService : ObservableObject {
     }
     
     func toggleBookmark(for blogEntry: BlogEntry) {
-        stack.update(blogEntry) {
-            $0.bookmarkDate = $0.isBookmarked ? nil : Date()
+        stack.update(blogEntry) { blogEntry in
+            blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
+            if blogEntry.isTemporary {
+                blogEntry.validState = BlogEntry.ValidState.normal.rawValue
+            }
         }
     }
     

@@ -15,6 +15,7 @@ struct BlogEntryDetailView: View {
     // The blog entry we want to display
     let blogEntry: BlogEntry
     let navigateToSubEntry: (BlogEntry) -> ()
+    @State private var isBookmarked: Bool? = nil
     
     // For controlling the integrated browser
     @State private var action = WebViewAction.idle
@@ -31,8 +32,6 @@ struct BlogEntryDetailView: View {
     
     // If another blog entry shall be shown
     @State private var showPreparingSubEntry = false
-    //@State private var showSubEntry = false
-    //@State private var subEntry: BlogEntry = BlogEntryDetailView.dummyBlogEntry
     
     @State private var previousBlogEntry: BlogEntry? = nil
     @State private var nextBlogEntry: BlogEntry? = nil
@@ -70,23 +69,17 @@ struct BlogEntryDetailView: View {
                     }
                 }))
              */
-            /*NavigationLink(isActive: $showSubEntry, destination: {
-                BlogEntryDetailWrapper(blogEntry: $subEntry)
-            }, label: {
-                EmptyView()
-            })*/
         }
         .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .automatic) {
-                if !blogEntry.isTemporary {
-                    Button(action: {
-                        FefeBlogService.shared.toggleBookmark(for: blogEntry)
-                    }, label: {
-                        blogEntry.bookmarkImage
-                    })
-                }
+                Button(action: {
+                    FefeBlogService.shared.toggleBookmark(for: blogEntry)
+                    isBookmarked = blogEntry.isBookmarked
+                }, label: {
+                    CommonIcons.shared.bookmarkImage(active: isBookmarked ?? blogEntry.isBookmarked)
+                })
             }
             
             ToolbarItem(placement: .principal) {
@@ -95,16 +88,6 @@ struct BlogEntryDetailView: View {
                 }
             }
         }
-        /*.onAppear {
-            if let content = blogEntry.content {
-                action = .loadHTML(HtmlService.shared.enhance(html: content))
-                FefeBlogService.shared.markAsRead(blogEntry)
-                
-                //urls = blogEntry.linkUrls
-            } else {
-                action = .loadHTML("<i>No content to load.</i>")
-            }
-        }*/
         .onAppear {
             loadStuff(for: blogEntry)
         }
@@ -125,8 +108,6 @@ struct BlogEntryDetailView: View {
         if let content = blogEntry.content {
             action = .loadHTML(HtmlService.shared.enhance(html: content))
             FefeBlogService.shared.markAsRead(blogEntry)
-            
-            //urls = blogEntry.linkUrls
         } else {
             action = .loadHTML("<i>No content to load.</i>")
         }
@@ -228,15 +209,17 @@ struct BlogEntryDetailView: View {
         showPreparingSubEntry = true
         ErrorService.shared.executeShowingError {
             if FefeBlogService.shared.isFefeBlogEntryUrl(url),
-                let id = FefeBlogService.shared.getIdFromFefeUrl(url),
-                let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id)
-            {
-                navigateToSubEntry(entry)
-                //subEntry = entry
-                //showSubEntry = true
-                return
+               let id = FefeBlogService.shared.getIdFromFefeUrl(url) {
+                if let entry = DataAccess.shared.getBlogEntry(withId: id, onlyNormal: true) {
+                    navigateToSubEntry(entry)
+                    return
+                } else if let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id) {
+                    navigateToSubEntry(entry)
+                    return
+                }
             }
-
+            
+            
             if Settings.shared.openUrlsInInternalBrowser {
                 externalUrl = url
                 showExternalContent = true
