@@ -14,6 +14,7 @@ struct BlogEntryDetailView: View {
     
     // The blog entry we want to display
     let blogEntry: BlogEntry
+    let navigateToEntry: ((BlogEntry) -> ())?
     let navigateToSubEntry: (BlogEntry) -> ()
     @State private var isBookmarked: Bool? = nil
     
@@ -37,71 +38,106 @@ struct BlogEntryDetailView: View {
     @State private var nextBlogEntry: BlogEntry? = nil
         
     var body: some View {
-        VStack(alignment: .leading) {
-            ZStack(alignment: .bottomTrailing) {
-                WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
-                    .popup(isPresented: $showLinkList, type: .floater(), position: .bottom, closeOnTap: false, closeOnTapOutside: true) {
-                                    linkListSheet
+        WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
+            .popup(isPresented: $showLinkList, type: .floater(), position: .bottom, closeOnTap: false, closeOnTapOutside: true) {
+                linkListSheet
+            }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    HStack {
+                        if let navigateToEntry {
+                            Button(action: {
+                                if let previousBlogEntry {
+                                    navigateToEntry(previousBlogEntry)
                                 }
-                
-                overlayButtons
-            }
-            /*
-            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                .onEnded({ value in
-                    if value.translation.width < 0 {
-                        // left
-                        print("LEFT")
+                            }, label: {
+                                CommonIcons.shared.arrowUp
+                            })
+                            .disabled(previousBlogEntry == nil)
+                            
+                            Button(action: {
+                                if let nextBlogEntry {
+                                    navigateToEntry(nextBlogEntry)
+                                }
+                            }, label: {
+                                CommonIcons.shared.arrowDown
+                            })
+                            .disabled(nextBlogEntry == nil)
+                        }
+                        
+                        Spacer()
+                        
+                        if !blogEntry.links.isEmpty {
+                            Button(action: {
+                                showLinkList.toggle()
+                            }, label: {
+                                CommonIcons.shared.linkListImage
+                            })
+                        }
+                        
+                        Button(action: {
+                            showShareSheet = true
+                        }, label: {
+                            CommonIcons.shared.shareImage
+                        })
                     }
-                    
-                    if value.translation.width > 0 {
-                        // right
-                        print("RIGHT")
-                    }
-                    if value.translation.height < 0 {
-                        // up
-                        print("UP")
-                    }
-                    
-                    if value.translation.height > 0 {
-                        // down
-                        print("DOWN")
-                    }
-                }))
-             */
-        }
-        .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: {
-                    FefeBlogService.shared.toggleBookmark(for: blogEntry)
-                    isBookmarked = blogEntry.isBookmarked
-                }, label: {
-                    CommonIcons.shared.bookmarkImage(active: isBookmarked ?? blogEntry.isBookmarked)
-                })
-            }
-            
-            ToolbarItem(placement: .principal) {
-                if showPreparingSubEntry {
-                    ProgressView()
                 }
             }
-        }
-        .onAppear {
-            loadStuff(for: blogEntry)
-        }
-        .sheet(isPresented: $showExternalContent) {
-            NavigationStack {
-                BrowserPopupView(url: $externalUrl)
+        /*
+         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
+         .onEnded({ value in
+         if value.translation.width < 0 {
+         // left
+         print("LEFT")
+         }
+         
+         if value.translation.width > 0 {
+         // right
+         print("RIGHT")
+         }
+         if value.translation.height < 0 {
+         // up
+         print("UP")
+         }
+         
+         if value.translation.height > 0 {
+         // down
+         print("DOWN")
+         }
+         }))
+         */
+            .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: {
+                        FefeBlogService.shared.toggleBookmark(for: blogEntry)
+                        isBookmarked = blogEntry.isBookmarked
+                    }, label: {
+                        CommonIcons.shared.bookmarkImage(active: isBookmarked ?? blogEntry.isBookmarked)
+                    })
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    if showPreparingSubEntry {
+                        ProgressView()
+                    }
+                }
             }
-        }
-        .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [blogEntry.url.absoluteURL])
-        }
-        .onChange(of: blogEntry) { newVal in
-            loadStuff(for: newVal)
-        }
+            .onAppear {
+                loadStuff(for: blogEntry)
+            }
+            .sheet(isPresented: $showExternalContent) {
+                NavigationStack {
+                    BrowserPopupView(url: $externalUrl)
+                }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                ShareSheet(activityItems: [blogEntry.url.absoluteURL])
+            }
+            .onChange(of: blogEntry) { newVal in
+                loadStuff(for: newVal)
+            }
     }
     
     private func loadStuff(for blogEntry: BlogEntry) {
@@ -114,58 +150,6 @@ struct BlogEntryDetailView: View {
         
         previousBlogEntry = DataAccess.shared.getPreviousBlogEntry(from: blogEntry)
         nextBlogEntry = DataAccess.shared.getNextBlogEntry(from: blogEntry)
-    }
-    
-    private var overlayButtons: some View {
-        HStack(spacing: 10) {
-            /*Button(action: {
-                if let previousBlogEntry {
-                    blogEntry = previousBlogEntry
-                }
-            }, label: {
-                CommonIcons.shared.arrowUp
-                    .frame(width: 20, height: 15)
-                    .padding()
-            })
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-            .disabled(previousBlogEntry == nil)
-            
-            Button(action: {
-                if let nextBlogEntry {
-                    blogEntry = nextBlogEntry
-                }
-            }, label: {
-                CommonIcons.shared.arrowDown
-                    .frame(width: 20, height: 15)
-                    .padding()
-            })
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-            .disabled(nextBlogEntry == nil)*/
-            
-            
-            Spacer()
-            
-            if !blogEntry.links.isEmpty {
-                Button(action: {
-                    showLinkList.toggle()
-                }, label: {
-                    CommonIcons.shared.linkListImage
-                        .frame(width: 20, height: 15)
-                        .padding()
-                })
-                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-            }
-            
-            Button(action: {
-                showShareSheet = true
-            }, label: {
-                CommonIcons.shared.shareImage
-                    .frame(width: 20, height: 15)
-                    .padding()
-            })
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
-        }
-        .padding()
     }
     
     private func copy(_ link: Link) {
@@ -235,7 +219,7 @@ struct BlogEntryDetailView: View {
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0], navigateToSubEntry: {_ in})
+            BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0], navigateToEntry: {_ in}, navigateToSubEntry: {_ in})
         }
     }
 }

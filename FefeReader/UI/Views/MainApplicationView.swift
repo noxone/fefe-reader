@@ -23,7 +23,7 @@ struct MainApplicationView: View {
         NavigationSplitView {
             BlogEntryListView(selectedBlogEntry: $currentBlogEntry)
                 .environment(\.managedObjectContext, viewContext)
-                .toolbar {                    
+                /*.toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
                             showSettingsSheet.toggle()
@@ -31,18 +31,19 @@ struct MainApplicationView: View {
                             CommonIcons.shared.settingsImage
                         })
                     }
-                }
+                }*/
         } detail: {
+            let navigateToEntry: (BlogEntry) -> Void = { currentBlogEntry = $0 }
             let navigateToSubEntry: (BlogEntry) -> Void = { subBlogEntries.append($0) }
             NavigationStack(path: $subBlogEntries) {
                 if let currentBlogEntry {
-                    BlogEntryDetailView(blogEntry: currentBlogEntry, navigateToSubEntry: navigateToSubEntry)
+                    BlogEntryDetailView(blogEntry: currentBlogEntry, navigateToEntry: navigateToEntry, navigateToSubEntry: navigateToSubEntry)
                 } else {
                     Text("Kein Blogeintrag zum Lesen ausgewählt.")
                 }
             }
             .navigationDestination(for: BlogEntry.self) { blogEntry in
-                BlogEntryDetailView(blogEntry: blogEntry, navigateToSubEntry: navigateToSubEntry)
+                BlogEntryDetailView(blogEntry: blogEntry, navigateToEntry: nil, navigateToSubEntry: navigateToSubEntry)
                     .navigationTitle("Hier muss noch der Titel geändert werden: blogEntry")
             }
         }
