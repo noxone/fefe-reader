@@ -77,12 +77,18 @@ class DataAccess {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [
-            NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
+            NSSortDescriptor(keyPath: \BlogEntry.date, ascending: !ascending),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: ascending)
         ]
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             DataAccess.PREDICATE_VALID_STATE_NORMAL,
-            ascending ? NSPredicate(format: "relativeNumber > %i", blogEntry.relativeNumber) : NSPredicate(format: "relativeNumber < %i", blogEntry.relativeNumber)
+            NSCompoundPredicate(orPredicateWithSubpredicates: [
+                ascending ? NSPredicate(format: "date < %@", blogEntry.secureDate as NSDate) : NSPredicate(format: "date > %@", blogEntry.secureDate as NSDate),
+                NSCompoundPredicate(andPredicateWithSubpredicates: [
+                    NSPredicate(format: "date = %@", blogEntry.secureDate as NSDate),
+                    ascending ? NSPredicate(format: "relativeNumber > %i", blogEntry.relativeNumber) : NSPredicate(format: "relativeNumber < %i", blogEntry.relativeNumber)
+                ])
+            ])
         ])
         return try? stack.readForUi { try $0.fetch(request) }.first
     }
