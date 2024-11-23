@@ -175,7 +175,6 @@ class DataAccess {
         blogEntry.teaser = preview
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
-        blogEntry.uuid = UUID()
         blogEntry.updatedSinceLastRead = false
         return blogEntry
     }
@@ -192,7 +191,6 @@ class DataAccess {
             blogEntry.teaser = blogEntry.teaser
             blogEntry.loadedTimestamp = blogEntry.loadedTimestamp
             blogEntry.readTimestamp = blogEntry.readTimestamp
-            blogEntry.uuid = UUID()
             return blogEntry
         }
     }

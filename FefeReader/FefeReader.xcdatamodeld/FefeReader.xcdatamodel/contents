@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BlogEntry" representedClassName="BlogEntry" syncable="YES" codeGenerationType="class">
         <attribute name="bookmarkDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="content" optional="YES" attributeType="String"/>
@@ -10,7 +10,6 @@
         <attribute name="relativeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="teaser" optional="YES" attributeType="String"/>
         <attribute name="updatedSinceLastRead" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="validState" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Log" representedClassName="Log" syncable="YES" codeGenerationType="class">
@@ -18,8 +17,4 @@
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="text" attributeType="String" defaultValueString=""/>
     </entity>
-    <elements>
-        <element name="BlogEntry" positionX="-63" positionY="-9" width="128" height="194"/>
-        <element name="Log" positionX="-63" positionY="72" width="128" height="74"/>
-    </elements>
 </model>

@@ -48,7 +48,6 @@ class PreviewData {
         blogEntry.teaser = teaser
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
-        blogEntry.uuid = UUID()
         return blogEntry
     }
     
