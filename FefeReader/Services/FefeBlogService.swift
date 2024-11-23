@@ -220,6 +220,7 @@ class FefeBlogService : ObservableObject {
                     // Update content
                     if blogEntry.content != rawEntry.content {
                         blogEntry.content = rawEntry.content
+                        blogEntry.teaser = rawEntry.plainContent
                         if blogEntry.isRead {
                             blogEntry.updatedSinceLastRead = true
                         }
