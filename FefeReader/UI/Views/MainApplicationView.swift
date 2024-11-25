@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainApplicationView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
     
     @State private var currentBlogEntry: BlogEntry?
     @State private var subBlogEntries = [BlogEntry]()
@@ -20,7 +21,7 @@ struct MainApplicationView: View {
     }
     
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             BlogEntryListView(selectedBlogEntry: $currentBlogEntry)
                 .environment(\.managedObjectContext, viewContext)
                 .toolbar {
@@ -45,6 +46,16 @@ struct MainApplicationView: View {
             .navigationDestination(for: BlogEntry.self) { blogEntry in
                 BlogEntryDetailView(blogEntry: blogEntry, navigateToEntry: nil, navigateToSubEntry: navigateToSubEntry)
                     .navigationTitle("Hier muss noch der Titel geändert werden: blogEntry")
+            }
+        }
+        .onAppear() {
+            if currentBlogEntry == nil {
+                columnVisibility = .all
+            }
+        }
+        .onChange(of: currentBlogEntry) { x in
+            if x != nil {
+                columnVisibility = .automatic
             }
         }
         .sheet(isPresented: $showSettingsSheet) {
