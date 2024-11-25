@@ -11,6 +11,7 @@ import SwiftUI
 class Settings : ObservableObject {
     static let shared = Settings()
     
+    private let KEY_REFRESH_INTERVAL = "refreshInterval"
     private let KEY_NOTIFICATION_APPROVAL = "askForNotificationApproval"
     private let KEY_OPEN_URLS_IN_INTERNAL_BROWSER = "openUrlsInInternalBrowser"
     private let KEY_FONT_SIZE = "fontSize"
@@ -37,10 +38,13 @@ class Settings : ObservableObject {
     let refreshInternal = TimeInterval(5 * 60)
     let notificationDelay = TimeInterval(5)
 #else
-    let refreshInternal = TimeInterval(15 * 60)
+    var refreshInternal: TimeInterval { get { Double(refreshInterval) * 60.0 } }
     let notificationDelay = TimeInterval(1)
 #endif
     let networkTimeoutInterval = TimeInterval(10)
+    
+    @Published var refreshInterval: Int = Int(RefreshIntervalDuration.x15.rawValue)
+    { didSet { UserDefaults.standard.set(refreshInterval, forKey: KEY_REFRESH_INTERVAL) } }
     
     @Published var askForNotificationApproval: Bool = true
     { didSet { UserDefaults.standard.set(askForNotificationApproval, forKey: KEY_NOTIFICATION_APPROVAL) } }
@@ -82,6 +86,12 @@ class Settings : ObservableObject {
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
         self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
         self.tintReadBlogentries = userDefaults.bool(forKey: KEY_TINT_READ_BLOGENTRIES, withDefault: true)
+    }
+    
+    enum RefreshIntervalDuration : Int, CaseIterable, Identifiable {
+        case x5 = 5, x10 = 10, x15 = 15, x20 = 20, x30 = 30, x45 = 45, x60 = 60
+        
+        var id: Int { rawValue }
     }
 }
 
