@@ -38,8 +38,8 @@ class Settings : ObservableObject {
     let refreshInternal = TimeInterval(5 * 60)
     let notificationDelay = TimeInterval(5)
 #else
-    var refreshInternal: TimeInterval { get { Double(refreshInterval) * 60.0 } }
-    let notificationDelay = TimeInterval(1)
+    var refreshTimeInterval: TimeInterval { get { Double(refreshInterval) * 60.0 } }
+    let notificationDelayTimeInterval = TimeInterval(1)
 #endif
     let networkTimeoutInterval = TimeInterval(10)
     
@@ -83,6 +83,7 @@ class Settings : ObservableObject {
         self.overviewLineLimit = userDefaults.integer(forKey: KEY_OVERVIEW_LINE_LIMIT, withDefault: 2)
         self.askForNotificationApproval = userDefaults.bool(forKey: KEY_NOTIFICATION_APPROVAL, withDefault: true)
         self.regularlyDeleteOldBlogEntries = userDefaults.bool(forKey: KEY_DELETE_OLD_BLOG_ENTRIES, withDefault: true)
+        self.refreshInterval = userDefaults.integer(forKey: KEY_REFRESH_INTERVAL, withDefault: RefreshIntervalDuration.x15.rawValue)
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
         self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
         self.tintReadBlogentries = userDefaults.bool(forKey: KEY_TINT_READ_BLOGENTRIES, withDefault: true)

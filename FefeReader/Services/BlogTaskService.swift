@@ -42,7 +42,7 @@ class BackgroundTaskService {
         if Settings.shared.checkForUpdatesInBackground {
             print("--- Schedule refresh task")
             let request = BGAppRefreshTaskRequest(identifier: BackgroundTaskService.TASK_REFRESH_ID)
-            request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshTimeInterval)
             do {
                 try BGTaskScheduler.shared.submit(request)
             } catch {
@@ -57,7 +57,7 @@ class BackgroundTaskService {
         print("--- Schedule clean up task")
         let request = BGProcessingTaskRequest(identifier: BackgroundTaskService.TASK_CLEANUP_ID)
         // TODO: Set to one daily processing
-        request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshInternal)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshTimeInterval)
         request.requiresExternalPower = false
         request.requiresNetworkConnectivity = false
         do {

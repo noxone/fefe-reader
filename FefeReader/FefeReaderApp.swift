@@ -19,7 +19,7 @@ struct FefeReaderApp: App {
     
     @ObservedObject var errorService = ErrorService.shared
     
-    private let timer = Timer.publish(every: Settings.shared.refreshInternal, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: Settings.shared.refreshTimeInterval, on: .main, in: .common).autoconnect()
         
     init() {
         BackgroundTaskService.shared.registerBackgroundTaks()

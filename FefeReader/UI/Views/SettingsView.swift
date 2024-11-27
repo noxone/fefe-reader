@@ -124,6 +124,7 @@ struct SettingsView: View {
                 Picker("Updates alle", selection: $settings.refreshInterval) {
                     ForEach(Settings.RefreshIntervalDuration.allCases) { option in
                         Text("\(option.rawValue) Minuten")
+                            .tag(option.rawValue)
                     }
                 }.pickerStyle(.menu)
             }
