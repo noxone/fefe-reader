@@ -20,12 +20,6 @@ extension BlogEntry {
         }
     }
     
-    var isTemporary: Bool {
-        get {
-            return validState == ValidState.temporary.rawValue
-        }
-    }
-    
     var secureDate: Date {
         get {
             return date ?? Date()
@@ -47,7 +41,7 @@ extension BlogEntry {
     
     var url: URL {
         get {
-            FefeBlogService.shared.createUrl(forId: Int(id))
+            FefeBlogService.createUrl(forId: Int(id))
         }
     }
     
@@ -63,7 +57,6 @@ extension BlogEntry {
     
     enum ValidState : String, Hashable, CaseIterable, Identifiable {
         case normal = "N"
-        case temporary = "T"
         case search = "S"
         
         var id: String { rawValue }

@@ -10,8 +10,6 @@ import SwiftSoup
 import CoreData
 
 class FefeBlogService : ObservableObject {
-    static let shared = FefeBlogService()
-    
     static let baseUrl = URL(string: "https://blog.fefe.de")!
     
     private static let earliestPost: Date = {
@@ -39,60 +37,30 @@ class FefeBlogService : ObservableObject {
         return formatter
     }()
     
-    private init() {}
+    private let persistence = PersistenceController.shared
     
-    private let dataAccess = DataAccess.shared
-    private let stack = CoreDataStack.shared
-
+    private let context: NSManagedObjectContext
+    
     @Published
-    private(set) var canLoadMore: Bool = {
-        if let oldestEntryDate = DataAccess.shared.getOldestBlogEntry()?.date {
-            return oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
-        } else {
-            return true
-        }
-    }()
+    private(set) var canLoadMore: Bool = true
     
-    func createUrl(forId id: Int) -> URL {
+    init (context: NSManagedObjectContext) {
+        self.context = context
+
+        if let oldestEntryDate = persistence.getOldestBlogEntry(context: context)?.date {
+            canLoadMore = oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
+        }
+    }
+    
+    static func createUrl(forId id: Int) -> URL {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
-    func markAsRead(_ blogEntry: BlogEntry) {
-        stack.update(blogEntry) {
-            $0.readTimestamp = Date()
-            $0.updatedSinceLastRead = false
-        }
-    }
-    
-    func markAsUnread(_ blogEntry: BlogEntry) {
-        stack.update(blogEntry) {
-            $0.readTimestamp = nil
-            $0.updatedSinceLastRead = false
-        }
-    }
-    
-    func toggleRead(_ blogEntry: BlogEntry) {
-        if blogEntry.isRead {
-            markAsUnread(blogEntry)
-        } else {
-            markAsRead(blogEntry)
-        }
-    }
-    
-    func toggleBookmark(for blogEntry: BlogEntry) {
-        stack.update(blogEntry) { blogEntry in
-            blogEntry.bookmarkDate = blogEntry.isBookmarked ? nil : Date()
-            if blogEntry.isTemporary {
-                blogEntry.validState = BlogEntry.ValidState.normal.rawValue
-            }
-        }
-    }
-    
-    func isFefeBlogEntryUrl(_ url: URL) -> Bool {
+    static func isFefeBlogEntryUrl(_ url: URL) -> Bool {
         return url.host == FefeBlogService.baseUrl.host && (url.query?.contains("ts=") ?? false)
     }
     
-    func getIdFromFefeUrl(_ url: URL) -> Int? {
+    static func getIdFromFefeUrl(_ url: URL) -> Int? {
         let href = url.absoluteString
         if let firstIndex = href.firstIndex(of: "=") {
             let index = href.index(firstIndex, offsetBy: 1)
@@ -110,11 +78,10 @@ class FefeBlogService : ObservableObject {
     @discardableResult
     func refresh(origin: String) async throws -> [BlogEntry] {
         print("Refresh...................", origin, Date())
-        dataAccess.createUpdateFetch(from: origin)
         if (origin == "init") {
             // if this is the first fetch of the application after start, check if there are posts from the previous month. If yes, update that month, too.
             let startOfMonth = Date().startOfMonth
-            if let youngestBlogEntry = DataAccess.shared.getYoungestBlogEntry(olderThan: startOfMonth) {
+            if let youngestBlogEntry = persistence.getYoungestBlogEntry(olderThan: startOfMonth, context: context) {
                 try await loadMonthsUntilToday(startingFrom: youngestBlogEntry.secureDate)
                 return []
             }
@@ -139,7 +106,7 @@ class FefeBlogService : ObservableObject {
     
     @discardableResult
     private func loadCurrentMonth() async throws -> [BlogEntry] {
-        return try await loadMonthIntoDatabase(for: Date()).newlyCreateBlogEntries
+        return try await loadMonthIntoDatabase(for: Date())
     }
     
     private func loadMonthsUntilToday(startingFrom date: Date) async throws {
@@ -155,7 +122,7 @@ class FefeBlogService : ObservableObject {
     }
     
     func loadOlderEntries() async throws {
-        guard let oldestEntry = DataAccess.shared.getOldestBlogEntry(includingBookmarks:  false) else {
+        guard let oldestEntry = persistence.getOldestBlogEntry(context: context) else {
             _ = try await loadCurrentMonth()
             return
         }
@@ -178,19 +145,19 @@ class FefeBlogService : ObservableObject {
                 return
             }
         
-            count = try await loadMonthIntoDatabase(for: dateToLoad).newlyCreateBlogEntries.count
+            count = try await loadMonthIntoDatabase(for: dateToLoad).count
         } while (count == 0)
     }
     
     @discardableResult
-    private func loadMonthIntoDatabase(for date: Date) async throws -> LoadBlogEntriesResult {
+    private func loadMonthIntoDatabase(for date: Date) async throws -> [BlogEntry] {
         print("Load month: ", date)
         let url = try getUrlForMonth(date: date)
         return try await loadEntriesIntoDatabase(from: url, withValidState: .normal)
     }
     
     @discardableResult
-    private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState) async throws -> LoadBlogEntriesResult {
+    private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState) async throws -> [BlogEntry] {
         let rawEntries: [RawEntry]
         do {
             rawEntries = try await downloadAndParseRawEntries(for: url)
@@ -200,43 +167,7 @@ class FefeBlogService : ObservableObject {
             throw FefeBlogError.unexpectedException(error: error)
         }
         
-        var updatedBlogEntries = 0
-        var createdBlogEntries: [BlogEntry] = []
-        
-        // if not using the main context, but a working context, that UI will become very laggy when inporting the change into the database.
-        try stack.withWorkingContext { context in
-            appPrint("Reading existing entries...")
-            let readEntries = dataAccess.getBlogEntries(withIds: rawEntries.map {Int64($0.id)}).reduce(into: [Int64: BlogEntry]()) {
-                $0[$1.id] = $1
-            }
-            appPrint("Persisting \(rawEntries.count) entries to database...")
-            for rawEntry in rawEntries {
-                guard !Task.isCancelled else {
-                    appPrint("Cancelled task!")
-                    throw FefeBlogError.cancelled
-                }
-                
-                if validState == .normal || validState == .temporary, let blogEntry = readEntries[Int64(rawEntry.id)] {
-                    // Update content
-                    if blogEntry.content != rawEntry.content {
-                        blogEntry.content = rawEntry.content
-                        blogEntry.teaser = rawEntry.plainContent
-                        if blogEntry.isRead {
-                            blogEntry.updatedSinceLastRead = true
-                        }
-                    }
-                    blogEntry.relativeNumber = Int16(rawEntry.relativeNumber)
-                    updatedBlogEntries += 1
-                } else {
-                    // Create entry
-                    let blogEntry = dataAccess.createBlogEntry(from: rawEntry, withValidState: validState)
-                    createdBlogEntries.append(blogEntry)
-                }
-            }
-            appPrint("Updated: \(updatedBlogEntries); created \(createdBlogEntries.count)")
-        }
-        
-        return LoadBlogEntriesResult(newlyCreateBlogEntries: createdBlogEntries, numberOfLoadedEntries: rawEntries.count)
+        return try await persistence.createOrUpdateBlogEntries(from: rawEntries, context: context)
     }
     
     private func downloadAndParseRawEntries(for url: URL) async throws -> [RawEntry] {
@@ -257,18 +188,9 @@ class FefeBlogService : ObservableObject {
         return URL(string: "?ts=\(String(id, radix: 16))", relativeTo: FefeBlogService.baseUrl)!
     }
     
-    func loadTemporaryBlogEntryFor(id: Int) async throws -> BlogEntry? {
-        // TODO: Reactivate this... but don't know why it doesn't work...
-        /*if let entry = dataAccess.getBlogEntry(withId: id, onlyNormal: false) {
-            return dataAccess.createTemporaryBlogEntry(from: entry)
-        }*/
-        
+    func loadRawEntry(forId id: Int) async throws -> RawEntry? {
         let html = try await downloadString(url: getUrlFor(id: id))
-        if let rawEntry = try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first {
-            let entry = dataAccess.createBlogEntry(from: rawEntry, withValidState: .temporary)
-            return entry
-        }
-        return nil
+        return try parseHtmlToRawEntries(html: html, relativeUrl: FefeBlogService.baseUrl).first
     }
     
     private func parseHtmlToRawEntries(html: String, relativeUrl: URL) throws -> [RawEntry] {
@@ -281,13 +203,14 @@ class FefeBlogService : ObservableObject {
             appPrint("Parsing HTML...")
             let doc = try SwiftSoup.parse(html)
             appPrint("HTML parsed")
-            let elements = try doc.select("body > h3, body > ul > li")
+            let elements = try doc.select("body > h3, body > ul, body > ul > li")
             appPrint("Elements selected from HTML")
             
-            var result: [RawEntry] = []
+            var createdRawResults: [RawEntry] = []
             
             var date: Date? = nil
-            var relativeNumber = 1
+            var currentChildCount = 0
+            var relativeNumber = 0
             
             for element in elements {
                 guard !Task.isCancelled else {
@@ -297,22 +220,24 @@ class FefeBlogService : ObservableObject {
                 
                 if element.tagName() == "h3" {
                     date = try getDate(forElement: element)
-                    relativeNumber = 1
+                    relativeNumber = 0
+                } else if element.tagName() == "ul" {
+                    currentChildCount = element.children().count
                 } else if element.tagName() == "li" {
                     if let date = date {
                         var rawEntry = try parseElementIntoRawEntry(element, relativUrl: relativeUrl)
                         rawEntry.date = date
-                        rawEntry.relativeNumber = relativeNumber
-                        result.append(rawEntry)
+                        rawEntry.relativeNumber = currentChildCount - relativeNumber
+                        createdRawResults.append(rawEntry)
                         relativeNumber += 1
                     } else {
                         print("Skipping element")
                     }
                 }
             }
-            appPrint("Extracted \(result.count) raw entries!")
+            appPrint("Extracted \(createdRawResults.count) raw entries!")
             
-            return result
+            return createdRawResults
         } catch let error as Exception {
             throw FefeBlogError.parsingException(exception: error)
         }
@@ -321,15 +246,15 @@ class FefeBlogService : ObservableObject {
     private func parseElementIntoRawEntry(_ element: Element, relativUrl: URL) throws -> RawEntry {
         do {
             if let link = element.children().first(),
-                link.tagName() == "a",
-                let hrefUrl = URL(string: try link.attr("href"), relativeTo: relativUrl),
-                isFefeBlogEntryUrl(hrefUrl),
-                let id = getIdFromFefeUrl(hrefUrl)
+               link.tagName() == "a",
+               let hrefUrl = URL(string: try link.attr("href"), relativeTo: relativUrl),
+               FefeBlogService.isFefeBlogEntryUrl(hrefUrl),
+               let id = FefeBlogService.getIdFromFefeUrl(hrefUrl)
             {
                 try link.remove()
                 let htmlContent = try element.html()
                 let textContent = try element.text()
-
+                
                 return RawEntry(id: id, link: hrefUrl, content: htmlContent, plainContent: textContent)
             } else {
                 throw FefeBlogError.invalidDocumentStructure
@@ -379,7 +304,6 @@ fileprivate extension HTTPURLResponse {
     }
 }
 
-// TODO make private
 struct RawEntry {
     let id: Int
     let link: URL
@@ -402,11 +326,6 @@ struct Link : Identifiable {
     }
 }
 
-struct LoadBlogEntriesResult {
-    let newlyCreateBlogEntries: [BlogEntry]
-    let numberOfLoadedEntries: Int
-}
-
 enum FefeBlogError : Error {
     case downloadFailed(url: URL, error: Error?)
     case urlConstructionFailed
@@ -417,16 +336,6 @@ enum FefeBlogError : Error {
     case cancelled
 }
 
-/*extension FefeBlogError : CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .downloadError(let url):
-            return "Unable to load content for URL: \(url)"
-        }
-    }
-}*/
-
-// TODO: improve error messages
 extension FefeBlogError : LocalizedError {
     public var errorDescription: String? {
         switch self {

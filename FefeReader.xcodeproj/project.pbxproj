@@ -42,6 +42,9 @@
 		C5583E21285483AA0026F67B /* SwiftSoup.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E20285483AA0026F67B /* SwiftSoup.license */; };
 		C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E22285483CF0026F67B /* SwiftUIWebView.license */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
+		C5E219B92CF6574B005B1F6A /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */; };
+		C5E219BB2CF657A6005B1F6A /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */; };
+		C5E219BD2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */; };
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
 		C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */ = {isa = PBXBuildFile; productRef = C5E310AB28471DA6005937FA /* SwiftUIWebView */; };
 		C5E310AE28472EEA005937FA /* BrowserPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* BrowserPopupView.swift */; };
@@ -113,6 +116,9 @@
 		C5583E20285483AA0026F67B /* SwiftSoup.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftSoup.license; sourceTree = "<group>"; };
 		C5583E22285483CF0026F67B /* SwiftUIWebView.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftUIWebView.license; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceController+BlogEntry.swift"; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
 		C5E310AD28472EEA005937FA /* BrowserPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPopupView.swift; sourceTree = "<group>"; };
 		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
@@ -232,7 +238,7 @@
 				C524AD2F2843FE8000EF24F1 /* UI */,
 				C51FA2C3284E2212007FAD56 /* Model */,
 				C51FA2C0284DF30B007FAD56 /* Services */,
-				C524AD302843FE8C00EF24F1 /* Persistance */,
+				C524AD302843FE8C00EF24F1 /* Persistence */,
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
@@ -278,14 +284,17 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		C524AD302843FE8C00EF24F1 /* Persistance */ = {
+		C524AD302843FE8C00EF24F1 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */,
+				C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */,
+				C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */,
 				C5583E0D285325530026F67B /* CoreDataStack.swift */,
 				C5583E11285327240026F67B /* DataAccess.swift */,
 				C5583E13285464D40026F67B /* PreviewData.swift */,
 			);
-			path = Persistance;
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		C524AD312843FEA500EF24F1 /* Widgets */ = {
@@ -500,6 +509,7 @@
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
 				C51FA2CA284F30D3007FAD56 /* LicensesView.swift in Sources */,
+				C5E219BB2CF657A6005B1F6A /* PersistenceController.swift in Sources */,
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
 				C51FA2BD284C78E4007FAD56 /* BlogTaskService.swift in Sources */,
 				C5583E0C285230110026F67B /* ErrorService.swift in Sources */,
@@ -507,6 +517,8 @@
 				C5E310BA28475840005937FA /* MainApplicationView.swift in Sources */,
 				C524AD012843FD8900EF24F1 /* FefeReaderApp.swift in Sources */,
 				C5E310AE28472EEA005937FA /* BrowserPopupView.swift in Sources */,
+				C5E219BD2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift in Sources */,
+				C5E219B92CF6574B005B1F6A /* CoreDataHelper.swift in Sources */,
 				C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */,
 				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
 				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
@@ -669,7 +681,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;
@@ -706,7 +718,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"FefeReader/Preview Content\"";
 				DEVELOPMENT_TEAM = NBA2M3HYSW;
 				ENABLE_PREVIEWS = YES;

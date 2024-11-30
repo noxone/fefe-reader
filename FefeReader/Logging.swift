@@ -26,6 +26,6 @@ func appPrint(_ text: String, _ error: Error) {
 
 class RaiseError {
     static func raise(error: Error? = nil) {
-        // TODO
+        fatalError("Error: \(String(describing: error))")
     }
 }

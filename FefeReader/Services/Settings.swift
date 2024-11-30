@@ -22,17 +22,23 @@ class Settings : ObservableObject {
     private let KEY_CHECK_FOR_UPDATES = "checkForUpdatesInBackground"
     private let KEY_TINT_READ_BLOGENTRIES = "tintReadBlogentries"
     
+    private let KEY_ENABLE_DELETION = "enableDeletion"
+    
     static let availableFonts = [
         AppFont(displayName: "Standard", font: .body, html: "font:-apple-system-body"),
         AppFont(displayName: "Helvetica Neue", font: .custom("Helvetica Neue", size: CGFloat(18)), html: "font-family:\"Helvetica Neue\""),
         AppFont(displayName: "Times new Roman", font: .custom("Times New Roman", size: CGFloat(18)), html: "font-family:\"Times New Roman\""),
         AppFont(displayName: "Courier New", font: .custom("Courier New", size: CGFloat(18)), html: "font-family:monospace"),
         AppFont(displayName: "Optima", font: .custom("Optima", size: CGFloat(18)), html: "font-family:Optima")
-        // TODO: Add more fonts
+        // MAYBE: Add more fonts
     ]
 
     static let issueUrl = URL(string: "https://github.com/noxone/fefe-reader/issues")!
     static let discussionUrl = URL(string: "https://github.com/noxone/fefe-reader/discussions")!
+    
+    static let MIN_FONT_SIZE = 2
+    static let DEFAULT_FONT_SIZE = 12
+    static let DEFAULT_FONT = availableFonts.first!
     
 #if targetEnvironment(simulator)
     let refreshInternal = TimeInterval(5 * 60)
@@ -73,6 +79,9 @@ class Settings : ObservableObject {
     @Published var tintReadBlogentries = true
     { didSet { UserDefaults.standard.set(tintReadBlogentries, forKey: KEY_TINT_READ_BLOGENTRIES) } }
     
+    @Published var enableDeletion = false
+    { didSet { UserDefaults.standard.set(enableDeletion, forKey: KEY_ENABLE_DELETION) } }
+    
     private init() {
         let userDefaults = UserDefaults.standard
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
@@ -87,6 +96,8 @@ class Settings : ObservableObject {
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
         self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
         self.tintReadBlogentries = userDefaults.bool(forKey: KEY_TINT_READ_BLOGENTRIES, withDefault: true)
+        
+        self.enableDeletion = userDefaults.bool(forKey: KEY_ENABLE_DELETION, withDefault: false)
     }
     
     enum RefreshIntervalDuration : Int, CaseIterable, Identifiable {

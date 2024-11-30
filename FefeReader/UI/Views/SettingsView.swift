@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) private var presentationMode
+    @ScaledMetric(relativeTo: .body) private var iconWidth = 20.0
     
-    @ObservedObject var settings = Settings.shared
+    @ObservedObject private var settings = Settings.shared
+    private let persistenceController = PersistenceController.shared
     
+    @State private var showResetFontConfirmation = false
     @State private var showClearBlogEntriesConfirmation = false
     @State private var showClearBookmarksConfirmation = false
     @State private var showClearReadConfirmation = false
@@ -75,21 +79,21 @@ struct SettingsView: View {
                 Spacer()
                 Button(action: {
                     settings.fontSize += 1
-                    if settings.fontSize < 2 {
-                        settings.fontSize = 2
-                        // TODO better handling
-                    }
                 }, label: {
-                    Text("+")
-                        .frame(width: 20, height: 20)
+                    Label("Größer", systemImage: "plus")
+                        .frame(width: iconWidth, height: iconWidth)
                 })
+                .labelStyle(.iconOnly)
                 .buttonStyle(.bordered)
                 Button(action: {
-                    settings.fontSize -= 1
+                    if settings.fontSize > Settings.MIN_FONT_SIZE {
+                        settings.fontSize -= 1
+                    }
                 }, label: {
-                    Text("-")
-                        .frame(width: 20, height: 20)
+                    Label("Kleiner", systemImage: "minus")
+                        .frame(width: iconWidth, height: iconWidth)
                 })
+                .labelStyle(.iconOnly)
                 .buttonStyle(.bordered)
             }
             Picker("Schriftart", selection: $settings.font) {
@@ -100,12 +104,17 @@ struct SettingsView: View {
                 }
             }
 
-            // TODO: Add reset button
-            /*Button(action: {
-                settings.fontSize = Settings.defaultFontSize
+            Button(role: .destructive, action: {
+                showResetFontConfirmation = true
             }, label: {
-                Text("Reset")
-            })*/
+                Text("Schrifteinstellungen zurücksetzen")
+            })
+            .confirmationDialog("Schrifteinstellungen zurücksetzen?", isPresented: $showResetFontConfirmation, titleVisibility: .visible) {
+                Button("Zurücksetzen", role: .destructive) {
+                    settings.fontSize = Settings.DEFAULT_FONT_SIZE
+                    settings.font = Settings.DEFAULT_FONT
+                }
+            }
         }
     }
     
@@ -140,7 +149,9 @@ struct SettingsView: View {
             })
             .confirmationDialog("Alle gelesenen Einträge zurücksetzen?", isPresented: $showClearReadConfirmation, titleVisibility: .visible) {
                 Button("Gelesene Einträge zurücksetzen", role: .destructive) {
-                    DataAccess.shared.resetRead()
+                    Task {
+                        await persistenceController.updateBlogEntry_resetAllReadTimestamps(context: viewContext)
+                    }
                 }
             }
             
@@ -151,7 +162,9 @@ struct SettingsView: View {
             })
             .confirmationDialog("Alle Lesezeichen zurücksetzen?", isPresented: $showClearBookmarksConfirmation, titleVisibility: .visible) {
                 Button("Lesezeichen zurücksetzen", role: .destructive) {
-                    DataAccess.shared.resetBookmarks()
+                    Task {
+                        await persistenceController.updateBlogEntry_resetAllBookmarkTimestamps(context: viewContext)
+                    }
                 }
             }
             
@@ -162,7 +175,9 @@ struct SettingsView: View {
             })
             .confirmationDialog("Alle geladenen Blogeinträge und Lesezeichen vom Gerät entfernen?", isPresented: $showClearBlogEntriesConfirmation, titleVisibility: .visible) {
                 Button("Alles löschen", role: .destructive) {
-                    DataAccess.shared.clearBlogEntries()
+                    Task {
+                        await persistenceController.deleteAllBlogEntries(context: viewContext)
+                    }
                 }
             }
         }

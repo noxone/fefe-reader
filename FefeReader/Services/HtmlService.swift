@@ -30,7 +30,6 @@ class HtmlService {
             let generatedHtml = try preparedHtml.html()
             return generatedHtml
         } catch {
-            // TODO proper error handling
             print("Unable to prepare HTML", error)
             return html
         }
@@ -51,7 +50,6 @@ class HtmlService {
             let links = try document.select("a")
             return try links.compactMap { Link(label: try? $0.text(), url: URL(string: try $0.attr("href"))) }
         } catch {
-            // TODO: better error handling
             print(error)
             return []
         }

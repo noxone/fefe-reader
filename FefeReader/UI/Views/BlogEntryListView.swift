@@ -12,7 +12,8 @@ struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
     
-    @ObservedObject private var fefeBlog = FefeBlogService.shared
+    private let persistence = PersistenceController.shared
+    @EnvironmentObject private var fefeBlog: FefeBlogService
     @ObservedObject private var settings = Settings.shared
     
     @State private var showNotificationPopup = false
@@ -68,7 +69,7 @@ struct BlogEntryListView: View {
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
-                if let id = NotificationService.shared.idToOpen, let entry = DataAccess.shared.getBlogEntry(withId: Int(id)) {
+                if let id = NotificationService.shared.idToOpen, let entry = persistence.getBlogEntry(withId: Int(id), context: viewContext) {
                     NotificationService.shared.idToOpen = nil
                     selectedBlogEntry = entry
                 }
@@ -77,7 +78,7 @@ struct BlogEntryListView: View {
         .refreshable {
             if !isSearching {
                 await ErrorService.shared.executeShowingErrorAsync {
-                    try await FefeBlogService.shared.refresh(origin: "manual refresh")
+                    try await fefeBlog.refresh(origin: "manual refresh")
                 }
             }
         }
@@ -85,6 +86,11 @@ struct BlogEntryListView: View {
         .disableAutocorrection(true)
         .onChange(of: isSearching) {
             if $0 {
+                appPrint("yes")
+            } else {
+                appPrint("no")
+            }
+            /* TODO: if $0 {
                 showSearchingIndicator = false
                 DataAccess.shared.deleteSearchBlogEntries()
             } else {
@@ -92,7 +98,7 @@ struct BlogEntryListView: View {
                 Task {
                     DataAccess.shared.deleteSearchBlogEntries()
                 }
-            }
+            }*/
         }
         .onSubmit(of: .search) {
             search(for: searchText)
@@ -166,7 +172,7 @@ struct BlogEntryListView: View {
             sectionIdentifier: \BlogEntry.date,
             sortDescriptors: [
                 NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
-                NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: true)
+                NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: false)
             ],
             predicate: createDynamicPredicate(validState: validState)
         ) { sectionedBlogEntries in
@@ -177,30 +183,38 @@ struct BlogEntryListView: View {
                             BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: !isSearching && settings.tintReadBlogentries)
                         }
                         .id(blogEntry.id)
-                        .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
                             Button(action: {
-                                fefeBlog.toggleBookmark(for: blogEntry)
+                                withAnimation {
+                                    persistence.toggleBlogEntryBookmark(blogEntry)
+                                }
                             }, label: {
                                 CommonIcons.shared.bookmarkImage()
                             })
                             .tint(CommonIcons.shared.bookmarkColor)
-                        })
+                        }
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
                             Button(action: {
-                                fefeBlog.toggleRead(blogEntry)
+                                withAnimation {
+                                    persistence.toggleBlogEntryRead(blogEntry)
+                                }
                             }, label: {
                                 Image(systemName: "app.badge")
                             })
                             .tint(.blue)
                         }
-                        /*.swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(action: {
-                                DataAccess.shared.delete(object: blogEntry)
-                            }, label: {
-                                CommonIcons.shared.trashImage
-                            })
-                            .tint(.red)
-                        }*/
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            if true /*settings.enableDeletion*/ {
+                                Button(action: {
+                                    withAnimation {
+                                        persistence.delete(blogEntry: blogEntry)
+                                    }
+                                }, label: {
+                                    CommonIcons.shared.trashImage
+                                })
+                                .tint(.red)
+                            }
+                        }
                     }
                 }
             }
@@ -243,7 +257,7 @@ struct BlogEntryListView: View {
     
     
     private func search(for searchString: String) {
-        TaskService.shared.cancelTask(for: "search")
+        /*TODO: TaskService.shared.cancelTask(for: "search")
         appPrint("Searching for: \(searchString)")
         showSearchingIndicator = true
         let task = ErrorService.shared.executeShowingError {
@@ -253,7 +267,7 @@ struct BlogEntryListView: View {
             }
             showLoadingIndicator = false
         }
-        TaskService.shared.set(task: task, for: "search")
+        TaskService.shared.set(task: task, for: "search")*/
     }
 }
 
@@ -261,5 +275,6 @@ struct BlogEntryListView_Previews: PreviewProvider {
     static var previews: some View {
         BlogEntryListView(selectedBlogEntry: .constant(nil))
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
+            .environmentObject(FefeBlogService(context: PreviewData.shared.container.viewContext))
     }
 }

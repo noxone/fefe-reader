@@ -39,12 +39,14 @@ struct MainApplicationView: View {
             NavigationStack(path: $subBlogEntries) {
                 if let currentBlogEntry {
                     BlogEntryDetailView(blogEntry: currentBlogEntry, navigateToEntry: navigateToEntry, navigateToSubEntry: navigateToSubEntry)
+                        .environment(\.managedObjectContext, viewContext)
                 } else {
                     Text("Kein Blogeintrag zum Lesen ausgewählt.")
                 }
             }
             .navigationDestination(for: BlogEntry.self) { blogEntry in
                 BlogEntryDetailView(blogEntry: blogEntry, navigateToEntry: nil, navigateToSubEntry: navigateToSubEntry)
+                    .environment(\.managedObjectContext, viewContext)
                     .navigationTitle("Hier muss noch der Titel geändert werden: blogEntry")
             }
         }

@@ -8,8 +8,8 @@
 import Foundation
 import CoreData
 
-class DataAccess {
-    static let shared = DataAccess()
+class DataAccess2 {
+    static let shared = DataAccess2()
 
     static let PREDICATE_VALID_STATE_NORMAL = NSPredicate(format: "validState = %@", BlogEntry.ValidState.normal.rawValue)
 
@@ -17,18 +17,15 @@ class DataAccess {
     
     private let stack = CoreDataStack.shared
         
-    func getBlogEntry(withId id: Int, onlyNormal: Bool = true) -> BlogEntry? {
+    /*func getBlogEntry(withId id: Int) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.predicate = NSPredicate(format: "id == %ld", Int64(id))
         request.fetchLimit = 1
-        if onlyNormal {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [request.predicate!, DataAccess.PREDICATE_VALID_STATE_NORMAL])
-        }
         
         return try? stack.readForUi { try $0.fetch(request) }.first
-    }
+    }*/
     
-    func getBlogEntries(withIds ids: [Int64]) -> [BlogEntry] {
+    /*func getBlogEntries(withIds ids: [Int64]) -> [BlogEntry] {
         let request = BlogEntry.fetchRequest()
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             DataAccess.PREDICATE_VALID_STATE_NORMAL,
@@ -36,13 +33,13 @@ class DataAccess {
         ])
         let entries = try? stack.readForUi { try $0.fetch(request) }
         return entries ?? []
-    }
+    }*/
     
     func getOldestBlogEntry(includingBookmarks includeBookmarks: Bool = true) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
-        request.predicate = DataAccess.PREDICATE_VALID_STATE_NORMAL
+        request.predicate = DataAccess2.PREDICATE_VALID_STATE_NORMAL
         if !includeBookmarks {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
                 request.predicate!,
@@ -58,7 +55,7 @@ class DataAccess {
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false)]
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            DataAccess.PREDICATE_VALID_STATE_NORMAL,
+            DataAccess2.PREDICATE_VALID_STATE_NORMAL,
             NSPredicate(format: "date < %@", date as NSDate)
         ])
         
@@ -81,7 +78,7 @@ class DataAccess {
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: ascending)
         ]
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            DataAccess.PREDICATE_VALID_STATE_NORMAL,
+            DataAccess2.PREDICATE_VALID_STATE_NORMAL,
             NSCompoundPredicate(orPredicateWithSubpredicates: [
                 ascending ? NSPredicate(format: "date < %@", blogEntry.secureDate as NSDate) : NSPredicate(format: "date > %@", blogEntry.secureDate as NSDate),
                 NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -123,10 +120,6 @@ class DataAccess {
         changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.search) { $0.delete($1) }
     }
     
-    func deleteTemporaryBlogEntries() {
-        changeNonValidBlogEntries(withValidState: BlogEntry.ValidState.temporary) { $0.delete($1) }
-    }
-    
     func deleteAllNonDefaultBlogEntries() {
         stack.withWorkingContext { context in
             let request = BlogEntry.fetchRequest()
@@ -153,18 +146,8 @@ class DataAccess {
         }
     }
     
-    func createUpdateFetch(from origin: String) {
-        appPrint("Update from: \(origin)")
-        /*let fetch = UpdateFetch(context: container.viewContext)
-        fetch.date = Date()
-        fetch.from = from
-        save()*/
-    }
-    
     @discardableResult
     func createBlogEntry(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState = .normal) -> BlogEntry {
-        let preview = rawEntry.plainContent
-
         let blogEntry = BlogEntry(context: stack.managedObjectContext)
         blogEntry.validState = validState.rawValue
         blogEntry.id = Int64(rawEntry.id)
@@ -172,27 +155,11 @@ class DataAccess {
         blogEntry.date = rawEntry.date
         blogEntry.content = rawEntry.content
         blogEntry.bookmarkDate = nil
-        blogEntry.teaser = preview
+        blogEntry.teaser = rawEntry.plainContent
         blogEntry.loadedTimestamp = Date()
         blogEntry.readTimestamp = nil
         blogEntry.updatedSinceLastRead = false
         return blogEntry
-    }
-    
-    func createTemporaryBlogEntry(from blogEntry: BlogEntry) -> BlogEntry {
-        return stack.withMainContext { context in
-            let blogEntry = BlogEntry(context: context)
-            blogEntry.validState = BlogEntry.ValidState.temporary.rawValue
-            blogEntry.id = blogEntry.id
-            blogEntry.relativeNumber = blogEntry.relativeNumber
-            blogEntry.date = blogEntry.date
-            blogEntry.content = blogEntry.content
-            blogEntry.bookmarkDate = blogEntry.bookmarkDate
-            blogEntry.teaser = blogEntry.teaser
-            blogEntry.loadedTimestamp = blogEntry.loadedTimestamp
-            blogEntry.readTimestamp = blogEntry.readTimestamp
-            return blogEntry
-        }
     }
     
     // TODO: https://code.tutsplus.com/tutorials/core-data-and-swift-batch-updates--cms-25120
@@ -251,7 +218,7 @@ class DataAccess {
     }
     
     func cleanUpDatabase(deleteOldBlogEntries: Bool, keepBookmarks: Bool) {
-        deleteTemporaryBlogEntries()
+        // TODO: deleteTemporaryBlogEntries()
         deleteAllNonDefaultBlogEntries()
         if deleteOldBlogEntries {
             let halfAYearAgo = Calendar.current.date(byAdding: .month, value: -6, to: Date())!

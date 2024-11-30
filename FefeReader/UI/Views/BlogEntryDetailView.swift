@@ -10,7 +10,10 @@ import SwiftUIWebView
 import UniformTypeIdentifiers
 
 struct BlogEntryDetailView: View {
-    private static let dummyBlogEntry = BlogEntry()
+    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var fefeBlog: FefeBlogService
+    
+    private let persistence = PersistenceController.shared
     
     // The blog entry we want to display
     let blogEntry: BlogEntry
@@ -86,6 +89,7 @@ struct BlogEntryDetailView: View {
                 }
             }
         /*
+         TODO: Build gestures
          .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
          .onEnded({ value in
          if value.translation.width < 0 {
@@ -113,8 +117,8 @@ struct BlogEntryDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .automatic) {
                     Button(action: {
-                        FefeBlogService.shared.toggleBookmark(for: blogEntry)
-                        isBookmarked = blogEntry.isBookmarked
+                        persistence.toggleBlogEntryBookmark(blogEntry)
+                        isBookmarked = !blogEntry.isBookmarked
                     }, label: {
                         CommonIcons.shared.bookmarkImage(active: isBookmarked ?? blogEntry.isBookmarked)
                     })
@@ -145,13 +149,13 @@ struct BlogEntryDetailView: View {
     private func loadStuff(for blogEntry: BlogEntry) {
         if let content = blogEntry.content {
             action = .loadHTML(HtmlService.shared.enhance(html: content))
-            FefeBlogService.shared.markAsRead(blogEntry)
+            persistence.toggleBlogEntryRead(blogEntry, read: true)
         } else {
             action = .loadHTML("<i>No content to load.</i>")
         }
         
-        previousBlogEntry = DataAccess.shared.getPreviousBlogEntry(from: blogEntry)
-        nextBlogEntry = DataAccess.shared.getNextBlogEntry(from: blogEntry)
+        previousBlogEntry = persistence.getPreviousBlogEntry(from: blogEntry, context: viewContext)
+        nextBlogEntry = persistence.getNextBlogEntry(from: blogEntry, context: viewContext)
     }
     
     private func copy(_ link: Link) {
@@ -194,13 +198,14 @@ struct BlogEntryDetailView: View {
     private func handleHttpLinks(url: URL) {
         showPreparingSubEntry = true
         ErrorService.shared.executeShowingError {
-            if FefeBlogService.shared.isFefeBlogEntryUrl(url),
-               let id = FefeBlogService.shared.getIdFromFefeUrl(url) {
-                if let entry = DataAccess.shared.getBlogEntry(withId: id, onlyNormal: true) {
+            if FefeBlogService.isFefeBlogEntryUrl(url),
+               let id = FefeBlogService.getIdFromFefeUrl(url) {
+                if let entry = persistence.getBlogEntry(withId: id, context: viewContext) {
                     navigateToSubEntry(entry)
                     return
-                } else if let entry = try await FefeBlogService.shared.loadTemporaryBlogEntryFor(id: id) {
-                    navigateToSubEntry(entry)
+                } else if let rawEntry = try await fefeBlog.loadRawEntry(forId: id) {
+                    let blogEntry = persistence.createBlogEntryAndSave(from: rawEntry, context: viewContext)
+                    navigateToSubEntry(blogEntry)
                     return
                 }
             }

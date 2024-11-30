@@ -6,14 +6,19 @@
 //
 
 import BackgroundTasks
+import CoreData
 
 class BackgroundTaskService {
-    static let shared = BackgroundTaskService()
-    
     static let TASK_REFRESH_ID = "org.olafneumann.fefe-reader.FefeBlog.refresh"
     static let TASK_CLEANUP_ID = "org.olafneumann.fefe-reader.FefeBlog.cleanUpDatabase"
     
-    private init() {}
+    private let blogService: FefeBlogService
+    private let context: NSManagedObjectContext
+    
+    init(blogService: FefeBlogService, context: NSManagedObjectContext) {
+        self.blogService = blogService
+        self.context = context
+    }
     
     // https://medium.com/@spaceotech/how-to-update-app-content-with-background-tasks-using-the-task-scheduler-in-ios-13-95d465c462e7
     func registerBackgroundTaks() {
@@ -77,10 +82,10 @@ class BackgroundTaskService {
 
         Task {
             do {
-                try await FefeBlogService.shared.refreshWithNotifications(origin: "background")
+                try await blogService.refreshWithNotifications(origin: "background")
                 task.setTaskCompleted(success: true)
             } catch {
-                // TODO: log error
+                appPrint("Unable to refresh", error)
                 task.setTaskCompleted(success: false)
             }
         }
@@ -95,8 +100,13 @@ class BackgroundTaskService {
             print("Cancel clean up task")
         }
         
-        let settings = Settings.shared
-        DataAccess.shared.cleanUpDatabase(deleteOldBlogEntries: settings.regularlyDeleteOldBlogEntries, keepBookmarks: settings.keepBookmarkedBlogEntries)
-        task.setTaskCompleted(success: true)
+        Task {
+            let settings = Settings.shared
+            if settings.regularlyDeleteOldBlogEntries {
+                let deletedEntryCount = await PersistenceController.shared.deleteOldBlogEntries(butKeepBookmarks: settings.keepBookmarkedBlogEntries, context: context)
+                appPrint("Cleared \(deletedEntryCount) entries in background.")
+            }
+            task.setTaskCompleted(success: true)
+        }
     }
 }
