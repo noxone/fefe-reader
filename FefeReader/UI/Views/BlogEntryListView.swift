@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PopupView
+import CoreData
 
 struct BlogEntryListView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -20,14 +21,15 @@ struct BlogEntryListView: View {
     @State private var showLoadingIndicator = false
     
     @State private var isSearching: Bool = false
-    @State private var searchText: String = ""
+    // @State private var searchText: String = ""
     @State private var showSearchingIndicator = false
-    
+    @StateObject private var searchTextDebouncer = Debouncer()
+
     @State private var showOnlyUnread = false
     @State private var showOnlyBookmarks = false
     
     @Binding var selectedBlogEntry: BlogEntry?
-        
+            
     private func loadOlderEntries() {
         ErrorService.shared.executeShowingError {
             print("Load older entries")
@@ -50,7 +52,7 @@ struct BlogEntryListView: View {
     
     private var list: some View {
         SearchableList(selection: _selectedBlogEntry, indicator: $isSearching) { isSearching in
-            createListBody(validState: isSearching ? .search : .normal)
+            createListBody()
             if !isSearching && fefeBlog.canLoadMore {
                 moreListEntriesAvailableView
             }
@@ -70,6 +72,7 @@ struct BlogEntryListView: View {
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
                 if let id = NotificationService.shared.idToOpen, let entry = persistence.getBlogEntry(withId: Int(id), context: viewContext) {
+                    isSearching = false
                     NotificationService.shared.idToOpen = nil
                     selectedBlogEntry = entry
                 }
@@ -82,26 +85,24 @@ struct BlogEntryListView: View {
                 }
             }
         }
-        .searchable(text: $searchText)
+        .searchable(text: $searchTextDebouncer.input)
         .disableAutocorrection(true)
-        .onChange(of: isSearching) {
-            if $0 {
-                appPrint("yes")
-            } else {
-                appPrint("no")
-            }
-            /* TODO: if $0 {
-                showSearchingIndicator = false
-                DataAccess.shared.deleteSearchBlogEntries()
-            } else {
-                TaskService.shared.cancelTask(for: "search")
-                Task {
-                    DataAccess.shared.deleteSearchBlogEntries()
+        .onChange(of: isSearching) { searching in
+            Task {
+                if searching {
+                    showSearchingIndicator = false
+                    await persistence.deleteBlogEntriesForSearch(context: viewContext)
+                } else {
+                    TaskService.shared.cancelTask(for: "search")
+                    await persistence.deleteBlogEntriesForSearch(context: viewContext)
                 }
-            }*/
+            }
+        }
+        .onReceive(searchTextDebouncer.$debounced) { searchText in
+            search(for: searchText)
         }
         .onSubmit(of: .search) {
-            search(for: searchText)
+            search(for: searchTextDebouncer.debounced)
         }
         .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
             notificationPopup
@@ -151,14 +152,18 @@ struct BlogEntryListView: View {
             .listRowSeparator(.hidden)
     }
     
-    private func createDynamicPredicate(validState: BlogEntry.ValidState) -> NSPredicate {
+    private func createDynamicPredicate() -> NSPredicate {
         var predicates = [NSPredicate]()
-        predicates.append(NSPredicate(format: "validState = %@", validState.rawValue))
         if showOnlyUnread {
             predicates.append(NSPredicate(format: "readTimestamp = nil"))
         }
         if showOnlyBookmarks {
             predicates.append(NSPredicate(format: "bookmarkDate != nil"))
+        }
+        let searchText = searchTextDebouncer.debounced
+        if isSearching && !searchText.isBlank {
+            let trimmedSearchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+            predicates.append(NSPredicate(format: "%K CONTAINS[c] %@", #keyPath(BlogEntry.content), trimmedSearchText))
         }
         if predicates.count == 1 {
             return predicates.first!
@@ -167,14 +172,14 @@ struct BlogEntryListView: View {
         }
     }
     
-    private func createListBody(validState: BlogEntry.ValidState) -> some View {
+    private func createListBody() -> some View {
         SectionedFetchedObjectsView(
             sectionIdentifier: \BlogEntry.date,
             sortDescriptors: [
                 NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false),
                 NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: false)
             ],
-            predicate: createDynamicPredicate(validState: validState)
+            predicate: createDynamicPredicate()
         ) { sectionedBlogEntries in
             ForEach(sectionedBlogEntries) { blogEntries in
                 Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
@@ -221,6 +226,20 @@ struct BlogEntryListView: View {
         }
     }
     
+    private func search(for searchString: String) {
+        TaskService.shared.cancelTask(for: "search")
+        appPrint("Searching for: \(searchString)")
+        showSearchingIndicator = true
+        let task = ErrorService.shared.executeShowingError {
+            await persistence.deleteBlogEntriesForSearch(context: viewContext)
+            if !searchString.isBlank {
+                try await fefeBlog.search(for: searchString, context: viewContext)
+            }
+            showLoadingIndicator = false
+        }
+        TaskService.shared.set(task: task, for: "search")
+    }
+    
     private var notificationPopup: some View {
         VStack(spacing: 10) {
             Text("Möchtest Du benachrichtigt werden, wenn Fefe neue Blogeinträge veröffentlicht?")
@@ -253,21 +272,6 @@ struct BlogEntryListView: View {
         .shadow(color: .black.opacity(0.08), radius: 2, x: 0, y: 0)
         .shadow(color: .black.opacity(0.16), radius: 24, x: 0, y: 0)
         .padding(.horizontal, 16)
-    }
-    
-    
-    private func search(for searchString: String) {
-        /*TODO: TaskService.shared.cancelTask(for: "search")
-        appPrint("Searching for: \(searchString)")
-        showSearchingIndicator = true
-        let task = ErrorService.shared.executeShowingError {
-            DataAccess.shared.deleteSearchBlogEntries()
-            if !searchString.isEmpty {
-                try await FefeBlogService.shared.search(for: searchString)
-            }
-            showLoadingIndicator = false
-        }
-        TaskService.shared.set(task: task, for: "search")*/
     }
 }
 

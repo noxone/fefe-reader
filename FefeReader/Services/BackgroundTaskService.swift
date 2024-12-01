@@ -97,7 +97,7 @@ class BackgroundTaskService {
         scheduleCleanUpTask()
         
         task.expirationHandler = {
-            print("Cancel clean up task")
+            print("Canceled clean up task")
         }
         
         Task {

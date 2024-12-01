@@ -39,13 +39,13 @@ class FefeBlogService : ObservableObject {
     
     private let persistence = PersistenceController.shared
     
-    private let context: NSManagedObjectContext
+    private let defaultContext: NSManagedObjectContext
     
     @Published
     private(set) var canLoadMore: Bool = true
     
     init (context: NSManagedObjectContext) {
-        self.context = context
+        self.defaultContext = context
 
         if let oldestEntryDate = persistence.getOldestBlogEntry(context: context)?.date {
             canLoadMore = oldestEntryDate > Calendar.current.date(byAdding: .month, value: 1, to: FefeBlogService.earliestPost)!
@@ -81,7 +81,7 @@ class FefeBlogService : ObservableObject {
         if (origin == "init") {
             // if this is the first fetch of the application after start, check if there are posts from the previous month. If yes, update that month, too.
             let startOfMonth = Date().startOfMonth
-            if let youngestBlogEntry = persistence.getYoungestBlogEntry(olderThan: startOfMonth, context: context) {
+            if let youngestBlogEntry = persistence.getYoungestBlogEntry(olderThan: startOfMonth, context: defaultContext) {
                 try await loadMonthsUntilToday(startingFrom: youngestBlogEntry.secureDate)
                 return []
             }
@@ -89,9 +89,10 @@ class FefeBlogService : ObservableObject {
         return try await loadCurrentMonth()
     }
     
-    func search(for searchString: String) async throws {
+    func search(for searchString: String, context: NSManagedObjectContext) async throws {
         let url = try getUrlForSearch(searchString.trimmingCharacters(in: .whitespacesAndNewlines))
-        try await loadEntriesIntoDatabase(from: url, withValidState: .search)
+        try await loadEntriesIntoDatabase(from: url, withValidState: .search, context: context)
+        appPrint("Done searching for \(searchString).")
     }
     
     private func getUrlForSearch(_ searchString: String) throws -> URL {
@@ -106,14 +107,14 @@ class FefeBlogService : ObservableObject {
     
     @discardableResult
     private func loadCurrentMonth() async throws -> [BlogEntry] {
-        return try await loadMonthIntoDatabase(for: Date())
+        return try await loadMonthIntoDatabase(for: Date(), context: defaultContext)
     }
     
     private func loadMonthsUntilToday(startingFrom date: Date) async throws {
         var dateToLoad = date
         while dateToLoad < Date() {
             print("Load until, for ", dateToLoad)
-            try await loadMonthIntoDatabase(for: dateToLoad)
+            try await loadMonthIntoDatabase(for: dateToLoad, context: defaultContext)
             
             var dateComponent = DateComponents()
             dateComponent.month = 1
@@ -121,7 +122,9 @@ class FefeBlogService : ObservableObject {
         }
     }
     
-    func loadOlderEntries() async throws {
+    func loadOlderEntries(context: NSManagedObjectContext? = nil) async throws {
+        let context = context ?? defaultContext
+        
         guard let oldestEntry = persistence.getOldestBlogEntry(context: context) else {
             _ = try await loadCurrentMonth()
             return
@@ -145,19 +148,19 @@ class FefeBlogService : ObservableObject {
                 return
             }
         
-            count = try await loadMonthIntoDatabase(for: dateToLoad).count
+            count = try await loadMonthIntoDatabase(for: dateToLoad, context: context).count
         } while (count == 0)
     }
     
     @discardableResult
-    private func loadMonthIntoDatabase(for date: Date) async throws -> [BlogEntry] {
+    private func loadMonthIntoDatabase(for date: Date, context: NSManagedObjectContext) async throws -> [BlogEntry] {
         print("Load month: ", date)
         let url = try getUrlForMonth(date: date)
-        return try await loadEntriesIntoDatabase(from: url, withValidState: .normal)
+        return try await loadEntriesIntoDatabase(from: url, withValidState: .normal, context: context)
     }
     
     @discardableResult
-    private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState) async throws -> [BlogEntry] {
+    private func loadEntriesIntoDatabase(from url: URL, withValidState validState: BlogEntry.ValidState, context: NSManagedObjectContext) async throws -> [BlogEntry] {
         let rawEntries: [RawEntry]
         do {
             rawEntries = try await downloadAndParseRawEntries(for: url)
@@ -167,7 +170,7 @@ class FefeBlogService : ObservableObject {
             throw FefeBlogError.unexpectedException(error: error)
         }
         
-        return try await persistence.createOrUpdateBlogEntries(from: rawEntries, context: context)
+        return try await persistence.createOrUpdateBlogEntries(from: rawEntries, validState: validState, context: context)
     }
     
     private func downloadAndParseRawEntries(for url: URL) async throws -> [RawEntry] {

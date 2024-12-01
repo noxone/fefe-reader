@@ -204,7 +204,7 @@ struct BlogEntryDetailView: View {
                     navigateToSubEntry(entry)
                     return
                 } else if let rawEntry = try await fefeBlog.loadRawEntry(forId: id) {
-                    let blogEntry = persistence.createBlogEntryAndSave(from: rawEntry, context: viewContext)
+                    let blogEntry = persistence.createBlogEntryAndSave(from: rawEntry, withValidState: .search, context: viewContext)
                     navigateToSubEntry(blogEntry)
                     return
                 }

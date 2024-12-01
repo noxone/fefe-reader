@@ -11,13 +11,13 @@ import CoreData
 private let gCloudKitContainerIdentifier = "iCloud.org.olafneumann.FefeBlogReader"
 
 extension PersistenceController {
-    func createBlogEntryAndSave(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState = .normal, context: NSManagedObjectContext) -> BlogEntry {
-        let blogEntry = createBlogEntry(from: rawEntry, context: context)
+    func createBlogEntryAndSave(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState, context: NSManagedObjectContext) -> BlogEntry {
+        let blogEntry = createBlogEntry(from: rawEntry, withValidState: validState, context: context)
         context.save(with: .addBlogEntry)
         return blogEntry
     }
     
-    private func createBlogEntry(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState = .normal, context: NSManagedObjectContext) -> BlogEntry {
+    private func createBlogEntry(from rawEntry: RawEntry, withValidState validState: BlogEntry.ValidState, context: NSManagedObjectContext) -> BlogEntry {
         let blogEntry = BlogEntry(context: context)
         blogEntry.validState = validState.rawValue
         blogEntry.id = Int64(rawEntry.id)
@@ -32,7 +32,7 @@ extension PersistenceController {
         return blogEntry
     }
     
-    func createOrUpdateBlogEntries(from rawEntries: [RawEntry], context: NSManagedObjectContext) async throws -> [BlogEntry] {
+    func createOrUpdateBlogEntries(from rawEntries: [RawEntry], validState: BlogEntry.ValidState, context: NSManagedObjectContext) async throws -> [BlogEntry] {
         return try await context.perform {
             appPrint("Reading existing entries...")
             let readEntries = self.getBlogEntries(withIds: rawEntries.map {Int64($0.id)}, context: context).reduce(into: [Int64: BlogEntry]()) { array, item in
@@ -70,7 +70,7 @@ extension PersistenceController {
                     }
                 } else {
                     // Create entry
-                    let newBlogEntry = self.createBlogEntry(from: rawEntry, context: context)
+                    let newBlogEntry = self.createBlogEntry(from: rawEntry, withValidState: validState, context: context)
                     createdBlogEntries.append(newBlogEntry)
                     createdBlogEntryCount += 1
                 }
@@ -106,7 +106,10 @@ extension PersistenceController {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: true)]
-        request.predicate = NSPredicate(format: "%K == nil", #keyPath(BlogEntry.bookmarkDate))
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", #keyPath(BlogEntry.validState), BlogEntry.ValidState.normal.rawValue),
+            NSPredicate(format: "%K == nil", #keyPath(BlogEntry.bookmarkDate))
+        ])
         
         return try? context.fetch(request).first
     }
@@ -115,7 +118,10 @@ extension PersistenceController {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1
         request.sortDescriptors = [NSSortDescriptor(keyPath: \BlogEntry.date, ascending: false)]
-        request.predicate = NSPredicate(format: "date < %@", date as NSDate)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", #keyPath(BlogEntry.validState), BlogEntry.ValidState.normal.rawValue),
+            NSPredicate(format: "date < %@", date as NSDate)
+        ])
         
         return try? context.fetch(request).first
     }
@@ -135,11 +141,14 @@ extension PersistenceController {
             NSSortDescriptor(keyPath: \BlogEntry.date, ascending: !ascending),
             NSSortDescriptor(keyPath: \BlogEntry.relativeNumber, ascending: !ascending)
         ]
-        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [
-            ascending ? NSPredicate(format: "date < %@", blogEntry.secureDate as NSDate) : NSPredicate(format: "date > %@", blogEntry.secureDate as NSDate),
-            NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "date = %@", blogEntry.secureDate as NSDate),
-                ascending ? NSPredicate(format: "relativeNumber < %i", blogEntry.relativeNumber) : NSPredicate(format: "relativeNumber > %i", blogEntry.relativeNumber)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", #keyPath(BlogEntry.validState), BlogEntry.ValidState.normal.rawValue),
+            NSCompoundPredicate(orPredicateWithSubpredicates: [
+                ascending ? NSPredicate(format: "date < %@", blogEntry.secureDate as NSDate) : NSPredicate(format: "date > %@", blogEntry.secureDate as NSDate),
+                NSCompoundPredicate(andPredicateWithSubpredicates: [
+                    NSPredicate(format: "date = %@", blogEntry.secureDate as NSDate),
+                    ascending ? NSPredicate(format: "relativeNumber < %i", blogEntry.relativeNumber) : NSPredicate(format: "relativeNumber > %i", blogEntry.relativeNumber)
+                ])
             ])
         ])
         return try? context.fetch(request).first
@@ -162,6 +171,9 @@ extension PersistenceController {
             context.perform {
                 let willBeBookmarked = !blogEntry.isBookmarked
                 blogEntry.bookmarkDate = willBeBookmarked ? Date() : nil
+                if willBeBookmarked {
+                    blogEntry.validState = BlogEntry.ValidState.normal.rawValue
+                }
                 
                 context.save(with: .updateBlogEntry)
             }
@@ -266,7 +278,7 @@ extension PersistenceController {
             let count = try await delete(byFetch: fetchRequest, context: context)
             appPrint("Deleted all \(count) blog entries.")
         } catch {
-            appPrint("Error deleting all blog entries: \(error)")
+            appPrint("Error deleting all blog entries", error)
         }
     }
     
@@ -286,8 +298,21 @@ extension PersistenceController {
             appPrint("Deleted \(count) blog entries older than \(date).")
             return count
         } catch {
-            appPrint("Error deleting blog entries older than \(date): \(error)")
+            appPrint("Error deleting blog entries older than \(date)", error)
             return 0
+        }
+    }
+    
+    func deleteBlogEntriesForSearch(context: NSManagedObjectContext) async {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult>
+        fetchRequest = BlogEntry.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", #keyPath(BlogEntry.validState), BlogEntry.ValidState.search.rawValue)
+
+        do {
+            let count = try await delete(byFetch: fetchRequest, context: context)
+            appPrint("Deleted \(count) blog entries for search.")
+        } catch {
+            appPrint("Error deleting blog entries for search", error)
         }
     }
 }
