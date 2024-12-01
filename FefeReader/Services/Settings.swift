@@ -41,8 +41,8 @@ class Settings : ObservableObject {
     static let DEFAULT_FONT = availableFonts.first!
     
 #if targetEnvironment(simulator)
-    let refreshInternal = TimeInterval(5 * 60)
-    let notificationDelay = TimeInterval(5)
+    let refreshTimeInterval = TimeInterval(5 * 60)
+    let notificationDelayTimeInterval = TimeInterval(5)
 #else
     var refreshTimeInterval: TimeInterval { get { Double(refreshInterval) * 60.0 } }
     let notificationDelayTimeInterval = TimeInterval(1)
