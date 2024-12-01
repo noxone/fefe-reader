@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LicensesView: View {
-    private static let libraries = ["PopupView", "SwiftSoup", "SwiftUIWebView"]
+    private static let libraries = ["PopupView", "SwiftSoup", "SwiftUIWebView", "swiftui-introspect"]
     private static let fonts = ["Allison"]
     
     var body: some View {

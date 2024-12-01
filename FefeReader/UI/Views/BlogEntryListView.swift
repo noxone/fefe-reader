@@ -104,9 +104,6 @@ struct BlogEntryListView: View {
         .onSubmit(of: .search) {
             search(for: searchTextDebouncer.debounced)
         }
-        .popup(isPresented: $showNotificationPopup, type: .floater(verticalPadding: 10, useSafeAreaInset: true), position: .bottom, animation: .easeInOut, autohideIn: 10, closeOnTap: false) {
-            notificationPopup
-        }
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
@@ -122,6 +119,15 @@ struct BlogEntryListView: View {
                     CommonIcons.shared.filterUnread(active: showOnlyUnread)
                 })
             }
+        }
+        .popup(isPresented: $showNotificationPopup) {
+            notificationPopup
+        } customize: { params in
+            params.type(.floater(verticalPadding: 10, horizontalPadding: 10, useSafeAreaInset: true))
+                .position(.bottom)
+                .animation(.easeInOut)
+                .autohideIn(10)
+                .closeOnTap(false)
         }
     }
     

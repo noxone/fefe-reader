@@ -42,8 +42,14 @@ struct BlogEntryDetailView: View {
         
     var body: some View {
         WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
-            .popup(isPresented: $showLinkList, type: .floater(), position: .bottom, closeOnTap: false, closeOnTapOutside: true) {
+            .popup(isPresented: $showLinkList) {
                 linkListSheet
+            } customize: { config in
+                config.type(.floater(verticalPadding: 10, horizontalPadding: 10, useSafeAreaInset: true))
+                    .position(.bottom)
+                    .closeOnTap(false)
+                    .closeOnTapOutside(true)
+                    .animation(.easeInOut)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {

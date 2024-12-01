@@ -8,6 +8,7 @@
 import SwiftUI
 import UIKit
 import BackgroundTasks
+import PopupView
 
 @main
 struct FefeReaderApp: App {
@@ -65,8 +66,17 @@ struct FefeReaderApp: App {
                         }
                     }
                 }
-                .popup(isPresented: $errorService.showError, type: .toast, position: .top, autohideIn: 5, closeOnTap: true) {
+                .popup(isPresented: $errorService.showError) {
                     errorPopup
+                } customize: { params in
+                    params.position(.top)
+                        .isOpaque(true)
+                        .animation(.smooth)
+                        .backgroundColor(errorService.color)
+                        .autohideIn(5)
+                        .dragToDismiss(true)
+                        .closeOnTap(true)
+                        .type(.toast)
                 }
 
         }
