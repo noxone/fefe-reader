@@ -59,7 +59,7 @@ struct BlogEntryDetailView: View {
                                 navigateToEntry(previousBlogEntry)
                             }
                         }, label: {
-                            Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.arrowUpImageName)
+                            Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.previousBlogEntryImageName)
                         })
                         .labelStyle(.iconOnly)
                         .disabled(previousBlogEntry == nil)
@@ -69,7 +69,7 @@ struct BlogEntryDetailView: View {
                                 navigateToEntry(nextBlogEntry)
                             }
                         }, label: {
-                            Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.arrowDownImageName)
+                            Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.nextBlogEntryImageName)
                         })
                         .labelStyle(.iconOnly)
                         .disabled(nextBlogEntry == nil)
@@ -94,30 +94,19 @@ struct BlogEntryDetailView: View {
                     .labelStyle(.iconOnly)
                 }
             }
-        /*
-         TODO: Build gestures
-         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
-         .onEnded({ value in
-         if value.translation.width < 0 {
-         // left
-         print("LEFT")
-         }
-         
-         if value.translation.width > 0 {
-         // right
-         print("RIGHT")
-         }
-         if value.translation.height < 0 {
-         // up
-         print("UP")
-         }
-         
-         if value.translation.height > 0 {
-         // down
-         print("DOWN")
-         }
-         }))
-         */
+            .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
+                .onEnded({ value in
+                    if value.translation.width < 0 {
+                        if let nextBlogEntry {
+                            navigateToEntry?(nextBlogEntry)
+                        }
+                    }
+                    if value.translation.width > 0 {
+                        if let previousBlogEntry {
+                            navigateToEntry?(previousBlogEntry)
+                        }
+                    }
+                }))
             .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

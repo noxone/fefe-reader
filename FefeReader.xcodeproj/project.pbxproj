@@ -32,9 +32,7 @@
 		C552BA79285DBA400033855C /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA78285DBA400033855C /* Debouncer.swift */; };
 		C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0928512B9F0026F67B /* DateExtension.swift */; };
 		C5583E0C285230110026F67B /* ErrorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0B285230110026F67B /* ErrorService.swift */; };
-		C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0D285325530026F67B /* CoreDataStack.swift */; };
 		C5583E10285325B20026F67B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0F285325B20026F67B /* Logging.swift */; };
-		C5583E12285327240026F67B /* DataAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E11285327240026F67B /* DataAccess.swift */; };
 		C5583E14285464D40026F67B /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E13285464D40026F67B /* PreviewData.swift */; };
 		C5583E1C2854722C0026F67B /* Allison.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E1A2854722C0026F67B /* Allison.license */; };
 		C5583E1D2854722C0026F67B /* FefeReader.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E1B2854722C0026F67B /* FefeReader.license */; };
@@ -108,9 +106,7 @@
 		C552BA78285DBA400033855C /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		C5583E0928512B9F0026F67B /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		C5583E0B285230110026F67B /* ErrorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorService.swift; sourceTree = "<group>"; };
-		C5583E0D285325530026F67B /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C5583E0F285325B20026F67B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		C5583E11285327240026F67B /* DataAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAccess.swift; sourceTree = "<group>"; };
 		C5583E13285464D40026F67B /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		C5583E1A2854722C0026F67B /* Allison.license */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Allison.license; sourceTree = "<group>"; };
 		C5583E1B2854722C0026F67B /* FefeReader.license */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FefeReader.license; sourceTree = "<group>"; };
@@ -296,8 +292,6 @@
 				C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */,
 				C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */,
 				C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */,
-				C5583E0D285325530026F67B /* CoreDataStack.swift */,
-				C5583E11285327240026F67B /* DataAccess.swift */,
 				C5583E13285464D40026F67B /* PreviewData.swift */,
 			);
 			path = Persistence;
@@ -506,7 +500,6 @@
 				C5FD07A628623C260030F081 /* SearchableList.swift in Sources */,
 				C5C687832CFC854900397385 /* StringExtension.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
-				C5583E12285327240026F67B /* DataAccess.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,
 				C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */,
@@ -530,7 +523,6 @@
 				C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */,
 				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
 				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
-				C5583E0E285325530026F67B /* CoreDataStack.swift in Sources */,
 				C552BA75285706E20033855C /* ToggleWithDescription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

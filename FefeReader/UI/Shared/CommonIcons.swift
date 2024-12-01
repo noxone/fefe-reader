@@ -26,9 +26,9 @@ class CommonIcons {
     
     let linkListImageName = "link.circle"
     
-    let arrowUpImageName = "arrow.up"
+    let previousBlogEntryImageName = "arrow.left"
     
-    let arrowDownImageName = "arrow.down"
+    let nextBlogEntryImageName = "arrow.right"
     
     private let filterUnreadInactiveImageName = "line.3.horizontal.decrease.circle"
     private let filterUnreadActiveImageName = "line.3.horizontal.decrease.circle.fill"
@@ -58,9 +58,9 @@ class CommonIcons {
     
     var linkListImage: Image { Image(systemName: linkListImageName) }
     
-    var arrowUp: Image { Image(systemName: arrowUpImageName) }
+    var previousBlogEntry: Image { Image(systemName: previousBlogEntryImageName) }
     
-    var arrowDown: Image { Image(systemName: arrowDownImageName) }
+    var nextBlogEntry: Image { Image(systemName: nextBlogEntryImageName) }
     
     var filterUnreadInactive: Image { Image(systemName: filterUnreadInactiveImageName) }
     
