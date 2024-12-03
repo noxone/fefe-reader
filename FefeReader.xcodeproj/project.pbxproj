@@ -181,10 +181,10 @@
 		C51FA2C3284E2212007FAD56 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C5C687822CFC854100397385 /* StringExtension.swift */,
 				C5243EA82844F0AE001CBA3D /* BlogEntryExtension.swift */,
 				C55EC20A285111560049AFB3 /* ColorExtension.swift */,
 				C5583E0928512B9F0026F67B /* DateExtension.swift */,
+				C5C687822CFC854100397385 /* StringExtension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
