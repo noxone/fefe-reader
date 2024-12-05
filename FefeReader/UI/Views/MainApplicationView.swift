@@ -79,5 +79,6 @@ struct MainApplicationView_Previews: PreviewProvider {
         
         MainApplicationView()
             .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
+            .environmentObject(FefeBlogService(context: PreviewData.shared.container.viewContext))
     }
 }

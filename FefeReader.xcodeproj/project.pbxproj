@@ -28,6 +28,7 @@
 		C524AD332843FEC500EF24F1 /* BlogEntryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C524AD322843FEC500EF24F1 /* BlogEntryRowView.swift */; };
 		C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C530683A28491D5700082BA2 /* CommonIcons.swift */; };
 		C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C533525E284F54EC0060A663 /* Allison-Regular.ttf */; };
+		C53B82D22D02283A00D4021D /* AdaptiveButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53B82D12D02283A00D4021D /* AdaptiveButtonStyle.swift */; };
 		C552BA75285706E20033855C /* ToggleWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA74285706E20033855C /* ToggleWithDescription.swift */; };
 		C552BA79285DBA400033855C /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C552BA78285DBA400033855C /* Debouncer.swift */; };
 		C5583E0A28512B9F0026F67B /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5583E0928512B9F0026F67B /* DateExtension.swift */; };
@@ -102,6 +103,7 @@
 		C530683A28491D5700082BA2 /* CommonIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonIcons.swift; sourceTree = "<group>"; };
 		C530683E2849E2A600082BA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C533525E284F54EC0060A663 /* Allison-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Allison-Regular.ttf"; path = "FefeReader/UI/Fonts/Allison-Regular.ttf"; sourceTree = SOURCE_ROOT; };
+		C53B82D12D02283A00D4021D /* AdaptiveButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveButtonStyle.swift; sourceTree = "<group>"; };
 		C552BA74285706E20033855C /* ToggleWithDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleWithDescription.swift; sourceTree = "<group>"; };
 		C552BA78285DBA400033855C /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		C5583E0928512B9F0026F67B /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 			children = (
 				C5243EB32845CF5B001CBA3D /* Views */,
 				C524AD312843FEA500EF24F1 /* Widgets */,
+				C58495A92D02343B0039300C /* Modifiers */,
 				C5243EAD2845CAA6001CBA3D /* UIKit */,
 				C530683928491D3D00082BA2 /* Shared */,
 				C5335263284F75CF0060A663 /* Fonts */,
@@ -339,6 +342,14 @@
 				C5583E22285483CF0026F67B /* SwiftUIWebView.license */,
 			);
 			path = Licenses;
+			sourceTree = "<group>";
+		};
+		C58495A92D02343B0039300C /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				C53B82D12D02283A00D4021D /* AdaptiveButtonStyle.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -510,6 +521,7 @@
 				C51FA2C2284DF31F007FAD56 /* NotificationService.swift in Sources */,
 				C5243EB42845CF8A001CBA3D /* BlogEntryListView.swift in Sources */,
 				C51FA2CA284F30D3007FAD56 /* LicensesView.swift in Sources */,
+				C53B82D22D02283A00D4021D /* AdaptiveButtonStyle.swift in Sources */,
 				C5E219BB2CF657A6005B1F6A /* PersistenceController.swift in Sources */,
 				C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */,
 				C51FA2BD284C78E4007FAD56 /* BackgroundTaskService.swift in Sources */,
@@ -704,7 +716,7 @@
 				REGISTER_APP_GROUPS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -741,7 +753,7 @@
 				REGISTER_APP_GROUPS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 struct BlogEntryDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var fefeBlog: FefeBlogService
-    
+        
     private let persistence = PersistenceController.shared
     
     // The blog entry we want to display
@@ -39,7 +39,7 @@ struct BlogEntryDetailView: View {
     
     @State private var previousBlogEntry: BlogEntry? = nil
     @State private var nextBlogEntry: BlogEntry? = nil
-        
+    
     var body: some View {
         WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
             .popup(isPresented: $showLinkList) {
@@ -53,45 +53,47 @@ struct BlogEntryDetailView: View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    if let navigateToEntry {
-                        Button(action: {
-                            if let previousBlogEntry {
-                                navigateToEntry(previousBlogEntry)
-                            }
-                        }, label: {
-                            Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.previousBlogEntryImageName)
-                        })
-                        .labelStyle(.iconOnly)
-                        .disabled(previousBlogEntry == nil)
+                    HStack {
+                        if let navigateToEntry {
+                            Button(action: {
+                                if let previousBlogEntry {
+                                    navigateToEntry(previousBlogEntry)
+                                }
+                            }, label: {
+                                Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.previousBlogEntryImageName)
+                            })
+                            .adaptiveButtonStyle()
+                            .disabled(previousBlogEntry == nil)
+                            
+                            Button(action: {
+                                if let nextBlogEntry {
+                                    navigateToEntry(nextBlogEntry)
+                                }
+                            }, label: {
+                                Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.nextBlogEntryImageName)
+                            })
+                            .adaptiveButtonStyle()
+                            .disabled(nextBlogEntry == nil)
+                        }
+                        
+                        Spacer()
+                        
+                        if !blogEntry.links.isEmpty {
+                            Button(action: {
+                                showLinkList.toggle()
+                            }, label: {
+                                Label("Links", systemImage: CommonIcons.shared.linkListImageName)
+                            })
+                            .adaptiveButtonStyle()
+                        }
                         
                         Button(action: {
-                            if let nextBlogEntry {
-                                navigateToEntry(nextBlogEntry)
-                            }
+                            showShareSheet = true
                         }, label: {
-                            Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.nextBlogEntryImageName)
+                            Label("Teilen", systemImage: CommonIcons.shared.shareImageName)
                         })
-                        .labelStyle(.iconOnly)
-                        .disabled(nextBlogEntry == nil)
+                        .adaptiveButtonStyle()
                     }
-                    
-                    Spacer()
-                    
-                    if !blogEntry.links.isEmpty {
-                        Button(action: {
-                            showLinkList.toggle()
-                        }, label: {
-                            Label("Links", systemImage: CommonIcons.shared.linkListImageName)
-                        })
-                        .labelStyle(.iconOnly)
-                    }
-                    
-                    Button(action: {
-                        showShareSheet = true
-                    }, label: {
-                        Label("Teilen", systemImage: CommonIcons.shared.shareImageName)
-                    })
-                    .labelStyle(.iconOnly)
                 }
             }
             .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
@@ -220,8 +222,9 @@ struct BlogEntryDetailView: View {
 
 struct BlogEntryDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             BlogEntryDetailView(blogEntry: PreviewData.shared.preview_BlogEntries[0], navigateToEntry: {_ in}, navigateToSubEntry: {_ in})
         }
+        .environment(\.managedObjectContext, PreviewData.shared.container.viewContext)
     }
 }
