@@ -128,7 +128,7 @@ struct SettingsView: View {
                 }
             }
             Toggle("Gelesene Einträge ausgrauen", isOn: $settings.tintReadBlogentries)
-            ToggleWithDescription(title: "Updates im Hintergrund", isOn: $settings.checkForUpdatesInBackground, descriptionForOn: "Die App sucht regelmäßig nach neuen Blogeinträgen, auch wenn sie nicht im Vordergrund ist. Wird die App ganz geschlossen, findet keine Suche nach Updates statt.", descriptionForOff: "Die App wird nicht im Hintergrund nach Updates suchen.")
+            ToggleWithDescription(title: "Updates im Hintergrund", isOn: $settings.checkForUpdatesInBackground, descriptionForOn: "Die App sucht regelmäßig nach neuen Blogeinträgen, auch wenn sie nicht im Vordergrund ist.", descriptionForOff: "Die App wird nicht im Hintergrund nach Updates suchen.")
             if settings.checkForUpdatesInBackground {
                 Picker("Updates alle", selection: $settings.refreshInterval) {
                     ForEach(Settings.RefreshIntervalDuration.allCases) { option in
