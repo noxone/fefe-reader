@@ -41,6 +41,7 @@
 		C5583E21285483AA0026F67B /* SwiftSoup.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E20285483AA0026F67B /* SwiftSoup.license */; };
 		C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E22285483CF0026F67B /* SwiftUIWebView.license */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
+		C5A93F1C2D05CB1A00C56A63 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */; };
 		C5C687832CFC854900397385 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C687822CFC854100397385 /* StringExtension.swift */; };
 		C5C687852CFC8C4400397385 /* swiftui-introspect.license in Resources */ = {isa = PBXBuildFile; fileRef = C5C687842CFC8C3C00397385 /* swiftui-introspect.license */; };
 		C5E219B92CF6574B005B1F6A /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */; };
@@ -116,6 +117,7 @@
 		C5583E20285483AA0026F67B /* SwiftSoup.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftSoup.license; sourceTree = "<group>"; };
 		C5583E22285483CF0026F67B /* SwiftUIWebView.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftUIWebView.license; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C5C687822CFC854100397385 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		C5C687842CFC8C3C00397385 /* swiftui-introspect.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = "swiftui-introspect.license"; sourceTree = "<group>"; };
 		C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				C524AD042843FD8C00EF24F1 /* Assets.xcassets */,
 				C524AD0B2843FD8C00EF24F1 /* FefeReader.xcdatamodeld */,
 				C524AD062843FD8C00EF24F1 /* Preview Content */,
+				C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */,
 			);
 			path = FefeReader;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 			files = (
 				C5583E1D2854722C0026F67B /* FefeReader.license in Resources */,
 				C524AD082843FD8C00EF24F1 /* Preview Assets.xcassets in Resources */,
+				C5A93F1C2D05CB1A00C56A63 /* Settings.bundle in Resources */,
 				C533525F284F54EC0060A663 /* Allison-Regular.ttf in Resources */,
 				C5C687852CFC8C4400397385 /* swiftui-introspect.license in Resources */,
 				C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */,

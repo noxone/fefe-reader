@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class Settings : ObservableObject {
+class Settings : NSObject, ObservableObject {
     static let shared = Settings()
     
     private let KEY_REFRESH_INTERVAL = "refreshInterval"
@@ -82,8 +82,24 @@ class Settings : ObservableObject {
     @Published var enableDeletion = false
     { didSet { UserDefaults.standard.set(enableDeletion, forKey: KEY_ENABLE_DELETION) } }
     
-    private init() {
+    private var key: NSKeyValueObservation?
+    
+    private override init() {
+        super.init()
+        
         let userDefaults = UserDefaults.standard
+        self.read(userDefaults: userDefaults)
+        
+        key = userDefaults.observe(\.enableDeletion) { userDefaults, key in
+            self.enableDeletion = userDefaults.bool(forKey: self.KEY_ENABLE_DELETION, withDefault: false)
+        }
+    }
+    
+    deinit {
+        key?.invalidate()
+    }
+    
+    private func read(userDefaults: UserDefaults) {
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
         self.fontSize = userDefaults.integer(forKey: KEY_FONT_SIZE, withDefault: 12)
         self.font = userDefaults.stringBasedObject(forKey: KEY_FONT_NAME, withDefault: Settings.availableFonts[0], andConverter: { string in
@@ -127,6 +143,17 @@ extension UserDefaults {
             return converter(string) ?? defaultValue
         }
         return defaultValue
+    }
+}
+
+fileprivate extension UserDefaults {
+    @objc dynamic var enableDeletion: Bool {
+        get {
+            self.bool(forKey: "enableDeletion")
+        }
+        set {
+            self.set(newValue, forKey: "enableDeletion")
+        }
     }
 }
 

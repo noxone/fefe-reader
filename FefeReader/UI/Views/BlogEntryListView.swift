@@ -215,7 +215,7 @@ struct BlogEntryListView: View {
                             .tint(.blue)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            if true /*settings.enableDeletion*/ {
+                            if settings.enableDeletion {
                                 Button(action: {
                                     withAnimation {
                                         persistence.delete(blogEntry: blogEntry)
