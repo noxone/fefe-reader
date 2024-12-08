@@ -66,19 +66,6 @@ struct FefeReaderApp: App {
                         }
                     }
                 }
-                .popup(isPresented: $errorService.showError) {
-                    errorPopup
-                } customize: { params in
-                    params.position(.top)
-                        .isOpaque(true)
-                        .animation(.smooth)
-                        .backgroundColor(errorService.color)
-                        .autohideIn(5)
-                        .dragToDismiss(true)
-                        .closeOnTap(true)
-                        .type(.toast)
-                }
-
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
@@ -89,13 +76,5 @@ struct FefeReaderApp: App {
                 taskService.scheduleBackgroundTasks()
             }
         }
-    }
-    
-    private var errorPopup: some View {
-        Text(errorService.errorMessage)
-            .foregroundColor(.white)
-            .padding(EdgeInsets(top: 60, leading: 32, bottom: 16, trailing: 32))
-            .frame(maxWidth: .infinity)
-            .background(errorService.color)
     }
 }

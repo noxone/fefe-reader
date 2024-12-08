@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainApplicationView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var errorService = ErrorService.shared
+    
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
     
     @State private var currentBlogEntry: BlogEntry?
@@ -61,14 +63,30 @@ struct MainApplicationView: View {
             }
         }
         .sheet(isPresented: $showSettingsSheet) {
-            settingsItem
+            NavigationStack {
+                SettingsView()
+            }
+        }
+        .popup(isPresented: $errorService.showError) {
+            errorPopup
+        } customize: { params in
+            params.position(.top)
+                .isOpaque(true)
+                .animation(.smooth)
+                .autohideIn(5)
+                .dragToDismiss(true)
+                .closeOnTap(true)
+                .closeOnTapOutside(true)
+                .type(.toast)
         }
     }
     
-    private var settingsItem: some View {
-        NavigationStack {
-            SettingsView()
-        }
+    private var errorPopup: some View {
+        Text(errorService.errorMessage)
+            .foregroundColor(.white)
+            .padding(EdgeInsets(top: 60, leading: 32, bottom: 16, trailing: 32))
+            .frame(maxWidth: .infinity)
+            .background(errorService.color)
     }
 }
 
