@@ -121,6 +121,7 @@ struct SettingsView: View {
     private var sectionBlogEntries: some View {
         Section("Blogeinträge") {
             Toggle("Links im internen Browser öffnen", isOn: $settings.openUrlsInInternalBrowser)
+            ToggleWithDescription(title: "Text in Spalten", isOn: $settings.useColumns, descriptionForOn: "Wenn der Bildschirm breit genug ist, wird der Text in zwei Spalten angezeigt.", descriptionForOff: "Der Text wird nie in Spalten angezeigt.")
             Picker("Anzahl Vorschauzeilen in der Liste", selection: $settings.overviewLineLimit) {
                 ForEach(1 ..< 5) { lineLimit in
                     Text("\(lineLimit)")

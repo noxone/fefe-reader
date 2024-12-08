@@ -21,6 +21,7 @@ class Settings : NSObject, ObservableObject {
     private let KEY_KEEP_BOOKMARKS = "keepBookmarkedBlogEntries"
     private let KEY_CHECK_FOR_UPDATES = "checkForUpdatesInBackground"
     private let KEY_TINT_READ_BLOGENTRIES = "tintReadBlogentries"
+    private let KEY_USE_COLUMNS = "useColumnsOnWideScreens"
     
     private let KEY_ENABLE_DELETION = "enableDeletion"
     
@@ -82,6 +83,9 @@ class Settings : NSObject, ObservableObject {
     @Published var enableDeletion = false
     { didSet { UserDefaults.standard.set(enableDeletion, forKey: KEY_ENABLE_DELETION) } }
     
+    @Published var useColumns = true
+    { didSet { UserDefaults.standard.set(useColumns, forKey: KEY_USE_COLUMNS) } }
+
     private var key: NSKeyValueObservation?
     
     private override init() {
@@ -112,6 +116,7 @@ class Settings : NSObject, ObservableObject {
         self.keepBookmarkedBlogEntries = userDefaults.bool(forKey: KEY_KEEP_BOOKMARKS, withDefault: true)
         self.checkForUpdatesInBackground = userDefaults.bool(forKey: KEY_CHECK_FOR_UPDATES, withDefault: true)
         self.tintReadBlogentries = userDefaults.bool(forKey: KEY_TINT_READ_BLOGENTRIES, withDefault: true)
+        self.useColumns = userDefaults.bool(forKey: KEY_USE_COLUMNS, withDefault: true)
         
         self.enableDeletion = userDefaults.bool(forKey: KEY_ENABLE_DELETION, withDefault: false)
     }
