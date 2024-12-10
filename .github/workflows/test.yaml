@@ -7,11 +7,23 @@ on:
 jobs:
   test:
     name: Testing iOS app
-    runs-on: macos-12
+    runs-on: macos-15
+    # https://github.com/actions/runner-images/blob/main/README.md#available-images
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
-      - name: Force XCode 13.4
-        run: sudo xcode-select -switch /Applications/Xcode_13.4.app
+
+      - name: Force XCode 16.1
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
+
       - name: Testing iOS app
-        run: exec ./.github/scripts/test_app.sh
+        run: |
+          set -eo pipefail
+
+          xcodebuild -project FefeReader.xcodeproj \
+                      -scheme FefeReader \
+                      -destination platform=iOS\ Simulator,OS=18.1,name=iPhone\ 16\ Pro \
+                      clean test | xcpretty
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#installed-simulators
