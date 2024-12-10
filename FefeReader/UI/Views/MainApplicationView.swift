@@ -57,11 +57,6 @@ struct MainApplicationView: View {
                 columnVisibility = .all
             }
         }
-        .onChange(of: currentBlogEntry) { x in
-            if x != nil {
-                columnVisibility = .automatic
-            }
-        }
         .sheet(isPresented: $showSettingsSheet) {
             NavigationStack {
                 SettingsView()
