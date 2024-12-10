@@ -56,6 +56,7 @@
 		C5E310BA28475840005937FA /* MainApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* MainApplicationView.swift */; };
 		C5E310BC28475A9A005937FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BB28475A9A005937FA /* Settings.swift */; };
 		C5E310BE28476130005937FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310BD28476130005937FA /* SettingsView.swift */; };
+		C5EF75462D08DEFA0084F917 /* ContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EF75452D08DEFA0084F917 /* ContextView.swift */; };
 		C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */; };
 		C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */; };
 		C5FD07A628623C260030F081 /* SearchableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FD07A528623C260030F081 /* SearchableList.swift */; };
@@ -131,6 +132,7 @@
 		C5E310B928475840005937FA /* MainApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApplicationView.swift; sourceTree = "<group>"; };
 		C5E310BB28475A9A005937FA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C5E310BD28476130005937FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C5EF75452D08DEFA0084F917 /* ContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextView.swift; sourceTree = "<group>"; };
 		C5FD079F285EF4F00030F081 /* MinSizeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinSizeScrollView.swift; sourceTree = "<group>"; };
 		C5FD07A3286198020030F081 /* SectionedFetchedObjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedFetchedObjectsView.swift; sourceTree = "<group>"; };
 		C5FD07A528623C260030F081 /* SearchableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchableList.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			isa = PBXGroup;
 			children = (
 				C53B82D12D02283A00D4021D /* AdaptiveButtonStyle.swift */,
+				C5EF75452D08DEFA0084F917 /* ContextView.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */,
 				C5FD07A628623C260030F081 /* SearchableList.swift in Sources */,
 				C5C687832CFC854900397385 /* StringExtension.swift in Sources */,
+				C5EF75462D08DEFA0084F917 /* ContextView.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
 				C5E310BC28475A9A005937FA /* Settings.swift in Sources */,

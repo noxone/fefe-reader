@@ -42,14 +42,8 @@ struct BlogEntryDetailView: View {
     
     var body: some View {
         WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
-            .popup(isPresented: $showLinkList) {
+            .contextView(isPresented: $showLinkList) {
                 linkListSheet
-            } customize: { config in
-                config.type(.floater(verticalPadding: 10, horizontalPadding: 10, useSafeAreaInset: true))
-                    .position(.bottom)
-                    .closeOnTap(false)
-                    .closeOnTapOutside(true)
-                    .animation(.easeInOut)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -162,34 +156,51 @@ struct BlogEntryDetailView: View {
     }
     
     private var linkListSheet: some View {
-        MinSizeScrollView {
-            VStack(alignment: .leading) {
-                ForEach(blogEntry.links) { link in
-                    LinkDisplayButton(link: link) { isLongPress in
-                        if !isLongPress {
-                            copy(link)
-                        } else {
-                            print("loooooong")
-                        }
-                    }
-                    .contextMenu(menuItems: {
-                        Button("URL kopieren") { copy(link) }
-                        Button("URL öffnen") {
-                            handleHttpLinks(url: link.url)
-                            showLinkList = false
-                        }
-                    })
+        if #available(iOS 17.0, *) {
+            AnyView(
+                ScrollView {
+                    unframedLinkList
                 }
-
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(5)
+                    .padding(.top)
+            )
+        } else {
+            AnyView(framedLinkList)
+        }
+    }
+    
+    private var framedLinkList: some View {
+        MinSizeScrollView {
+            unframedLinkList
         }
         .background(.ultraThinMaterial)
         .shadow(color: .shadow, radius: 10, x: 0, y: 0)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding()
         .padding(.bottom, 50)
+    }
+    
+    private var unframedLinkList: some View {
+        VStack(alignment: .leading) {
+            ForEach(blogEntry.links) { link in
+                LinkDisplayButton(link: link) { isLongPress in
+                    if !isLongPress {
+                        copy(link)
+                    } else {
+                        print("loooooong")
+                    }
+                }
+                .contextMenu(menuItems: {
+                    Button("URL kopieren") { copy(link) }
+                    Button("URL öffnen") {
+                        handleHttpLinks(url: link.url)
+                        showLinkList = false
+                    }
+                })
+            }
+            
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(5)
     }
     
     private func handleHttpLinks(url: URL) {
