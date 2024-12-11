@@ -1,0 +1,37 @@
+name: Build and archive
+
+on:
+  workflow_dispatch:
+
+  
+  
+jobs:
+  test:
+    name: Testing iOS app
+    runs-on: macos-15
+    # https://github.com/actions/runner-images/blob/main/README.md#available-images
+    env:
+      project-name: FefeReader
+      scheme-name: FefeReader
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Select XCode 16.1
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
+
+      - name: Clean project
+        run: |
+          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release clean
+      
+      - name: Archive project
+        run: |
+          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release archive -archivePath "../build/${{ env.project-name }}.xcarchive"
+
+      - name: Export .ipa
+        run: |
+          xcodebuild -exportArchive -archivePath ../build/${{ env.project-name }}.xcarchive -exportOptionsPlist exportOptions.plist -exportPath "../build" -allowProvisioningUpdates
+
+
