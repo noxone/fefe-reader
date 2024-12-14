@@ -9,6 +9,7 @@ on:
 env:
   project-name: FefeReader
   scheme-name: FefeReader
+  bundle-id: org.olafneumann.FefeReader
   
 jobs:
   build:
@@ -25,10 +26,6 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_16.1.app
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
 
-      - name: Clean project
-        run: |
-          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release clean
-
       - name: Import certificates
         uses: Apple-Actions/import-codesign-certs@v1
         with:
@@ -38,7 +35,7 @@ jobs:
       - name: Download provisioning profiles
         uses: Apple-Actions/download-provisioning-profiles@v1
         with:
-          bundle-id: codes.orj.Example-iOS
+          bundle-id: ${{ env.bundle-id }}
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
@@ -49,6 +46,10 @@ jobs:
         with:
           token: ${{ secrets.github_token }}
 
+      - name: Clean project
+        run: |
+          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release clean
+  
       - name: Build and archive project
         run: |
           ./.github/scripts/build-and-archive.sh
@@ -56,7 +57,7 @@ jobs:
       - name: Upload to Testflight
         uses: Apple-Actions/upload-testflight-build@master
         with:
-          app-path: .build/Artifacts/Example-iOS.ipa/Example-iOS.ipa
+          app-path: .build/Artifacts/${{ env.scheme-name }}.ipa/${{ env.scheme-name }}.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
