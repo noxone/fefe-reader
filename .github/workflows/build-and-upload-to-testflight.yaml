@@ -1,0 +1,64 @@
+name: Build and archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - test-flight/**
+
+env:
+  project-name: FefeReader
+  scheme-name: FefeReader
+  
+jobs:
+  build:
+    name: Build and upload iOS app
+    runs-on: macos-15
+    # https://github.com/actions/runner-images/blob/main/README.md#available-images
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select XCode 16.1
+        run: sudo xcode-select -switch /Applications/Xcode_16.1.app
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
+
+      - name: Clean project
+        run: |
+          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release clean
+
+      - name: Import certificates
+        uses: Apple-Actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_FILE_BASE64 }}
+          p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
+
+      - name: Download provisioning profiles
+        uses: Apple-Actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: codes.orj.Example-iOS
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Generate Build Number
+        id: buildnumber
+        uses: einaregilsson/build-number@v2
+        with:
+          token: ${{ secrets.github_token }}
+
+      - name: Build and archive project
+        run: |
+          ./.github/scripts/build-and-archive.sh
+
+      - name: Upload to Testflight
+        uses: Apple-Actions/upload-testflight-build@master
+        with:
+          app-path: .build/Artifacts/Example-iOS.ipa/Example-iOS.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+# https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
