@@ -27,12 +27,12 @@ EXPORT_OPTIONS_FILE="Support/ExportOptions.plist"
 rm -rf "${RESULT_BUNDLE_PATH}"
 
 #-workspace "${WORKSPACE}" \
+#    -sdk "${SDK}" \
+#    -parallelizeTargets \
 xcrun xcodebuild \
     -project "${PROJECT}" \
     -scheme "${SCHEME}" \
     -configuration "${CONFIGURATION}" \
-    -sdk "${SDK}" \
-    -parallelizeTargets \
     -showBuildTimingSummary \
     -disableAutomaticPackageResolution \
     -derivedDataPath "${DERIVED_DATA_PATH}" \

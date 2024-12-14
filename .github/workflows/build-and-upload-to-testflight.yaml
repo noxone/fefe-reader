@@ -42,15 +42,30 @@ jobs:
 
       - name: Generate Build Number
         id: buildnumber
-        uses: einaregilsson/build-number@v2
+        uses: onyxmueller/build-tag-number@v1
         with:
           token: ${{ secrets.github_token }}
 
       - name: Clean project
         run: |
-          xcodebuild -project ${{ env.project-name }}.xcodeproj -scheme ${{ env.scheme-name }} -sdk iphoneos -configuration Release clean
-  
-      - name: Build and archive project
+          xcodebuild -project ${{ env.project-name }}.xcodeproj \
+                      -scheme ${{ env.scheme-name }} \
+                      -sdk iphoneos \
+                      -configuration Release \
+                      clean | xcpretty
+
+      - name: Build project
+        run: |
+          xcodebuild -project ${{ env.project-name }}.xcodeproj \
+                      -scheme ${{ env.scheme-name }} \
+                      -sdk iphoneos \
+                      -configuration Release \
+                      -allowProvisioningUpdates \
+                      -showBuildTimingSummary \
+                      -disableAutomaticPackageResolution \
+                      build
+    
+      - name: Archive project
         run: |
           ./.github/scripts/build-and-archive.sh
 
