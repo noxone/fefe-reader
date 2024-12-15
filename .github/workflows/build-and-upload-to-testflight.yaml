@@ -10,6 +10,9 @@ env:
   project-name: FefeReader
   scheme-name: FefeReader
   bundle-id: org.olafneumann.FefeReader
+  development-team: NBA2M3HYSW
+  provisioning-profile-specifier: Distribute FefeReader
+  provisioning-profile: 2d117a78-38d3-4de5-b92d-661132c8e97d
   
 jobs:
   build:
@@ -27,18 +30,24 @@ jobs:
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
 
       - name: Import certificates
-        uses: Apple-Actions/import-codesign-certs@v1
+        uses: Apple-Actions/import-codesign-certs@v3
         with:
           p12-file-base64: ${{ secrets.CERTIFICATES_FILE_BASE64 }}
           p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
 
       - name: Download provisioning profiles
-        uses: Apple-Actions/download-provisioning-profiles@v1
+        id: provisioning
+        uses: Apple-Actions/download-provisioning-profiles@v3
         with:
           bundle-id: ${{ env.bundle-id }}
+          profile-type: 'IOS_APP_STORE'
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Print provisioning profiles
+        run: |
+          echo "${{ steps.provisioning.outputs.profiles }}"
 
       - name: Generate Build Number
         id: buildnumber
@@ -46,28 +55,60 @@ jobs:
         with:
           token: ${{ secrets.github_token }}
 
-      - name: Clean project
-        run: |
-          xcodebuild -project ${{ env.project-name }}.xcodeproj \
-                      -scheme ${{ env.scheme-name }} \
-                      -sdk iphoneos \
-                      -configuration Release \
-                      clean | xcpretty
+#      - name: Clean project
+#        run: |
+#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
+#                      -scheme ${{ env.scheme-name }} \
+#                      -sdk iphoneos \
+#                      -configuration Release \
+#                      clean | xcpretty
 
-      - name: Build project
+#      - name: Build project
+#        run: |
+#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
+#                      -scheme ${{ env.scheme-name }} \
+#                      -sdk iphoneos \
+#                      -configuration Release \
+#                      -allowProvisioningUpdates \
+#                      -showBuildTimingSummary \
+#                      CODE_SIGN_STYLE="Manual" \
+#                      CODE_SIGN_IDENTITY="iPhone Distribution" \
+#                      DEVELOPMENT_TEAM="${{env.development-team}}" \
+#                      PROVISIONING_PROFILE_SPECIFIER="${{env.provisioning-profile-specifier}}" \
+#                      PROVISIONING_PROFILE="${{env.provisioning-profile}}" \
+#                      CURRENT_PROJECT_VERSION=${{ steps.buildnumber.outputs.build_number }} \
+#                      build
+    
+      - name: Clean and build for archive project
         run: |
-          xcodebuild -project ${{ env.project-name }}.xcodeproj \
+          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
                       -scheme ${{ env.scheme-name }} \
                       -sdk iphoneos \
                       -configuration Release \
                       -allowProvisioningUpdates \
                       -showBuildTimingSummary \
-                      -disableAutomaticPackageResolution \
-                      build
-    
-      - name: Archive project
+                      -derivedDataPath ".build/DerivedData" \
+                      -archivePath ".build/Archives/${{ env.scheme-name }}.xcarchive" \
+                      -resultBundlePath ".build/Artifacts/${{ env.scheme-name }}.xcresult" \
+                      CODE_SIGN_STYLE="Manual" \
+                      CODE_SIGN_IDENTITY="iPhone Distribution" \
+                      DEVELOPMENT_TEAM="${{env.development-team}}" \
+                      PROVISIONING_PROFILE_SPECIFIER="${{env.provisioning-profile-specifier}}" \
+                      PROVISIONING_PROFILE="${{env.provisioning-profile}}" \
+                      CURRENT_PROJECT_VERSION=${{ steps.buildnumber.outputs.build_number }} \
+                      clean archive
+
+      - name: Export archive
         run: |
-          ./.github/scripts/build-and-archive.sh
+          xcrun xcodebuild \
+                      -exportArchive \
+                      -exportOptionsPlist "BuildConfiguration/ExportOptions.plist" \
+                      -archivePath ".build/Archives/${{ env.scheme-name }}.xcarchive" \
+                      -exportPath ".build/Artifacts/${{env.scheme-name}}.ipa" \
+    
+#      - name: Archive project
+#        run: |
+#          ./.github/scripts/build-and-archive.sh
 
       - name: Upload to Testflight
         uses: Apple-Actions/upload-testflight-build@master
