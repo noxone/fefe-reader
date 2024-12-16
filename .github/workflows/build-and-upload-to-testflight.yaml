@@ -2,9 +2,15 @@ name: Build and archive
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number'
+        required: true
+        default: ''
   push:
     branches: 
-      - test-flight/**
+      - testfligth/*
+      - test-flight/*
 
 env:
   project-name: FefeReader
@@ -28,6 +34,32 @@ jobs:
       - name: Select XCode 16.1
         run: sudo xcode-select -switch /Applications/Xcode_16.1.app
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
+        
+      - name: Extract version from branch name
+        id: extract_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+
+            echo "version: ${{ github.event.inputs.version }}"
+            version="${{ github.event.inputs.version }}"
+
+          else
+
+            branch_name="${GITHUB_REF#refs/heads/}"
+            echo "Branch name: $branch_name"
+
+            if [[ "$branch_name" =~ test-?flight\/([0-9]+\.[0-9]+)$ ]]; then
+              version="${BASH_REMATCH[1]}"
+              echo "Extracted version: $version"
+            else
+              echo "Branch name does not match the expected pattern: test-?flight\/([0-9]+\.[0-9]+)$"
+              echo "No version extracted."
+              exit 1
+            fi
+
+          fi
+
+          echo "::set-output name=version::$version"
 
       - name: Import certificates
         uses: Apple-Actions/import-codesign-certs@v3
@@ -55,30 +87,6 @@ jobs:
         with:
           token: ${{ secrets.github_token }}
 
-#      - name: Clean project
-#        run: |
-#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
-#                      -scheme ${{ env.scheme-name }} \
-#                      -sdk iphoneos \
-#                      -configuration Release \
-#                      clean | xcpretty
-
-#      - name: Build project
-#        run: |
-#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
-#                      -scheme ${{ env.scheme-name }} \
-#                      -sdk iphoneos \
-#                      -configuration Release \
-#                      -allowProvisioningUpdates \
-#                      -showBuildTimingSummary \
-#                      CODE_SIGN_STYLE="Manual" \
-#                      CODE_SIGN_IDENTITY="iPhone Distribution" \
-#                      DEVELOPMENT_TEAM="${{env.development-team}}" \
-#                      PROVISIONING_PROFILE_SPECIFIER="${{env.provisioning-profile-specifier}}" \
-#                      PROVISIONING_PROFILE="${{env.provisioning-profile}}" \
-#                      CURRENT_PROJECT_VERSION=${{ steps.buildnumber.outputs.build_number }} \
-#                      build
-    
       - name: Clean and build for archive project
         run: |
           xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
@@ -96,6 +104,7 @@ jobs:
                       PROVISIONING_PROFILE_SPECIFIER="${{env.provisioning-profile-specifier}}" \
                       PROVISIONING_PROFILE="${{env.provisioning-profile}}" \
                       CURRENT_PROJECT_VERSION=${{ steps.buildnumber.outputs.build_number }} \
+                      MARKETING_VERSION=${{ steps.extract_version.outputs.version }} \
                       clean archive
 
       - name: Export archive
@@ -105,11 +114,17 @@ jobs:
                       -exportOptionsPlist "BuildConfiguration/ExportOptions.plist" \
                       -archivePath ".build/Archives/${{ env.scheme-name }}.xcarchive" \
                       -exportPath ".build/Artifacts/${{env.scheme-name}}.ipa" \
-    
-#      - name: Archive project
-#        run: |
-#          ./.github/scripts/build-and-archive.sh
 
+      - name: Create ipa.zip
+        run: |
+          zip .build/ipa.zip .build/Artifacts/${{env.scheme-name}}.ipa/*
+
+      - name: Upload ipa.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: IPA
+          path: .build/ipa.zip
+    
       - name: Upload to Testflight
         uses: Apple-Actions/upload-testflight-build@master
         with:
