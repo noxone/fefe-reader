@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: 
-      - test-flight/**
+      - testfligth/*
+      - test-flight/*
 
 env:
   project-name: FefeReader
@@ -25,9 +26,46 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache .build folder
+        uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-build-${{ hashFiles('.build/**') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
       - name: Select XCode 16.1
         run: sudo xcode-select -switch /Applications/Xcode_16.1.app
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#xcode
+        
+      - name: Extract version from branch name
+        id: extract_version
+        run: |
+          #!/bin/bash
+          branch_name="${GITHUB_REF#refs/heads/}"
+
+          echo $branch_name
+
+          # Apply regex to extract version
+          if [[ "$branch_name" =~ test-?flight\/([0-9]+\.[0-9]+)$ ]]; then
+            version="${BASH_REMATCH[1]}"
+            echo "Extracted version: $version"
+            echo "::set-output name=version::$version"
+          else
+            echo "Branch name does not match the expected pattern. No version extracted."
+            echo "::set-output name=version::"  # Set empty output if version not found
+          fi
+
+      - name: Set marketing version
+        if: steps.extract_version.outputs.version != ''  # Only runs if a version was extracted or set
+        run: |
+          version=${{ steps.extract_version.outputs.version }}
+          echo "Setting marketing version to: $version"
+          
+          agvtool new-marketing-version "$version"
+          
+          # Print the new version for verification
+          agvtool next-version
 
       - name: Import certificates
         uses: Apple-Actions/import-codesign-certs@v3
@@ -55,30 +93,6 @@ jobs:
         with:
           token: ${{ secrets.github_token }}
 
-#      - name: Clean project
-#        run: |
-#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
-#                      -scheme ${{ env.scheme-name }} \
-#                      -sdk iphoneos \
-#                      -configuration Release \
-#                      clean | xcpretty
-
-#      - name: Build project
-#        run: |
-#          xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
-#                      -scheme ${{ env.scheme-name }} \
-#                      -sdk iphoneos \
-#                      -configuration Release \
-#                      -allowProvisioningUpdates \
-#                      -showBuildTimingSummary \
-#                      CODE_SIGN_STYLE="Manual" \
-#                      CODE_SIGN_IDENTITY="iPhone Distribution" \
-#                      DEVELOPMENT_TEAM="${{env.development-team}}" \
-#                      PROVISIONING_PROFILE_SPECIFIER="${{env.provisioning-profile-specifier}}" \
-#                      PROVISIONING_PROFILE="${{env.provisioning-profile}}" \
-#                      CURRENT_PROJECT_VERSION=${{ steps.buildnumber.outputs.build_number }} \
-#                      build
-    
       - name: Clean and build for archive project
         run: |
           xcrun xcodebuild -project ${{ env.project-name }}.xcodeproj \
@@ -105,17 +119,23 @@ jobs:
                       -exportOptionsPlist "BuildConfiguration/ExportOptions.plist" \
                       -archivePath ".build/Archives/${{ env.scheme-name }}.xcarchive" \
                       -exportPath ".build/Artifacts/${{env.scheme-name}}.ipa" \
-    
-#      - name: Archive project
-#        run: |
-#          ./.github/scripts/build-and-archive.sh
 
-      - name: Upload to Testflight
-        uses: Apple-Actions/upload-testflight-build@master
+      - name: Zip IPA
+        run: |
+          zip .build/ipa.zip .build/Artifacts/${{env.scheme-name}}.ipa/*
+
+      - name: Upload ipa.zip
+        uses: actions/upload-artifact@v4
         with:
-          app-path: .build/Artifacts/${{ env.scheme-name }}.ipa/${{ env.scheme-name }}.ipa
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+          name: IPA
+          path: .build/ipa.zip
+    
+#      - name: Upload to Testflight
+#        uses: Apple-Actions/upload-testflight-build@master
+#        with:
+#          app-path: .build/Artifacts/${{ env.scheme-name }}.ipa/${{ env.scheme-name }}.ipa
+#          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+#          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+#          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
 # https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
