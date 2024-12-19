@@ -188,7 +188,7 @@ struct BlogEntryListView: View {
             predicate: createDynamicPredicate()
         ) { sectionedBlogEntries in
             ForEach(sectionedBlogEntries) { blogEntries in
-                Section(blogEntries[0].secureDate.formatted(date: .long, time: .omitted)) {
+                Section(blogEntries[0].secureDate.formatted(date: .complete, time: .omitted)) {
                     ForEach(blogEntries) { blogEntry in
                         NavigationLink(value: blogEntry) {
                             BlogEntryRowView(blogEntry: blogEntry, tintReadEntries: !isSearching && settings.tintReadBlogentries)
