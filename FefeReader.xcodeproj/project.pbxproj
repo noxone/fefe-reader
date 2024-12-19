@@ -121,7 +121,6 @@
 		C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C5C687822CFC854100397385 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		C5C687842CFC8C3C00397385 /* swiftui-introspect.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = "swiftui-introspect.license"; sourceTree = "<group>"; };
-		C5E2095C2D0F328300F50E3F /* Sign-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Sign-Release.xcconfig"; sourceTree = "<group>"; };
 		C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceController+BlogEntry.swift"; sourceTree = "<group>"; };
@@ -221,7 +220,6 @@
 		C524ACF42843FD8900EF24F1 = {
 			isa = PBXGroup;
 			children = (
-				C5E2095B2D0F325500F50E3F /* BuildConfiguration */,
 				C524ACFF2843FD8900EF24F1 /* FefeReader */,
 				C524AD152843FD8C00EF24F1 /* FefeReaderTests */,
 				C524AD1F2843FD8C00EF24F1 /* FefeReaderUITests */,
@@ -358,14 +356,6 @@
 				C5EF75452D08DEFA0084F917 /* ContextView.swift */,
 			);
 			path = Modifiers;
-			sourceTree = "<group>";
-		};
-		C5E2095B2D0F325500F50E3F /* BuildConfiguration */ = {
-			isa = PBXGroup;
-			children = (
-				C5E2095C2D0F328300F50E3F /* Sign-Release.xcconfig */,
-			);
-			path = BuildConfiguration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
