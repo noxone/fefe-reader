@@ -41,6 +41,8 @@
 		C5583E21285483AA0026F67B /* SwiftSoup.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E20285483AA0026F67B /* SwiftSoup.license */; };
 		C5583E23285483CF0026F67B /* SwiftUIWebView.license in Resources */ = {isa = PBXBuildFile; fileRef = C5583E22285483CF0026F67B /* SwiftUIWebView.license */; };
 		C55EC20B285111560049AFB3 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55EC20A285111560049AFB3 /* ColorExtension.swift */; };
+		C579325E2D1C3E44002BFCD7 /* PersistenceController+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C579325D2D1C3E3B002BFCD7 /* PersistenceController+History.swift */; };
+		C57932602D1C9B03002BFCD7 /* PersistenceController+Deduplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C579325F2D1C9AFA002BFCD7 /* PersistenceController+Deduplicate.swift */; };
 		C5A93F1C2D05CB1A00C56A63 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */; };
 		C5C687832CFC854900397385 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C687822CFC854100397385 /* StringExtension.swift */; };
 		C5C687852CFC8C4400397385 /* swiftui-introspect.license in Resources */ = {isa = PBXBuildFile; fileRef = C5C687842CFC8C3C00397385 /* swiftui-introspect.license */; };
@@ -118,6 +120,9 @@
 		C5583E20285483AA0026F67B /* SwiftSoup.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftSoup.license; sourceTree = "<group>"; };
 		C5583E22285483CF0026F67B /* SwiftUIWebView.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftUIWebView.license; sourceTree = "<group>"; };
 		C55EC20A285111560049AFB3 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		C579325D2D1C3E3B002BFCD7 /* PersistenceController+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceController+History.swift"; sourceTree = "<group>"; };
+		C579325F2D1C9AFA002BFCD7 /* PersistenceController+Deduplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceController+Deduplicate.swift"; sourceTree = "<group>"; };
+		C57932612D1CA120002BFCD7 /* FefeReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FefeReader.entitlements; sourceTree = "<group>"; };
 		C5A93F1B2D05CB1A00C56A63 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C5C687822CFC854100397385 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		C5C687842CFC8C3C00397385 /* swiftui-introspect.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = "swiftui-introspect.license"; sourceTree = "<group>"; };
@@ -240,6 +245,7 @@
 		C524ACFF2843FD8900EF24F1 /* FefeReader */ = {
 			isa = PBXGroup;
 			children = (
+				C57932612D1CA120002BFCD7 /* FefeReader.entitlements */,
 				C530683E2849E2A600082BA2 /* Info.plist */,
 				C524AD002843FD8900EF24F1 /* FefeReaderApp.swift */,
 				C5583E0F285325B20026F67B /* Logging.swift */,
@@ -300,6 +306,8 @@
 				C5E219B82CF6574B005B1F6A /* CoreDataHelper.swift */,
 				C5E219BA2CF657A6005B1F6A /* PersistenceController.swift */,
 				C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */,
+				C579325D2D1C3E3B002BFCD7 /* PersistenceController+History.swift */,
+				C579325F2D1C9AFA002BFCD7 /* PersistenceController+Deduplicate.swift */,
 				C5583E13285464D40026F67B /* PreviewData.swift */,
 			);
 			path = Persistence;
@@ -514,9 +522,11 @@
 				C5FD07A0285EF4F00030F081 /* MinSizeScrollView.swift in Sources */,
 				C5243EA92844F0AE001CBA3D /* BlogEntryExtension.swift in Sources */,
 				C530683B28491D5700082BA2 /* CommonIcons.swift in Sources */,
+				C57932602D1C9B03002BFCD7 /* PersistenceController+Deduplicate.swift in Sources */,
 				C5FD07A4286198020030F081 /* SectionedFetchedObjectsView.swift in Sources */,
 				C5FD07A628623C260030F081 /* SearchableList.swift in Sources */,
 				C5C687832CFC854900397385 /* StringExtension.swift in Sources */,
+				C579325E2D1C3E44002BFCD7 /* PersistenceController+History.swift in Sources */,
 				C5EF75462D08DEFA0084F917 /* ContextView.swift in Sources */,
 				C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */,
 				C51FA2C8284E5802007FAD56 /* UrlService.swift in Sources */,
@@ -699,6 +709,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FefeReader/FefeReader.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 16;
@@ -736,6 +747,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FefeReader/FefeReader.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 16;

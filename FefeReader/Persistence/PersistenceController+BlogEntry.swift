@@ -87,15 +87,19 @@ extension PersistenceController {
     }
     
     func getBlogEntry(withId id: Int, context: NSManagedObjectContext) -> BlogEntry? {
+        return getBlogEntry(withId: Int64(id), context: context)
+    }
+    
+    func getBlogEntry(withId id: Int64, context: NSManagedObjectContext) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %ld", Int64(id))
+        request.predicate = NSPredicate(format: "id == %ld", id)
         request.fetchLimit = 1
         
         return try? context.fetch(request).first
     }
 
     
-    private func getBlogEntries(withIds ids: [Int64], context: NSManagedObjectContext) -> [BlogEntry] {
+    func getBlogEntries(withIds ids: [Int64], context: NSManagedObjectContext) -> [BlogEntry] {
         let request = BlogEntry.fetchRequest()
         request.predicate = NSPredicate(format: "id IN %@", ids)
         

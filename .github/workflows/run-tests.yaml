@@ -36,5 +36,5 @@ jobs:
           xcodebuild -project ${{ env.project-name }}.xcodeproj \
                       -scheme ${{ env.scheme-name }} \
                       -destination platform=${{ env.platform }},name=${{ env.phone }} \
-                      clean test | xcpretty
+                      clean test
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md#installed-simulators

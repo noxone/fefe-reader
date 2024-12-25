@@ -24,6 +24,8 @@ class Settings : NSObject, ObservableObject {
     private let KEY_TINT_READ_BLOGENTRIES = "tintReadBlogentries"
     private let KEY_USE_COLUMNS = "useColumnsOnWideScreens"
     
+    private let KEY_VERSION_1_5_SINCE = "version1.5since"
+    
     private let KEY_ENABLE_DELETION = "enableDeletion"
     
     static let availableFonts = [
@@ -89,6 +91,9 @@ class Settings : NSObject, ObservableObject {
     
     @Published var useColumns = true
     { didSet { UserDefaults.standard.set(useColumns, forKey: KEY_USE_COLUMNS) } }
+    
+    @Published var versoin1_5since = Date()
+    { didSet { UserDefaults.standard.set(useColumns, forKey: KEY_VERSION_1_5_SINCE) } }
 
     private var key: NSKeyValueObservation?
     
@@ -108,7 +113,8 @@ class Settings : NSObject, ObservableObject {
     }
     
     private func read(userDefaults: UserDefaults) {
-        self.lastAppUsage = Date(timeIntervalSince1970: userDefaults.double(forKey: KEY_LAST_APP_USAGE, withDefault: Date().timeIntervalSince1970))
+        self.lastAppUsage = userDefaults.date(forKey: KEY_LAST_APP_USAGE, withDefault: Date())
+        self.versoin1_5since = userDefaults.date(forKey: KEY_VERSION_1_5_SINCE, withDefault: Date())
         
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
         self.fontSize = userDefaults.integer(forKey: KEY_FONT_SIZE, withDefault: 12)
@@ -154,6 +160,10 @@ extension UserDefaults {
             return double(forKey: key)
         }
         return defaultValue
+    }
+    
+    func date(forKey key: String, withDefault defaultValue: Date = Date()) -> Date {
+        return Date(timeIntervalSince1970: double(forKey: key, withDefault: defaultValue.timeIntervalSince1970))
     }
     
     func stringBasedObject<T>(forKey key: String, withDefault defaultValue: T, andConverter converter: (String) -> T?) -> T {
