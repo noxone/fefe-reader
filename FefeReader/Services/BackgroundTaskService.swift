@@ -82,7 +82,7 @@ class BackgroundTaskService {
 
         Task {
             do {
-                try await blogService.refreshWithNotifications(origin: "background")
+                try await blogService.refreshWithNotifications(origin: .background)
                 task.setTaskCompleted(success: true)
             } catch {
                 appPrint("Unable to refresh", error)

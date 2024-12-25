@@ -102,6 +102,16 @@ extension PersistenceController {
         return (try? context.fetch(request)) ?? []
     }
     
+    func countBlogEntriesThatAreUnreadAndNewer(than date: Date, context: NSManagedObjectContext) -> Int {
+        let request = BlogEntry.fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", #keyPath(BlogEntry.validState), BlogEntry.ValidState.normal.rawValue),
+            NSPredicate(format: "%K == nil", #keyPath(BlogEntry.readTimestamp)),
+            NSPredicate(format: "%K > %@", #keyPath(BlogEntry.loadedTimestamp), date as NSDate)
+            ])
+        return (try? context.count(for: request)) ?? 0
+    }
+    
     func getOldestBlogEntry(context: NSManagedObjectContext) -> BlogEntry? {
         let request = BlogEntry.fetchRequest()
         request.fetchLimit = 1

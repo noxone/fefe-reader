@@ -70,15 +70,20 @@ class FefeBlogService : ObservableObject {
         return nil
     }
     
-    func refreshWithNotifications(origin: String) async throws {
-        let blogEntries = try await refresh(origin: origin)
-        NotificationService.shared.addNotifications(for: blogEntries)
+    func refreshWithNotifications(origin: RequestOrigin, forceBadge: Bool = false) async throws {
+        let newBlogEntries = try await refresh(origin: origin)
+        NotificationService.shared.addNotifications(for: newBlogEntries)
+        
+        if forceBadge || origin == .background {
+            let numberOfNewBlogEntriesSinceLastAppUsage = persistence.countBlogEntriesThatAreUnreadAndNewer(than: Settings.shared.lastAppUsage, context: defaultContext)
+            NotificationService.shared.setBadge(number: numberOfNewBlogEntriesSinceLastAppUsage)
+        }
     }
     
     @discardableResult
-    func refresh(origin: String) async throws -> [BlogEntry] {
-        print("Refresh...................", origin, Date())
-        if (origin == "init") {
+    func refresh(origin: RequestOrigin) async throws -> [BlogEntry] {
+        print("Refresh...................", origin.rawValue, Date())
+        if origin == .initial {
             // if this is the first fetch of the application after start, check if there are posts from the previous month. If yes, update that month, too.
             let startOfMonth = Date().startOfMonth
             if let youngestBlogEntry = persistence.getYoungestBlogEntry(olderThan: startOfMonth, context: defaultContext) {
@@ -358,4 +363,11 @@ extension FefeBlogError : LocalizedError {
             return "Der Vorgang wurde abgebrochen."
         }
     }
+}
+
+enum RequestOrigin : String {
+    case initial
+    case manual
+    case background
+    case timer
 }

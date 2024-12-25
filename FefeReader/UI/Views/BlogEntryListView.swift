@@ -81,7 +81,7 @@ struct BlogEntryListView: View {
         .refreshable {
             if !isSearching {
                 await ErrorService.shared.executeShowingErrorAsync {
-                    try await fefeBlog.refresh(origin: "manual refresh")
+                    try await fefeBlog.refresh(origin: .manual)
                 }
             }
         }
