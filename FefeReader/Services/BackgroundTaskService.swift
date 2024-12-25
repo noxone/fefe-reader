@@ -23,7 +23,7 @@ class BackgroundTaskService {
     // https://medium.com/@spaceotech/how-to-update-app-content-with-background-tasks-using-the-task-scheduler-in-ios-13-95d465c462e7
     func registerBackgroundTaks() {
         cancelAllPendingBackgroundTasks()
-        print("--- Register background tasks")
+        appPrint("--- Register background tasks")
         BGTaskScheduler.shared.register(forTaskWithIdentifier: BackgroundTaskService.TASK_REFRESH_ID, using: .main) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
@@ -33,7 +33,7 @@ class BackgroundTaskService {
     }
     
     func cancelAllPendingBackgroundTasks() {
-        print("--- Cancel background tasks")
+        appPrint("--- Cancel background tasks")
         BGTaskScheduler.shared.cancelAllTaskRequests()
     }
     
@@ -45,21 +45,21 @@ class BackgroundTaskService {
     
     private func scheduleRefreshTask() {
         if Settings.shared.checkForUpdatesInBackground {
-            print("--- Schedule refresh task")
+            appPrint("--- Schedule refresh task")
             let request = BGAppRefreshTaskRequest(identifier: BackgroundTaskService.TASK_REFRESH_ID)
             request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshTimeInterval)
             do {
                 try BGTaskScheduler.shared.submit(request)
             } catch {
-                print("Could not schedule refresh task: \(error)")
+                appPrint("Could not schedule refresh task: \(error)")
             }
         } else {
-            print("--- Background refresh is deactivated")
+            appPrint("--- Background refresh is deactivated")
         }
     }
     
     private func scheduleCleanUpTask() {
-        print("--- Schedule clean up task")
+        appPrint("--- Schedule clean up task")
         let request = BGProcessingTaskRequest(identifier: BackgroundTaskService.TASK_CLEANUP_ID)
         // TODO: Set to one daily processing
         request.earliestBeginDate = Date(timeIntervalSinceNow: Settings.shared.refreshTimeInterval)
@@ -68,16 +68,16 @@ class BackgroundTaskService {
         do {
             try BGTaskScheduler.shared.submit(request)
         } catch {
-            print("Could not schedule clean up task: \(error)")
+            appPrint("Could not schedule clean up task: \(error)")
         }
     }
     
     private func handleAppRefresh(task: BGAppRefreshTask) {
-        print("--- Handle refresh task")
+        appPrint("--- Handle refresh task")
         scheduleRefreshTask()
 
         task.expirationHandler = {
-            print("Cancel refresh task")
+            appPrint("Cancel refresh task")
         }
 
         Task {
@@ -93,11 +93,11 @@ class BackgroundTaskService {
     
     
     private func handleCleanUpTask(task: BGProcessingTask) {
-        print("--- Handle clean up task")
+        appPrint("--- Handle clean up task")
         scheduleCleanUpTask()
         
         task.expirationHandler = {
-            print("Canceled clean up task")
+            appPrint("Canceled clean up task")
         }
         
         Task {
