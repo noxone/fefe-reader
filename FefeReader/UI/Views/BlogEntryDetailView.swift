@@ -41,6 +41,7 @@ struct BlogEntryDetailView: View {
     
     private let dragThreshold = 10.0
     @GestureState var dragTranslation = CGSize(width: 0, height: 0)
+    @State private var dragFeedbackTrigger = false
     
     private var dragToPrevious: Bool {
         dragTranslation.width > 0
@@ -118,12 +119,15 @@ struct BlogEntryDetailView: View {
                 }
                 .onEnded({ value in
                     if value.translation.width < 0 {
+                        dragFeedbackTrigger.toggle()
                         goToNextBlogEntry()
                     }
                     if value.translation.width > 0 {
+                        dragFeedbackTrigger.toggle()
                         goToPreviousBlogEntry()
                     }
                 }))
+            .sensoryFeedback(.selection, trigger: dragFeedbackTrigger)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -150,7 +154,7 @@ struct BlogEntryDetailView: View {
                     BrowserPopupView(url: $externalUrl)
                 }
             }
-            .onChange(of: blogEntry) { newVal in
+            .onChange(of: blogEntry) { (oldVal, newVal) in
                 loadStuff(for: newVal)
             }
     }
