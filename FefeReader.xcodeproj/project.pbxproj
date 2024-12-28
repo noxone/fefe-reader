@@ -52,7 +52,6 @@
 		C5E310A928464623005937FA /* BlogEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310A828464623005937FA /* BlogEntryDetailView.swift */; };
 		C5E310AC28471DA6005937FA /* SwiftUIWebView in Frameworks */ = {isa = PBXBuildFile; productRef = C5E310AB28471DA6005937FA /* SwiftUIWebView */; };
 		C5E310AE28472EEA005937FA /* BrowserPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AD28472EEA005937FA /* BrowserPopupView.swift */; };
-		C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310AF284738E3005937FA /* ShareSheet.swift */; };
 		C5E310B528473EC7005937FA /* ExitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B428473EC7005937FA /* ExitButtonView.swift */; };
 		C5E310B828474033005937FA /* HtmlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B728474033005937FA /* HtmlService.swift */; };
 		C5E310BA28475840005937FA /* MainApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E310B928475840005937FA /* MainApplicationView.swift */; };
@@ -131,7 +130,6 @@
 		C5E219BC2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistenceController+BlogEntry.swift"; sourceTree = "<group>"; };
 		C5E310A828464623005937FA /* BlogEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogEntryDetailView.swift; sourceTree = "<group>"; };
 		C5E310AD28472EEA005937FA /* BrowserPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPopupView.swift; sourceTree = "<group>"; };
-		C5E310AF284738E3005937FA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		C5E310B428473EC7005937FA /* ExitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButtonView.swift; sourceTree = "<group>"; };
 		C5E310B728474033005937FA /* HtmlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HtmlService.swift; sourceTree = "<group>"; };
 		C5E310B928475840005937FA /* MainApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApplicationView.swift; sourceTree = "<group>"; };
@@ -198,14 +196,6 @@
 				C5C687822CFC854100397385 /* StringExtension.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		C5243EAD2845CAA6001CBA3D /* UIKit */ = {
-			isa = PBXGroup;
-			children = (
-				C5E310AF284738E3005937FA /* ShareSheet.swift */,
-			);
-			path = UIKit;
 			sourceTree = "<group>";
 		};
 		C5243EB32845CF5B001CBA3D /* Views */ = {
@@ -292,7 +282,6 @@
 				C5243EB32845CF5B001CBA3D /* Views */,
 				C524AD312843FEA500EF24F1 /* Widgets */,
 				C58495A92D02343B0039300C /* Modifiers */,
-				C5243EAD2845CAA6001CBA3D /* UIKit */,
 				C530683928491D3D00082BA2 /* Shared */,
 				C5335263284F75CF0060A663 /* Fonts */,
 				C5583E15285470D30026F67B /* Licenses */,
@@ -551,7 +540,6 @@
 				C5E219BD2CF7A49A005B1F6A /* PersistenceController+BlogEntry.swift in Sources */,
 				C5E219B92CF6574B005B1F6A /* CoreDataHelper.swift in Sources */,
 				C51FA2CC284F331A007FAD56 /* LicenseTextView.swift in Sources */,
-				C5E310B0284738E3005937FA /* ShareSheet.swift in Sources */,
 				C5E310BE28476130005937FA /* SettingsView.swift in Sources */,
 				C552BA75285706E20033855C /* ToggleWithDescription.swift in Sources */,
 			);

@@ -17,8 +17,6 @@ struct BrowserPopupView: View {
     @State private var state = WebViewState.empty
     @State private var address = "https://www.google.com"
     
-    @State private var showShareSheet = false
-    
     private let config = WebViewConfig(javaScriptEnabled: true, allowsBackForwardNavigationGestures: true, allowsInlineMediaPlayback: true, mediaTypesRequiringUserActionForPlayback: .all, isScrollEnabled: true, isOpaque: false, backgroundColor: .background)
     
     var body: some View {
@@ -68,11 +66,7 @@ struct BrowserPopupView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    showShareSheet = true
-                }, label: {
-                    CommonIcons.shared.shareImage
-                })
+                ShareLink(item: url)
                 .accessibilityLabel(Text("URL teilen"))
                 .disabled(state.isLoading)
                 
@@ -86,9 +80,6 @@ struct BrowserPopupView: View {
                 .accessibilityLabel(Text("Neu laden"))
                 .disabled(state.isLoading)
             }
-        }
-        .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [url])
         }
         .onAppear {
             action = .load(URLRequest(url: url))

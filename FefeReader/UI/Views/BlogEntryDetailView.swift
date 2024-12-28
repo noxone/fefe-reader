@@ -31,7 +31,6 @@ struct BlogEntryDetailView: View {
     @State private var externalUrl: URL = URL(string: "https://blog.fefe.de")!
     
     // If a link shall be shared
-    @State private var showShareSheet = false
     @State private var showLinkList = false
     
     // If another blog entry shall be shown
@@ -70,7 +69,11 @@ struct BlogEntryDetailView: View {
         }
     }
     
-    var browser: some View {
+    private var title: String {
+        DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none)
+    }
+    
+    private var browser: some View {
         WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
             .contextView(isPresented: $showLinkList) {
                 linkListSheet
@@ -103,11 +106,7 @@ struct BlogEntryDetailView: View {
                             .adaptiveButtonStyle()
                         }
                         
-                        Button(action: {
-                            showShareSheet = true
-                        }, label: {
-                            Label("Teilen", systemImage: CommonIcons.shared.shareImageName)
-                        })
+                        ShareLink(item: blogEntry.url.absoluteURL, preview: SharePreview("Beitrag vom \(title) ", image: Image("ShareImage")))
                         .adaptiveButtonStyle()
                     }
                 }
@@ -125,7 +124,7 @@ struct BlogEntryDetailView: View {
                         goToPreviousBlogEntry()
                     }
                 }))
-            .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .automatic) {
@@ -150,9 +149,6 @@ struct BlogEntryDetailView: View {
                 NavigationStack {
                     BrowserPopupView(url: $externalUrl)
                 }
-            }
-            .sheet(isPresented: $showShareSheet) {
-                ShareSheet(activityItems: [blogEntry.url.absoluteURL])
             }
             .onChange(of: blogEntry) { newVal in
                 loadStuff(for: newVal)
