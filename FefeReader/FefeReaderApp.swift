@@ -46,9 +46,6 @@ struct FefeReaderApp: App {
                 }
                 .task {
                     taskService.cancelAllPendingBackgroundTasks()
-                    ErrorService.shared.executeShowingError {
-                        try await blogService.refresh(origin: "init")
-                    }
                 }
                 .task {
                     if Settings.shared.regularlyDeleteOldBlogEntries {
@@ -60,7 +57,7 @@ struct FefeReaderApp: App {
                 .onReceive(timer) { input in
                     Task {
                         do {
-                            try await blogService.refreshWithNotifications(origin: "timer")
+                            try await blogService.refreshWithNotifications(origin: .timer, forceBadge: scenePhase == .background)
                         } catch {
                             appPrint("Timer update failed.", error)
                         }
@@ -68,8 +65,12 @@ struct FefeReaderApp: App {
                 }
         }
         .onChange(of: scenePhase) { newPhase in
+            Settings.shared.lastAppUsage = Date()
             if newPhase == .active {
-                UIApplication.shared.applicationIconBadgeNumber = 0
+                NotificationService.shared.setBadge(number: 0)
+                ErrorService.shared.executeShowingError {
+                    try await blogService.refresh(origin: .initial)
+                }
             }
             if newPhase == .background {
                 taskService.cancelAllPendingBackgroundTasks()

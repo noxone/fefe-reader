@@ -11,6 +11,7 @@ import SwiftUI
 class Settings : NSObject, ObservableObject {
     static let shared = Settings()
     
+    private let KEY_LAST_APP_USAGE = "lastAppUsage"
     private let KEY_REFRESH_INTERVAL = "refreshInterval"
     private let KEY_NOTIFICATION_APPROVAL = "askForNotificationApproval"
     private let KEY_OPEN_URLS_IN_INTERNAL_BROWSER = "openUrlsInInternalBrowser"
@@ -22,6 +23,8 @@ class Settings : NSObject, ObservableObject {
     private let KEY_CHECK_FOR_UPDATES = "checkForUpdatesInBackground"
     private let KEY_TINT_READ_BLOGENTRIES = "tintReadBlogentries"
     private let KEY_USE_COLUMNS = "useColumnsOnWideScreens"
+    
+    private let KEY_VERSION_1_5_SINCE = "version1.5since"
     
     private let KEY_ENABLE_DELETION = "enableDeletion"
     
@@ -52,6 +55,9 @@ class Settings : NSObject, ObservableObject {
     
     @Published var refreshInterval: Int = Int(RefreshIntervalDuration.x15.rawValue)
     { didSet { UserDefaults.standard.set(refreshInterval, forKey: KEY_REFRESH_INTERVAL) } }
+    
+    @Published var lastAppUsage: Date = Date()
+    { didSet { UserDefaults.standard.set(lastAppUsage.timeIntervalSince1970, forKey: KEY_LAST_APP_USAGE) } }
     
     @Published var askForNotificationApproval: Bool = true
     { didSet { UserDefaults.standard.set(askForNotificationApproval, forKey: KEY_NOTIFICATION_APPROVAL) } }
@@ -85,6 +91,9 @@ class Settings : NSObject, ObservableObject {
     
     @Published var useColumns = true
     { didSet { UserDefaults.standard.set(useColumns, forKey: KEY_USE_COLUMNS) } }
+    
+    @Published var versoin1_5since = Date()
+    { didSet { UserDefaults.standard.set(useColumns, forKey: KEY_VERSION_1_5_SINCE) } }
 
     private var key: NSKeyValueObservation?
     
@@ -104,6 +113,9 @@ class Settings : NSObject, ObservableObject {
     }
     
     private func read(userDefaults: UserDefaults) {
+        self.lastAppUsage = userDefaults.date(forKey: KEY_LAST_APP_USAGE, withDefault: Date())
+        self.versoin1_5since = userDefaults.date(forKey: KEY_VERSION_1_5_SINCE, withDefault: Date())
+        
         self.openUrlsInInternalBrowser = userDefaults.bool(forKey:KEY_OPEN_URLS_IN_INTERNAL_BROWSER, withDefault: true)
         self.fontSize = userDefaults.integer(forKey: KEY_FONT_SIZE, withDefault: 12)
         self.font = userDefaults.stringBasedObject(forKey: KEY_FONT_NAME, withDefault: Settings.availableFonts[0], andConverter: { string in
@@ -141,6 +153,17 @@ extension UserDefaults {
             return integer(forKey: key)
         }
         return defaultValue
+    }
+    
+    func double(forKey key: String, withDefault defaultValue: Double) -> Double {
+        if object(forKey: key) != nil {
+            return double(forKey: key)
+        }
+        return defaultValue
+    }
+    
+    func date(forKey key: String, withDefault defaultValue: Date = Date()) -> Date {
+        return Date(timeIntervalSince1970: double(forKey: key, withDefault: defaultValue.timeIntervalSince1970))
     }
     
     func stringBasedObject<T>(forKey key: String, withDefault defaultValue: T, andConverter converter: (String) -> T?) -> T {

@@ -32,13 +32,10 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     
     func addNotifications(for blogEntries: [BlogEntry]) {
         center.delegate = self
-        addBadge(withNumber: blogEntries.count)
-        blogEntries.forEach {
-            addNotification(for: $0)
-        }
+        blogEntries.forEach { addNotification(for: $0) }
     }
     
-    func addNotification(for blogEntry: BlogEntry) {
+    private func addNotification(for blogEntry: BlogEntry) {
         guard let notificationContent = blogEntry.notificationContent else { return }
         
         addNotification(withId: blogEntry.id, andContent: notificationContent)
@@ -94,7 +91,7 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         }
     }
     
-    private func addBadge(withNumber number: Int) {
+    func setBadge(number: Int) {
         DispatchQueue.main.async {
             UIApplication.shared.applicationIconBadgeNumber = number
         }

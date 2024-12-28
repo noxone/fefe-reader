@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24B83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BlogEntry" representedClassName="BlogEntry" syncable="YES" codeGenerationType="class">
         <attribute name="bookmarkDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="content" optional="YES" attributeType="String"/>
@@ -11,10 +11,5 @@
         <attribute name="teaser" optional="YES" attributeType="String"/>
         <attribute name="updatedSinceLastRead" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="validState" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="Log" representedClassName="Log" syncable="YES" codeGenerationType="class">
-        <attribute name="category" attributeType="String" defaultValueString="none"/>
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="text" attributeType="String" defaultValueString=""/>
     </entity>
 </model>
