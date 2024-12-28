@@ -40,7 +40,37 @@ struct BlogEntryDetailView: View {
     @State private var previousBlogEntry: BlogEntry? = nil
     @State private var nextBlogEntry: BlogEntry? = nil
     
+    private let dragThreshold = 10.0
+    @GestureState var dragTranslation = CGSize(width: 0, height: 0)
+    
+    private var dragToPrevious: Bool {
+        dragTranslation.width > 0
+    }
+    private var dragToNext: Bool {
+        dragTranslation.width < 0
+    }
+
+    private func getDragImage(systemName: String) -> some View {
+        Image(systemName: systemName)
+            .resizable()
+            .frame(width: 150, height: 150)
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 10.0).fill(.regularMaterial))
+    }
+    
     var body: some View {
+        ZStack {
+            browser
+            if dragToNext && nextBlogEntry != nil {
+                getDragImage(systemName: "arrow.forward.square")
+            }
+            if dragToPrevious && previousBlogEntry != nil {
+                getDragImage(systemName: "arrow.backward.square")
+            }
+        }
+    }
+    
+    var browser: some View {
         WebView(config: config, action: $action, state: $state, schemeHandlers: ["http": handleHttpLinks(url:), "https": handleHttpLinks(url:)])
             .contextView(isPresented: $showLinkList) {
                 linkListSheet
@@ -48,22 +78,14 @@ struct BlogEntryDetailView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
-                        if let navigateToEntry {
-                            Button(action: {
-                                if let previousBlogEntry {
-                                    navigateToEntry(previousBlogEntry)
-                                }
-                            }, label: {
+                        if navigateToEntry != nil {
+                            Button(action: goToPreviousBlogEntry, label: {
                                 Label("Voriger Blogeintrag", systemImage: CommonIcons.shared.previousBlogEntryImageName)
                             })
                             .adaptiveButtonStyle()
                             .disabled(previousBlogEntry == nil)
                             
-                            Button(action: {
-                                if let nextBlogEntry {
-                                    navigateToEntry(nextBlogEntry)
-                                }
-                            }, label: {
+                            Button(action: goToNextBlogEntry, label: {
                                 Label("Nächster Blogeintrag", systemImage: CommonIcons.shared.nextBlogEntryImageName)
                             })
                             .adaptiveButtonStyle()
@@ -91,16 +113,16 @@ struct BlogEntryDetailView: View {
                 }
             }
             .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
+                .updating($dragTranslation) { (value, gestureState, transaction) in
+                    transaction.animation = .easeInOut
+                    gestureState = value.translation
+                }
                 .onEnded({ value in
                     if value.translation.width < 0 {
-                        if let nextBlogEntry {
-                            navigateToEntry?(nextBlogEntry)
-                        }
+                        goToNextBlogEntry()
                     }
                     if value.translation.width > 0 {
-                        if let previousBlogEntry {
-                            navigateToEntry?(previousBlogEntry)
-                        }
+                        goToPreviousBlogEntry()
                     }
                 }))
             .navigationTitle(DateFormatter.localizedString(from: blogEntry.secureDate, dateStyle: .long, timeStyle: .none))
@@ -153,6 +175,18 @@ struct BlogEntryDetailView: View {
         UIPasteboard.general.url = link.url
         ErrorService.shared.showSuccess(message: "Link in die Zwischenablage kopiert.")
         showLinkList = false
+    }
+    
+    private func goToNextBlogEntry() {
+        if let nextBlogEntry {
+            navigateToEntry?(nextBlogEntry)
+        }
+    }
+    
+    private func goToPreviousBlogEntry() {
+        if let previousBlogEntry {
+            navigateToEntry?(previousBlogEntry)
+        }
     }
     
     private var linkListSheet: some View {
