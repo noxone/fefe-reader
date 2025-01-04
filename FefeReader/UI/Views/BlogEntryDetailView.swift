@@ -16,10 +16,9 @@ struct BlogEntryDetailView: View {
     private let persistence = PersistenceController.shared
     
     // The blog entry we want to display
-    let blogEntry: BlogEntry
+    @ObservedObject var blogEntry: BlogEntry
     let navigateToEntry: ((BlogEntry) -> ())?
     let navigateToSubEntry: (BlogEntry) -> ()
-    @State private var isBookmarked: Bool? = nil
     
     // For controlling the integrated browser
     @State private var action = WebViewAction.idle
@@ -130,9 +129,8 @@ struct BlogEntryDetailView: View {
                 ToolbarItem(placement: .automatic) {
                     Button(action: {
                         persistence.toggleBlogEntryBookmark(blogEntry)
-                        isBookmarked = !blogEntry.isBookmarked
                     }, label: {
-                        CommonIcons.shared.bookmarkImage(active: isBookmarked ?? blogEntry.isBookmarked)
+                        blogEntry.bookmarkImage
                     })
                 }
                 
