@@ -9,13 +9,15 @@ import SwiftUI
 import UIKit
 import BackgroundTasks
 import PopupView
+import CoreData
 
 @main
 struct FefeReaderApp: App {
-    private let persistenceController = PersistenceController.shared
+    private let persistence: PersistenceController
+    private let context: NSManagedObjectContext
     
     private let blogService: FefeBlogService
-    private let taskService: BackgroundTaskService
+    private let backgroundTaskService: BackgroundTaskService
     
     @Environment(\.scenePhase) private var scenePhase
     @State var set: Bool = true
@@ -25,35 +27,20 @@ struct FefeReaderApp: App {
     private let timer = Timer.publish(every: Settings.shared.refreshTimeInterval, on: .main, in: .common).autoconnect()
         
     init() {
-        let context = persistenceController.persistentContainer.viewContext
-        blogService = FefeBlogService(context: context)
-        taskService = BackgroundTaskService(blogService: blogService, context: context)
+        self.persistence = PersistenceController.shared
+        self.context = persistence.persistentContainer.viewContext
         
-        taskService.registerBackgroundTaks()
+        self.blogService = FefeBlogService(context: context)
+        self.backgroundTaskService = BackgroundTaskService(blogService: blogService, context: context)
+        self.backgroundTaskService.registerBackgroundTaks()
     }
 
     var body: some Scene {
         WindowGroup {
             MainApplicationView()
-                .environment(\.managedObjectContext, persistenceController.persistentContainer.viewContext)
+                .environment(\.managedObjectContext, context)
                 .environmentObject(blogService)
-                .task {
-                    let context = persistenceController.persistentContainer.viewContext
-                    let count = persistenceController.countBlogEntries(context: context)
-                    appPrint("\(count) blog entries in database")
-                    let oldestBlogEntry = persistenceController.getOldestBlogEntry(context: context)
-                    appPrint("Oldest blog entry date: \(String(describing: oldestBlogEntry?.date))")
-                }
-                .task {
-                    taskService.cancelAllPendingBackgroundTasks()
-                }
-                .task {
-                    if Settings.shared.regularlyDeleteOldBlogEntries {
-                        Task(priority: .utility) {
-                            await persistenceController.deleteOldBlogEntries(butKeepBookmarks: Settings.shared.keepBookmarkedBlogEntries, context: persistenceController.persistentContainer.viewContext)
-                        }
-                    }
-                }
+                .task { createOtherTasks() }
                 .onReceive(timer) { input in
                     Task {
                         do {
@@ -68,13 +55,28 @@ struct FefeReaderApp: App {
             Settings.shared.lastAppUsage = Date()
             if newPhase == .active {
                 NotificationService.shared.setBadge(number: 0)
-                ErrorService.shared.executeShowingError {
-                    try await blogService.refresh(origin: .initial)
-                }
             }
             if newPhase == .background {
-                taskService.cancelAllPendingBackgroundTasks()
-                taskService.scheduleBackgroundTasks()
+                backgroundTaskService.cancelAllPendingBackgroundTasks()
+                backgroundTaskService.scheduleBackgroundTasks()
+            }
+        }
+    }
+    
+    private func createOtherTasks() {
+        ErrorService.shared.executeShowingError {
+            try await blogService.refresh(origin: .initial)
+        }
+        Task {
+            let count = persistence.countBlogEntries(context: context)
+            appPrint("\(count) blog entries in database")
+            
+            let oldestBlogEntry = persistence.getOldestBlogEntry(context: context)
+            appPrint("Oldest blog entry date: \(String(describing: oldestBlogEntry?.date))")
+        }
+        if Settings.shared.regularlyDeleteOldBlogEntries {
+            Task(priority: .utility) {
+                _ = await persistence.deleteOldBlogEntries(butKeepBookmarks: Settings.shared.keepBookmarkedBlogEntries, context: context)
             }
         }
     }
