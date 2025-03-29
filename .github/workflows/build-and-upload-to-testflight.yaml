@@ -69,7 +69,7 @@ jobs:
 
       - name: Download provisioning profiles
         id: provisioning
-        uses: Apple-Actions/download-provisioning-profiles@v3
+        uses: Apple-Actions/download-provisioning-profiles@v4
         with:
           bundle-id: ${{ env.bundle-id }}
           profile-type: 'IOS_APP_STORE'
