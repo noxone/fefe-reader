@@ -1,3 +1,6 @@
+⚠️ This repository is archived and will not developed further any more. The application has been removed from the App Store, too. ⚠️  
+This repository will remain read-only, if somebody wants to have a look into the code.
+
 # Fefe Reader [![Test app](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml/badge.svg)](https://github.com/noxone/fefe-reader/actions/workflows/test.yaml) ![Icon](readme/icon.png)
 
 An iOS app to easier read [Fefes Blog](https://blog.fefe.de).
